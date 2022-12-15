@@ -1,0 +1,13 @@
+# Run the Dockerfile in the local directory, with tty: true
+version: "3.8"
+services:
+  app:
+    container_name: app
+    hostname: app
+    build: .
+    ports:
+      - "3000:3000"
+    tty: true
+    volumes:
+      - .:/app
+      - /app/node_modules  # Ensure `/app/node_modules` is always empty in the container
