@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import ReactMarkdown from 'react-markdown';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         >
           Learn React
         </a>
+        <ReactMarkdown children={'Hello there'} />
+        <button>Check Tabs API</button>
       </header>
     </div>
   );
