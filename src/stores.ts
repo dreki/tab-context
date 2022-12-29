@@ -1,5 +1,34 @@
 import { atom } from 'jotai';
 
+export interface ITab {
+    id: number;
+    title: string;
+    groupId: number;
+
+    // A function called `isInGroup` that returns true if the tab is in a group
+    isInGroup: () => boolean;
+}
+
+// Implement the Tab interface
+class Tab implements ITab {
+    constructor(public id: number, public title: string, public groupId: number) {
+    }
+
+    isInGroup() {
+        return this.groupId !== -1;
+    }
+}
+
+// Implement the `isInGroup` function
+// Tab.prototype.isInGroup = function () {
+//     return this.groupId !== -1;
+// }
+
+export interface IWindow {
+    id: number;
+    tabs: ITab[];
+}
+
 /*
 import { createStore } from 'zustand';
 
@@ -37,6 +66,8 @@ export const useWindowStore = createStore<WindowState>()((set) => ({
 */
 
 const fetchWindowsAtom = atom(async () => {
+    
+    /* 
     return new Promise<chrome.windows.Window[]>((resolve, reject) => {
         // If chrome API is not available, reject the promise
         if (!chrome || !chrome.windows) {
@@ -47,6 +78,34 @@ const fetchWindowsAtom = atom(async () => {
         chrome.windows.getAll({ populate: true }, (windows) => {
             resolve(windows);
         });
+    });
+     */
+
+    return new Promise<IWindow[]>((resolve, reject) => {
+        // If chrome API is not available, reject the promise
+        if (!chrome || !chrome.windows) {
+            reject(new Error('Chrome API is not available'));
+            return;
+        }
+
+        const result: IWindow[] = [];
+        chrome.windows.getAll({ populate: true }, (windows) => {
+            // resolve(windows);
+            windows.forEach((window) => {
+                const tabs: ITab[] = [];
+                if (!window.tabs || !window.id) {
+                    return;
+                }
+                window.tabs.forEach((tab) => {
+                    if (!tab || tab.id === undefined || tab.title === undefined || tab.groupId === undefined) {
+                        return;
+                    }
+                    tabs.push(new Tab(tab.id, tab.title, tab.groupId));
+                });
+                result.push({ id: window.id, tabs: tabs });
+            });
+        });
+        resolve(result);
     });
 });
 // const windowsAtom = atom<chrome.windows.Window[]>([]);

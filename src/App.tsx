@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import './App.css';
 import logo from './logo.svg';
 import MarkdownLog from './models/MarkdownLog';
-import { windowsAtom } from './stores';
+import { windowsAtom, IWindow } from './stores';
 
 let log = new MarkdownLog();
 log.add('Hello there!');
@@ -50,27 +50,58 @@ function updateStringName(newStringName: string) {
   stringName = newStringName;
 }
 
+/**
+ * Log all window IDs and the titles of their tabs. Log as JSON string.
+ * @param windows Array of windows
+ */
+// function logWindowsAndTabs(windows: chrome.windows.Window[]) {
+function logWindowsAndTabs(windows: IWindow[]) {
+  // console.log('> Windows and tabs:');
+  // windows.forEach((window, index) => {
+  //   console.log(`Window ${index}:`);
+  //   console.log(`Window ID: ${window.id}`);
+  //   console.log(`Window tab length: ${window.tabs && window.tabs.length}`);
+  // });
+
+  const windowTabs: { tabs: { title: String }[] }[] = [];
+  for (let window of windows) {
+    // console.log(`Window ID: ${window.id}`);
+    // console.log(`Window tab length: ${window.tabs && window.tabs.length}`);
+    if (!window.tabs) {
+      continue;
+    }
+    const tabTitles: String[] = window.tabs.map(tab => tab.title) as String[];
+    // windowTabs.push({title: tabTitles.join(', ')});
+    windowTabs.push({ tabs: tabTitles.map(title => ({ title })) });
+  }
+  console.log(JSON.stringify(windowTabs));
+
+  // console.log('> Windows and tabs:');
+  // console.log(JSON.stringify(windows));
+
+}
+
 function App() {
   // const windows = useWindowStore(state: => state.windows);
   // const windows = useWindowStore((state: WindowState) => state.windows);
   
   const [windows] = useAtom(windowsAtom);
+  console.log('> windows:')
+  console.log(windows);
+  // Render a ul of window debug info
+  let windowDebugInfo = windows.map((window, index) => {
+    return (
+      <li key={index}>
+        <p>Window {index}</p>
+        <p>Window ID: {window.id}</p>
+        <p>Window tab length: {window.tabs && window.tabs.length}</p>
+      </li>
+    );
+  });
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
         {/* <ReactMarkdown children={'Hello there'} /> */}
         {/* <ReactMarkdown children={log.entries.join("\n")} /> */}
         <MarkdownLogView log={log} />
@@ -83,6 +114,15 @@ function App() {
         <StringNameDisplay key={stringName} name={stringName} />
         <button onClick={() => updateStringName('New string name')}>Change String Name</button>
       </header>
+
+      <main>
+        <ul>
+          {windowDebugInfo}
+        </ul>
+        {/* Button to trigger logging of `windows` */}
+        <button onClick={() => logWindowsAndTabs(windows)}>Log Windows</button>
+        {/* <button onClick={() => console.log(windows)}>Log Windows</button> */}
+      </main>
     </div>
   );
 }
