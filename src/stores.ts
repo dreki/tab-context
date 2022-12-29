@@ -1,5 +1,7 @@
 import { atom } from 'jotai';
 
+import devTabs from './data/dev-tabs.json';
+
 export interface ITab {
     id: number;
     title: string;
@@ -82,13 +84,26 @@ const fetchWindowsAtom = atom(async () => {
      */
 
     return new Promise<IWindow[]>((resolve, reject) => {
-        // If chrome API is not available, reject the promise
+        const result: IWindow[] = [];
+        // If chrome API is not available, return static data from `src/data/dev-tabs.json`
         if (!chrome || !chrome.windows) {
-            reject(new Error('Chrome API is not available'));
-            return;
+            // reject(new Error('Chrome API is not available'));
+            // return;
+            // return fetch('./data/dev-tabs.json')
+            
+            // resolve(devTabs as IWindow[]);
+
+            // For each object in devTabs, add to the result array
+            devTabs.forEach((window) => {
+                const tabs: ITab[] = [];
+                window.tabs.forEach((tab) => {
+                    tabs.push(new Tab(tab.id, tab.title, tab.groupId));
+                });
+                result.push({ id: window.id, tabs: tabs });
+            });
+            resolve(result);
         }
 
-        const result: IWindow[] = [];
         chrome.windows.getAll({ populate: true }, (windows) => {
             // resolve(windows);
             windows.forEach((window) => {
