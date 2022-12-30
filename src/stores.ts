@@ -6,6 +6,7 @@ export interface ITab {
     id: number;
     title: string;
     groupId: number;
+    favIconUrl?: string;
 
     // A function called `isInGroup` that returns true if the tab is in a group
     isInGroup: () => boolean;
@@ -13,7 +14,7 @@ export interface ITab {
 
 // Implement the Tab interface
 class Tab implements ITab {
-    constructor(public id: number, public title: string, public groupId: number) {
+    constructor(public id: number, public title: string, public groupId: number, public favIconUrl?: string) {
     }
 
     isInGroup() {
@@ -45,6 +46,8 @@ const fetchWindowsAtom = atom(async () => {
         }
 
         chrome.windows.getAll({ populate: true }, (windows) => {
+            console.log('> windows (from Chrome):')
+            console.log(windows);
             windows.forEach((window) => {
                 const tabs: ITab[] = [];
                 if (!window.tabs || !window.id) { return; }
@@ -52,7 +55,12 @@ const fetchWindowsAtom = atom(async () => {
                     if (!tab || tab.id === undefined || tab.title === undefined || tab.groupId === undefined) {
                         return;
                     }
-                    tabs.push(new Tab(tab.id, tab.title, tab.groupId));
+                    tabs.push(new Tab(
+                        tab.id,
+                        tab.title,
+                        tab.groupId,
+                        tab.favIconUrl
+                    ));
                 });
                 result.push({ id: window.id, tabs: tabs });
             });
