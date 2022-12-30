@@ -6,6 +6,7 @@ export interface ITab {
     id: number;
     title: string;
     groupId: number;
+    url?: string;
     favIconUrl?: string;
 
     // A function called `isInGroup` that returns true if the tab is in a group
@@ -14,7 +15,13 @@ export interface ITab {
 
 // Implement the Tab interface
 class Tab implements ITab {
-    constructor(public id: number, public title: string, public groupId: number, public favIconUrl?: string) {
+    constructor(
+        public id: number,
+        public title: string,
+        public groupId: number,
+        public url?: string,
+        public favIconUrl?: string
+    ) {
     }
 
     isInGroup() {
@@ -38,7 +45,14 @@ const fetchWindowsAtom = atom(async () => {
             devTabs.forEach((window) => {
                 const tabs: ITab[] = [];
                 window.tabs.forEach((tab) => {
-                    tabs.push(new Tab(tab.id, tab.title, tab.groupId));
+                    // `tab` is a Chrome tab
+                    tabs.push(new Tab(
+                        tab.id,
+                        tab.title,
+                        tab.groupId,
+                        tab.url,
+                        tab.favIconUrl
+                    ));
                 });
                 result.push({ id: window.id, tabs: tabs });
             });
@@ -59,6 +73,7 @@ const fetchWindowsAtom = atom(async () => {
                         tab.id,
                         tab.title,
                         tab.groupId,
+                        tab.url,
                         tab.favIconUrl
                     ));
                 });
