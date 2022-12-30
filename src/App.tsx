@@ -1,11 +1,7 @@
-import { useAtom } from 'jotai';
-import './App.css';
-import logo from './logo.svg';
-import { windowsAtom, IWindow } from './stores';
-
-
-
-
+import { useAtom } from "jotai";
+import "./App.css";
+import logo from "./logo.svg";
+import { windowsAtom, IWindow } from "./stores";
 
 /**
  * Log all window IDs and the titles of their tabs. Log as JSON string.
@@ -17,15 +13,15 @@ function logWindowsAndTabs(windows: IWindow[]) {
     if (!window.tabs) {
       continue;
     }
-    const tabTitles: String[] = window.tabs.map(tab => tab.title) as String[];
-    windowTabs.push({ tabs: tabTitles.map(title => ({ title })) });
+    const tabTitles: String[] = window.tabs.map((tab) => tab.title) as String[];
+    windowTabs.push({ tabs: tabTitles.map((title) => ({ title })) });
   }
   console.log(JSON.stringify(windowTabs));
 }
 
 function App() {
   const [windows] = useAtom(windowsAtom);
-  console.log('> windows:')
+  console.log("> windows:");
   console.log(windows);
   // Render a ul of window debug info
   let windowDebugInfo = windows.map((window, index) => {
@@ -41,9 +37,8 @@ function App() {
   return (
     <div className="App">
       <main>
-        <ul>
-          {windowDebugInfo}
-        </ul>
+        <h1 className="text-3xl font-bold underline">Hello world!</h1>
+        <ul>{windowDebugInfo}</ul>
         {/* Button to trigger logging of `windows` */}
         <button onClick={() => logWindowsAndTabs(windows)}>Log Windows</button>
         {/* <button onClick={() => console.log(windows)}>Log Windows</button> */}
