@@ -6,6 +6,9 @@ interface WindowListProps {
 }
 
 export function WindowList({ windows }: WindowListProps) {
+  console.log("WindowList, windows:");
+  console.log(windows);
+  
   return (
     <ul>
       {windows.map((window, index) => {

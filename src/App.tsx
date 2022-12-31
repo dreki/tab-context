@@ -26,6 +26,7 @@ function App() {
   console.log(windows);
   return (
     <div className="p-2">
+      <h1>Windows</h1>
       <WindowList windows={windows} />
     </div>
   );
