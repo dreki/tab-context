@@ -60,9 +60,11 @@ const fetchWindowsAtom = atom(async () => {
         }
 
         chrome.windows.getAll({ populate: true }, (windows) => {
-            console.log('> windows (from Chrome):')
-            console.log(windows);
-            windows.forEach((window) => {
+            // console.log('> windows (from Chrome):')
+            // console.log(windows);
+            console.log(`> windows length (from Chrome): ${windows.length}`)
+            // windows.forEach((window) => {
+            for (let window of windows) {
                 const tabs: ITab[] = [];
                 if (!window.tabs || !window.id) { return; }
                 window.tabs.forEach((tab) => {
@@ -78,9 +80,12 @@ const fetchWindowsAtom = atom(async () => {
                     ));
                 });
                 result.push({ id: window.id, tabs: tabs });
-            });
+                // });
+            }
+            console.log(`> result length(from Chrome): ${result.length}`)
+            resolve(result);
         });
-        resolve(result);
+        // resolve(result);
     });
 });
 
