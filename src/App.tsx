@@ -22,8 +22,6 @@ function logWindowsAndTabs(windows: IWindow[]) {
 
 function App() {
   const [windows] = useAtom(windowsAtom);
-  console.log("> windows:");
-  console.log(windows);
   return (
     <div className="p-2">
       <h1>Windows</h1>
