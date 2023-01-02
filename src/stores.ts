@@ -60,6 +60,8 @@ const fetchWindowsAtom = atom(async () => {
         }
 
         chrome.windows.getAll({ populate: true }, (windows) => {
+            console.log('> windows from Chrome:')
+            console.log(windows);
             for (let window of windows) {
                 const tabs: ITab[] = [];
                 if (!window.tabs || !window.id) { return; }
