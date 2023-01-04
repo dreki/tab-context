@@ -63,6 +63,9 @@ const fetchWindowsAtom = atom(async () => {
             console.log('> windows from Chrome:')
             console.log(windows);
             for (let window of windows) {
+                // get Session ID for window, from Chrome
+                const sessionId = window.sessionId;
+                console.log(`> sessionId for window ${window.id}: ${sessionId}`); 
                 const tabs: ITab[] = [];
                 if (!window.tabs || !window.id) { return; }
                 window.tabs.forEach((tab) => {

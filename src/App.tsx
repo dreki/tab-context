@@ -1,7 +1,8 @@
 import { useAtom } from "jotai";
 import "./App.css";
 import logo from "./logo.svg";
-import { windowsAtom, IWindow } from "./stores";
+// import { windowsAtom, IWindow } from "./stores";
+import { Window } from "./stores/window";
 import { WindowList } from "./components/WindowList";
 import { observer } from "mobx-react";
 import { Session } from "./stores/session";
@@ -11,7 +12,7 @@ import { useState, useEffect } from "react";
  * Log all window IDs and the titles of their tabs. Log as JSON string.
  * @param windows Array of windows
  */
-function logWindowsAndTabs(windows: IWindow[]) {
+function logWindowsAndTabs(windows: Window[]) {
   const windowTabs: { tabs: { title: String }[] }[] = [];
   for (let window of windows) {
     if (!window.tabs) {
@@ -60,7 +61,8 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
 });
 
 function App() {
-  const [windows] = useAtom(windowsAtom);
+  // const [windows] = useAtom(windowsAtom);
+  const [windows, setWindows] = useState<Window[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
 
   useEffect(() => {
@@ -69,7 +71,18 @@ function App() {
       setSessions(sessions || []);
     };
     getSessions();
+
+    const getWindows = async () => {
+      const windows = await Window.loadAll();
+      console.log(`> windows:`);
+      console.log(windows);
+      setWindows(windows || []);
+    };
+    getWindows();
   }, []);
+
+  console.log("> in useEffect, window IDs:");
+  console.log(windows.map((window) => window.id));
 
   const addSessionButtonOnClick = async () => {
     const session = new Session();
