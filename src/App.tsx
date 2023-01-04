@@ -1,4 +1,3 @@
-import { useAtom } from "jotai";
 import "./App.css";
 import logo from "./logo.svg";
 // import { windowsAtom, IWindow } from "./stores";
@@ -61,7 +60,6 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
 });
 
 function App() {
-  // const [windows] = useAtom(windowsAtom);
   const [windows, setWindows] = useState<Window[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
 

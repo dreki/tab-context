@@ -1,8 +1,8 @@
-import { ITab } from "../stores";
+import { Tab } from "../stores/window";
 import { TabComponent } from "./TabComponent";
 
 interface TabListProps {
-  tabs: ITab[];
+  tabs: Tab[];
 }
 
 export function TabList({ tabs }: TabListProps) {

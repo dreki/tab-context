@@ -1,8 +1,8 @@
-import { IWindow } from "../stores";
 import { WindowComponent } from "./WindowComponent";
+import { Window } from "../stores/window";
 
 interface WindowListProps {
-  windows: IWindow[];
+  windows: Window[];
 }
 
 export function WindowList({ windows }: WindowListProps) {

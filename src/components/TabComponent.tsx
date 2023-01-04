@@ -1,8 +1,8 @@
-import { ITab } from "../stores";
+import { Tab } from "../stores/window";
 import { FavIconWithDefault } from "./FavIconWithDefault";
 
 interface TabComponentProps {
-  tab: ITab;
+  tab: Tab;
 }
 
 export function TabComponent({ tab }: TabComponentProps) {
