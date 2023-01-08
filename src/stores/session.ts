@@ -29,6 +29,11 @@ export class Session {
 
     constructor() {
         makeAutoObservable(this);
+        console.log('> Session constructor called!');
+        // If no id, create a new id
+        if (!this.id) {
+            this.id = uuidv4();
+        }
     }
 
     // Static class method for loading all sessions
@@ -45,10 +50,6 @@ export class Session {
      * Save method. If the session has an id, update it. Otherwise, create a new session with a new unique ID.
      */
     async save() {
-        // If no id, create a new id
-        if (!this.id) {
-            this.id = uuidv4();
-        }
         await upsert<Session>('sessions', this);
     }
 

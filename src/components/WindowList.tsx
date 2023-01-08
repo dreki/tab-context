@@ -3,18 +3,24 @@ import { Window } from "../stores/window";
 
 interface WindowListProps {
   windows: Window[];
+
+  // A callback for when the user wants to save the window's current state to a session.
+  onSaveWindowToSession: (window: Window) => void;
 }
 
-export function WindowList({ windows }: WindowListProps) {
+export function WindowList(props: WindowListProps) {
   // Log the IDs of all the windows
   console.log("> Window IDs:");
-  console.log(windows.map((window) => window.id));
+  console.log(props.windows.map((window) => window.id));
   return (
     <ul>
-      {windows.map((window, index) => {
+      {props.windows.map((window, index) => {
         return (
           <li key={index}>
-            <WindowComponent window={window} />
+            <WindowComponent
+              window={window}
+              onSaveWindowToSession={props.onSaveWindowToSession}
+            />
           </li>
         );
       })}

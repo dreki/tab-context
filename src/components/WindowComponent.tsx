@@ -4,13 +4,22 @@ import { Window } from "../stores/window";
 
 interface WindowComponentProps {
   window: Window;
+
+  // A callback for when the user wants to save the window's current state to a session.
+  onSaveWindowToSession: (window: Window) => void;
 }
 
-export function WindowComponent({ window }: WindowComponentProps) {
+export function WindowComponent(props: WindowComponentProps) {
   return (
     <>
-      <p>Window ID: {window.id}</p>
-      <TabList tabs={window.tabs} />
+      <p>Window ID: {props.window.id}</p>
+      <TabList tabs={props.window.tabs} />
+      <button
+        className="btn"
+        onClick={() => props.onSaveWindowToSession(props.window)}
+      >
+        Save to session
+      </button>
     </>
   );
 }

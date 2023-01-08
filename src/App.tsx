@@ -6,6 +6,7 @@ import { WindowList } from "./components/WindowList";
 import { observer } from "mobx-react";
 import { Session } from "./stores/session";
 import { useState, useEffect } from "react";
+import React from "react";
 
 /**
  * Log all window IDs and the titles of their tabs. Log as JSON string.
@@ -59,28 +60,49 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
   );
 });
 
+/**
+ * The state of the app.
+ * @interface
+ */
+// interface IState {
+//   windows: Window[];
+//   sessions: Session[];
+// }
+
+/**
+ * The main app component.
+ * @class
+ * @extends React.Component
+ */
+// class App extends React.Component {
+//   // Initial state
+//   state: IState = {
+//     windows: [],
+//     sessions: [],
+//   };
+
+//   render() {
+//     return (
+//       <div className="p-2">
+//         <h1>Windows</h1>
+
+//         <h1>Sessions</h1>
+//       </div>
+//     );
+//   }
+// }
+
 function App() {
   const [windows, setWindows] = useState<Window[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
 
   useEffect(() => {
-    const getSessions = async () => {
-      const sessions = await Session.loadAll();
-      setSessions(sessions || []);
-    };
-    getSessions();
-
-    const getWindows = async () => {
-      const windows = await Window.loadAll();
-      console.log(`> windows:`);
-      console.log(windows);
-      setWindows(windows || []);
-    };
-    getWindows();
+    loadSessions();
+    loadWindows();
   }, []);
 
-  console.log("> in useEffect, window IDs:");
-  console.log(windows.map((window) => window.id));
+  // console.log("> in useEffect, window IDs:");
+  // console.log(windows.map((window) => window.id));
 
   const addSessionButtonOnClick = async () => {
     const session = new Session();
@@ -88,15 +110,45 @@ function App() {
     setSessions([...sessions, session]);
   };
 
+  const onSaveWindowToSession = async (window: Window) => {
+    const session = new Session();
+    console.log(`> session:`);
+    console.log(session);
+    // session.windows = [window];
+    // await session.save();
+    // setSessions([...sessions, session]);
+  };
+
   return (
     <div className="p-2">
       <h1>Windows</h1>
-      <WindowList windows={windows} />
+      <WindowList
+        windows={windows}
+        onSaveWindowToSession={onSaveWindowToSession}
+      />
       <h1>Sessions</h1>
       <SessionList sessions={sessions} />
       <button onClick={addSessionButtonOnClick}>Add Session</button>
     </div>
   );
+
+  function loadWindows() {
+    const getWindows = async () => {
+      const windows = await Window.loadAll();
+      console.log(`> windows:`);
+      console.log(windows);
+      setWindows(windows || []);
+    };
+    getWindows();
+  }
+
+  function loadSessions() {
+    const getSessions = async () => {
+      const sessions = await Session.loadAll();
+      setSessions(sessions || []);
+    };
+    getSessions();
+  }
 }
 
 export default observer(App);
