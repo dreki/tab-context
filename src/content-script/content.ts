@@ -7,7 +7,7 @@ localForage.config({
     driver: localForage.LOCALSTORAGE,
 });
 
-console.log(`> Hello from content script!`);
+console.log(`> Hello from content script`);
 
 // Read the window session ID from local storage
 localForage.getItem("session-id").then((value) => {

@@ -117,6 +117,34 @@ function App() {
     // session.windows = [window];
     // await session.save();
     // setSessions([...sessions, session]);
+
+    // Send message to all content scripts in all tabs in the window.
+    const message = {
+      type: "saveWindowToSession",
+      payload: {
+        sessionId: session.id,
+      },
+    };
+    const tabs = window.tabs;
+    for (let tab of tabs) {
+      // Tell Chrome to unsuspend the tab.
+      // https://developer.chrome.com/docs/extensions/reference/tabs/#method-discard
+      // https://developer.chrome.com/docs/extensions/reference/tabs/#method-undiscard
+
+      // Connect to the content script.
+      chrome.tabs.connect(tab.id);
+
+      try {
+        console.log(`> sending message to tab ${tab.id}`);
+        const result = await chrome.tabs.sendMessage(tab.id, message);
+        console.log(`> result:`);
+        console.log(result);
+      } catch (error) {
+        console.log(`> error:`);
+        console.log(error);
+        debugger;
+      }
+    }
   };
 
   return (
