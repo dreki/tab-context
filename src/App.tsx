@@ -126,6 +126,64 @@ function App() {
       },
     };
     const tabs = window.tabs;
+
+    // Reload the first three tabs and send message to them.
+    const tabsToReload = tabs.slice(0, 3);
+    for (let tab of tabsToReload) {
+      // Only reload tabs that are not already suspended.
+      // if ((await chrome.tabs.get(tab.id)).discarded) {
+      chrome.tabs.reload(tab.id);
+
+      // }
+    }
+
+    // Wait until tabs are loaded.
+    let tabsLoaded = 0;
+    chrome.tabs.onUpdated.addListener(function listener(
+      tabId,
+      changeInfo,
+      tab
+    ) {
+      if (changeInfo.status === "complete") {
+        tabsLoaded++;
+        // chrome.tabs.onUpdated.removeListener(listener);
+        // console.log(`> tab ${tabId} is loaded`);
+        // console.log(`> sending message to tab ${tabId}`);
+        // chrome.tabs.sendMessage(tabId, message);
+      }
+
+      if (tabsLoaded === tabsToReload.length) {
+        chrome.tabs.onUpdated.removeListener(listener);
+        console.log(`> all tabs are loaded`);
+        // sendMessageToTabs(tabsToReload, message);
+        for (let tab of tabsToReload) {
+          // Connect to the content script.
+          // chrome.tabs.connect(tab.id);
+
+          try {
+            console.log(`> sending message to tab ${tab.id}`);
+            // const result = await chrome.tabs.sendMessage(tab.id, message);
+            chrome.tabs.sendMessage(tab.id, message);
+            // console.log(`> result:`);
+            // console.log(result);
+          } catch (error) {}
+        }
+      }
+    });
+
+    for (let tab of tabsToReload) {
+      // Connect to the content script.
+      // chrome.tabs.connect(tab.id);
+
+      try {
+        const result = await chrome.tabs.sendMessage(tab.id, message);
+      } catch (error) {}
+    }
+
+    /* 
+    // Reload first tab
+    const tab = tabs[0];
+    chrome.tabs.reload(tab.id);
     for (let tab of tabs) {
       // Tell Chrome to unsuspend the tab.
       // https://developer.chrome.com/docs/extensions/reference/tabs/#method-discard
@@ -145,6 +203,7 @@ function App() {
         debugger;
       }
     }
+     */
   };
 
   return (
