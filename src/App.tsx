@@ -40,8 +40,6 @@ interface SessionListProps {
   sessions: Session[] | null;
 }
 
-// const SessionList = observer(() => {
-// });
 const SessionList = observer(({ sessions }: SessionListProps) => {
   if (!sessions) {
     return null;
@@ -59,38 +57,6 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
     </ul>
   );
 });
-
-/**
- * The state of the app.
- * @interface
- */
-// interface IState {
-//   windows: Window[];
-//   sessions: Session[];
-// }
-
-/**
- * The main app component.
- * @class
- * @extends React.Component
- */
-// class App extends React.Component {
-//   // Initial state
-//   state: IState = {
-//     windows: [],
-//     sessions: [],
-//   };
-
-//   render() {
-//     return (
-//       <div className="p-2">
-//         <h1>Windows</h1>
-
-//         <h1>Sessions</h1>
-//       </div>
-//     );
-//   }
-// }
 
 function App() {
   const [windows, setWindows] = useState<Window[]>([]);
@@ -147,16 +113,11 @@ function App() {
     ) {
       if (changeInfo.status === "complete") {
         tabsLoaded++;
-        // chrome.tabs.onUpdated.removeListener(listener);
-        // console.log(`> tab ${tabId} is loaded`);
-        // console.log(`> sending message to tab ${tabId}`);
-        // chrome.tabs.sendMessage(tabId, message);
       }
 
       if (tabsLoaded === tabsToReload.length) {
         chrome.tabs.onUpdated.removeListener(listener);
         console.log(`> all tabs are loaded`);
-        // sendMessageToTabs(tabsToReload, message);
         for (let tab of tabsToReload) {
           // Connect to the content script.
           // chrome.tabs.connect(tab.id);
@@ -168,10 +129,8 @@ function App() {
             chrome.tabs.sendMessage(tab.id, message).then((response) => {
               console.log(`> response:`);
               console.log(response);
-              sessionId = sessionId;
+              // sessionId = sessionId;
             });
-            // console.log(`> result:`);
-            // console.log(result);
           } catch (error) {}
         }
       }
@@ -185,31 +144,6 @@ function App() {
         const result = await chrome.tabs.sendMessage(tab.id, message);
       } catch (error) {}
     }
-
-    /* 
-    // Reload first tab
-    const tab = tabs[0];
-    chrome.tabs.reload(tab.id);
-    for (let tab of tabs) {
-      // Tell Chrome to unsuspend the tab.
-      // https://developer.chrome.com/docs/extensions/reference/tabs/#method-discard
-      // https://developer.chrome.com/docs/extensions/reference/tabs/#method-undiscard
-
-      // Connect to the content script.
-      chrome.tabs.connect(tab.id);
-
-      try {
-        console.log(`> sending message to tab ${tab.id}`);
-        const result = await chrome.tabs.sendMessage(tab.id, message);
-        console.log(`> result:`);
-        console.log(result);
-      } catch (error) {
-        console.log(`> error:`);
-        console.log(error);
-        debugger;
-      }
-    }
-     */
   };
 
   return (
