@@ -127,12 +127,48 @@ function App() {
     };
     const tabs = window.tabs;
 
+    // Hold reference to function here so that it can be used in the callback safely.
+    const reloadFn = chrome.tabs.reload;
+
     // Reload the first three tabs and send message to them.
     const tabsToReload = tabs.slice(0, 3);
     for (let tab of tabsToReload) {
+      // If this is the current tab, skip it.
+      let isCurrentTab = false;
+      chrome.tabs.query({ active: true, currentWindow: true }, (queryTabs) => {
+        for (let queryTab of queryTabs) {
+          console.log(`> queryTab.id: ${queryTab.id}`);
+          console.log(`> tab.id: ${tab.id}`);
+          // Don't reload the current tab.
+          if (queryTab.id === tab.id) {
+            continue;
+          }
+          // Reload the tab.
+          // chrome.tabs.reload(tab.id);
+          reloadFn(tab.id);
+        }
+
+        /*
+        const firstTabsId = `${tabs[0].id}`;
+        const tabId = `${tab.id}`;
+        // if (tabs[0].id === tab.id) {
+        // Compare as strings
+        console.log(`> ${firstTabsId} === ${tabId} ?`);
+        if (firstTabsId === tabId) {
+          console.log(`> yes`);
+          isCurrentTab = true;
+        }
+        */
+      });
+      if (isCurrentTab) {
+        continue;
+      }
+
       // Only reload tabs that are not already suspended.
       // if ((await chrome.tabs.get(tab.id)).discarded) {
-      chrome.tabs.reload(tab.id);
+
+      // console.log(`> reloading tab ${tab.id}`);
+      // chrome.tabs.reload(tab.id);
 
       // }
     }
@@ -163,7 +199,12 @@ function App() {
           try {
             console.log(`> sending message to tab ${tab.id}`);
             // const result = await chrome.tabs.sendMessage(tab.id, message);
-            chrome.tabs.sendMessage(tab.id, message);
+            let sessionId: any;
+            chrome.tabs.sendMessage(tab.id, message).then((response) => {
+              console.log(`> response:`);
+              console.log(response);
+              sessionId = sessionId;
+            });
             // console.log(`> result:`);
             // console.log(result);
           } catch (error) {}
