@@ -112,12 +112,6 @@ function App() {
 
   const onSaveWindowToSession = async (window: Window) => {
     const session = new Session();
-    console.log(`> session:`);
-    console.log(session);
-    // session.windows = [window];
-    // await session.save();
-    // setSessions([...sessions, session]);
-
     // Send message to all content scripts in all tabs in the window.
     const message = {
       type: "saveWindowToSession",
@@ -133,46 +127,17 @@ function App() {
     // Reload the first three tabs and send message to them.
     const tabsToReload = tabs.slice(0, 3);
     for (let tab of tabsToReload) {
-      // If this is the current tab, skip it.
-      let isCurrentTab = false;
       chrome.tabs.query({ active: true, currentWindow: true }, (queryTabs) => {
         for (let queryTab of queryTabs) {
-          console.log(`> queryTab.id: ${queryTab.id}`);
-          console.log(`> tab.id: ${tab.id}`);
           // Don't reload the current tab.
           if (queryTab.id === tab.id) {
             continue;
           }
           // Reload the tab.
-          // chrome.tabs.reload(tab.id);
           reloadFn(tab.id);
         }
-
-        /*
-        const firstTabsId = `${tabs[0].id}`;
-        const tabId = `${tab.id}`;
-        // if (tabs[0].id === tab.id) {
-        // Compare as strings
-        console.log(`> ${firstTabsId} === ${tabId} ?`);
-        if (firstTabsId === tabId) {
-          console.log(`> yes`);
-          isCurrentTab = true;
-        }
-        */
       });
-      if (isCurrentTab) {
-        continue;
-      }
-
-      // Only reload tabs that are not already suspended.
-      // if ((await chrome.tabs.get(tab.id)).discarded) {
-
-      // console.log(`> reloading tab ${tab.id}`);
-      // chrome.tabs.reload(tab.id);
-
-      // }
     }
-
     // Wait until tabs are loaded.
     let tabsLoaded = 0;
     chrome.tabs.onUpdated.addListener(function listener(
