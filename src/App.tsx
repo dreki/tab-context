@@ -7,6 +7,7 @@ import { observer } from "mobx-react";
 import { Session } from "./stores/session";
 import { useState, useEffect } from "react";
 import React from "react";
+import { onSaveWindowToSession } from "./workflows/saveWindowSession";
 
 /**
  * Log all window IDs and the titles of their tabs. Log as JSON string.
@@ -57,7 +58,6 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
     </ul>
   );
 });
-
 function App() {
   const [windows, setWindows] = useState<Window[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -74,76 +74,6 @@ function App() {
     const session = new Session();
     await session.save();
     setSessions([...sessions, session]);
-  };
-
-  const onSaveWindowToSession = async (window: Window) => {
-    const session = new Session();
-    // Send message to all content scripts in all tabs in the window.
-    const message = {
-      type: "saveWindowToSession",
-      payload: {
-        sessionId: session.id,
-      },
-    };
-    const tabs = window.tabs;
-
-    // Hold reference to function here so that it can be used in the callback safely.
-    const reloadFn = chrome.tabs.reload;
-
-    // Reload the first three tabs and send message to them.
-    const tabsToReload = tabs.slice(0, 3);
-    for (let tab of tabsToReload) {
-      chrome.tabs.query({ active: true, currentWindow: true }, (queryTabs) => {
-        for (let queryTab of queryTabs) {
-          // Don't reload the current tab.
-          if (queryTab.id === tab.id) {
-            continue;
-          }
-          // Reload the tab.
-          reloadFn(tab.id);
-        }
-      });
-    }
-    // Wait until tabs are loaded.
-    let tabsLoaded = 0;
-    chrome.tabs.onUpdated.addListener(function listener(
-      tabId,
-      changeInfo,
-      tab
-    ) {
-      if (changeInfo.status === "complete") {
-        tabsLoaded++;
-      }
-
-      if (tabsLoaded === tabsToReload.length) {
-        chrome.tabs.onUpdated.removeListener(listener);
-        console.log(`> all tabs are loaded`);
-        for (let tab of tabsToReload) {
-          // Connect to the content script.
-          // chrome.tabs.connect(tab.id);
-
-          try {
-            console.log(`> sending message to tab ${tab.id}`);
-            // const result = await chrome.tabs.sendMessage(tab.id, message);
-            let sessionId: any;
-            chrome.tabs.sendMessage(tab.id, message).then((response) => {
-              console.log(`> response:`);
-              console.log(response);
-              // sessionId = sessionId;
-            });
-          } catch (error) {}
-        }
-      }
-    });
-
-    for (let tab of tabsToReload) {
-      // Connect to the content script.
-      // chrome.tabs.connect(tab.id);
-
-      try {
-        const result = await chrome.tabs.sendMessage(tab.id, message);
-      } catch (error) {}
-    }
   };
 
   return (

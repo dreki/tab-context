@@ -1,4 +1,5 @@
 import localForage from "localforage";
+import { ISaveWindowToSessionMessage, ISaveWindowToSessionResponse } from "../workflows/saveWindowSession";
 
 localForage.config({
     name: "tab-context-content",
@@ -7,32 +8,35 @@ localForage.config({
     driver: localForage.LOCALSTORAGE,
 });
 
-console.log(`> Hello from content script`);
-
 // Read the window session ID from local storage
 let sessionId: string | null = null;
 localForage.getItem("session-id").then((value) => {
-    console.log(`> Session ID: ${value}`);
     sessionId = value as string;
 });
 
 // Listen for an event from the action script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log(`> Received message from action script: ${message}`);
+chrome.runtime.onMessage.addListener((
+    message: ISaveWindowToSessionMessage,
+    sender,
+    // sendResponse requires a param of ISaveWindowToSessionResponse
+    sendResponse: (response: ISaveWindowToSessionResponse) => void
+) => {
+    console.log(`> Received message from action script:`);
+    console.log(message);
 
     // If `sessionId` already holds an ID, return that.
     if (sessionId) {
         console.log(`> Returning existing session ID: ${sessionId}`);
 
-        sendResponse(sessionId);
+        // sendResponse(sessionId);
+        sendResponse({
+            type: 'saveWindowToSessionResponse',
+            payload: {
+                sessionId: sessionId
+            }
+        });
         return;
     }
-    // Otherwise, get the ID from the message, store it in local storage, and return it.
-    sessionId = message;
-    localForage.setItem("session-id", sessionId).then(() => {
-        console.log(`> Returning new session ID: ${sessionId}`);
-        sendResponse(sessionId);
-    });
 });
 
 export { };
