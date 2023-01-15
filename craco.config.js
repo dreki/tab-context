@@ -70,7 +70,14 @@ class InterpolateHtmlWithManifestPlugin {
                             "assetManifest",
                             "g" + (tagPattern.ignoreCase ? "i" : "")
                         );
- */
+                        */
+
+                        // Set the pattern to match strings like "#manifest('main.css')#"
+                        tagPattern = new RegExp(
+                            "#manifest\\('" + escapeStringRegexp(key) + "'\\)#",
+                            "gm"
+                        );
+
                         /*
                         tagPattern = VerEx()
                             // .startOfLine()
