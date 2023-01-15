@@ -9,6 +9,10 @@ const escapeStringRegexp = require("escape-string-regexp");
  *
  * Using this plugin, you can replace dynamically-generated URLs in your HTML files with the actual
  * URLs. (Dynamically-generated URLs can include content hashes, making them difficult to predict.)
+ *
+ * Note that this plugin will only process HTML files that are listed in
+ * `build/asset-manifest.json`. Typically this means that you need HtmlWebpackPlugin to be aware of
+ * the HTML file.
  */
 class InterpolateHtmlWithManifestPlugin {
     apply(compiler) {
@@ -75,7 +79,7 @@ module.exports = {
                     inject: true,
                     template: paths.appPublic + "/ui.html",
                     filename: "ui.html",
-                    chunks: ["content"],
+                    // chunks: ["content"],˝
                 })
             );
 
