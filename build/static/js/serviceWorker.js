@@ -1,2 +1,2 @@
-!function(){"use strict";chrome.runtime.onInstalled.addListener((function(){chrome.tabs.create({url:chrome.runtime.getURL("ui.html"),pinned:!0})}))}();
+!function(){"use strict";chrome.runtime.onInstalled.addListener((function(){chrome.windows.getAll({populate:!0},(function(e){e.forEach((function(e){e.type&&"normal"!==e.type||chrome.tabs.create({windowId:e.id,url:chrome.runtime.getURL("ui.html"),pinned:!0})}))}))}))}();
 //# sourceMappingURL=serviceWorker.js.map
