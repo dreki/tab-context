@@ -27,11 +27,13 @@ export class Tab {
 
 export class Window {
     id!: number;
+    index!: number;
     tabs: Tab[] = [];
 
-    constructor(id: number, tabs: Tab[]) {
+    constructor(id: number, index: number, tabs: Tab[]) {
         makeAutoObservable(this);
         this.id = id;
+        this.index = index;
         this.tabs = tabs;
     }
 
@@ -46,6 +48,7 @@ export class Window {
 
     private static loadDevWindows(): Window[] {
         const result: Window[] = [];
+        let i = 0;
         devTabs.forEach((window) => {
             const tabs: Tab[] = [];
             // For each object in devTabs, add to the result array
@@ -60,7 +63,8 @@ export class Window {
                 ));
             });
             // result.push({ id: window.id, tabs: tabs });
-            result.push(new Window(window.id, tabs));
+            result.push(new Window(window.id, i, tabs));
+            i++;
         });
         return result;
     }
@@ -71,6 +75,8 @@ export class Window {
         // chrome.windows.getAll({ populate: true }, (windows) => {
         console.log('> windows from Chrome:')
         console.log(chromeWindows);
+        // Iterate over each window, along with an index
+        let i = 0;
         for (let window of chromeWindows) {
             // get Session ID for window, from Chrome
             // const sessionId = window.sessionId;
@@ -90,7 +96,8 @@ export class Window {
                 ));
             });
             // result.push({ id: window.id, tabs: tabs });
-            result.push(new Window(window.id, tabs));
+            result.push(new Window(window.id, i, tabs));
+            i++;
         }
         // resolve(result);
         return result;

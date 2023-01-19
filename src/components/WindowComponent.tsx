@@ -11,15 +11,17 @@ interface WindowComponentProps {
 
 export function WindowComponent(props: WindowComponentProps) {
   return (
-    <>
-      <p>Window ID: {props.window.id}</p>
-      <TabList tabs={props.window.tabs} />
-      <button
-        className="btn"
-        onClick={() => props.onSaveWindowToSession(props.window)}
-      >
-        Save to session
-      </button>
-    </>
+      <>
+          <p>
+              Window ID: {props.window.id} (index: {props.window.index})
+          </p>
+          <TabList tabs={props.window.tabs} />
+          <button
+              className="btn"
+              onClick={() => props.onSaveWindowToSession(props.window)}
+          >
+              Save to session
+          </button>
+      </>
   );
 }
