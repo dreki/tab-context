@@ -53,4 +53,8 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
+chrome.windows.onRemoved.addListener((windowId) => {
+    console.log(`> Window ${windowId} was closed.`);
+});
+
 export { };
