@@ -73,9 +73,11 @@ function App() {
     // console.log(windows.map((window) => window.id));
 
     const addSessionButtonOnClick = async () => {
-        const session = new Session();
-        await session.save();
-        setSessions([...sessions, session]);
+        // const session = new Session();
+        // await session.save();
+        // setSessions([...sessions, session]);
+        console.warn('DEPRECATED');
+        
     };
 
     return (

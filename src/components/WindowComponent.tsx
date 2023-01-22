@@ -17,10 +17,10 @@ export function WindowComponent(props: WindowComponentProps) {
           </p>
           <TabList tabs={props.window.tabs} />
           <button
-              className="btn"
+              className="btn btn-sm btn-primary"
               onClick={() => props.onSaveWindowToSession(props.window)}
           >
-              Save to session
+              Suspend
           </button>
       </>
   );
