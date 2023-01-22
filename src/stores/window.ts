@@ -5,10 +5,10 @@ export class Tab {
     id!: number;
     title: string;
     groupId: number;
-    url?: string;
-    favIconUrl?: string;
+    url: string;
+    favIconUrl: string;
 
-    constructor(id: number, title: string, groupId: number, url?: string, favIconUrl?: string) {
+    constructor(id: number, title: string, groupId: number, url: string, favIconUrl: string) {
         makeAutoObservable(this);
         this.id = id;
         this.title = title;
@@ -59,7 +59,7 @@ export class Window {
                     tab.title,
                     tab.groupId,
                     tab.url,
-                    tab.favIconUrl
+                    tab.favIconUrl || ''
                 ));
             });
             // result.push({ id: window.id, tabs: tabs });
@@ -91,8 +91,8 @@ export class Window {
                     tab.id,
                     tab.title,
                     tab.groupId,
-                    tab.url,
-                    tab.favIconUrl
+                    tab.url || '',
+                    tab.favIconUrl || ''
                 ));
             });
             // result.push({ id: window.id, tabs: tabs });

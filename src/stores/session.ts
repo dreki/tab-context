@@ -1,6 +1,7 @@
 import { makeAutoObservable, observable } from 'mobx';
 import { get, upsert } from './db';
 import { v4 as uuidv4 } from 'uuid'
+import SparkMD5 from 'spark-md5';
 
 export class Tab {
     title: string;
@@ -16,6 +17,13 @@ export class Tab {
     }
 }
 
+// Enum for Session status
+export enum SessionStatus {
+    Active = 'active',
+    Suspended = 'suspended',
+    Archived = 'archived'
+}
+
 /**
  * Session class. Represents a tab session.
  */
@@ -23,17 +31,21 @@ export class Session {
     // id is a unique identifier for the session
     id!: string;
     tabs: Tab[] = [];
+    // status is the status of the session
+    status: SessionStatus = SessionStatus.Active;
 
     // static class-level `sessions` array
     // static sessions: Session[] = observable([]);
 
-    constructor() {
+    constructor(tabs: Tab[]) {
         makeAutoObservable(this);
         console.log('> Session constructor called!');
         // If no id, create a new id
+        /*
         if (!this.id) {
             this.id = uuidv4();
         }
+        */
     }
 
     // Static class method for loading all sessions
@@ -44,6 +56,15 @@ export class Session {
         //     return;
         // }
         // Session.sessions = sessions;
+    }
+
+    /**
+     * Load all active sessions.
+     */
+    static async loadActive(): Promise<Session[] | null> {
+        // const sessions: Session[] | null = await get<Session>('sessions', { status: SessionStatus.Active });
+        const sessions: Session[] | null = await get<Session>('activeSessions');
+        return sessions;
     }
 
     /**

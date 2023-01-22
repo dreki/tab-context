@@ -15,8 +15,22 @@ export abstract class Model {
 // class Session
 
 // Allow fetching by key and generic type.
-export async function get<T extends Model>(key: string): Promise<T[] | null> {
+export async function get<T extends Model>(
+    key: string,
+    // filter?: { [key: string]: any }
+): Promise<T[] | null> {
     return localForage.getItem(key);
+    // const allItems: T[] | null = await localForage.getItem(key);
+    // if (!allItems) { return null; }
+    // if (!filter) { return allItems; }
+    // return allItems.filter(item => {
+    //     for (const [key, value] of Object.entries(filter)) {
+    //         if (item[key] !== value) {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 }
 
 // Allow fetching by key, ID, and generic type.
