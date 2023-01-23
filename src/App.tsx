@@ -7,7 +7,7 @@ import { observer } from "mobx-react";
 import { Session } from "./stores/session";
 import { useState, useEffect } from "react";
 import React from "react";
-import { onSaveWindowToSession } from "./workflows/saveWindowSession";
+import { suspend } from "./workflows/saveWindowSession";
 
 /**
  * Log all window IDs and the titles of their tabs. Log as JSON string.
@@ -69,27 +69,17 @@ function App() {
         loadWindows();
     }, []);
 
-    // console.log("> in useEffect, window IDs:");
-    // console.log(windows.map((window) => window.id));
-
-    const addSessionButtonOnClick = async () => {
-        // const session = new Session();
-        // await session.save();
-        // setSessions([...sessions, session]);
-        console.warn('DEPRECATED');
-        
-    };
-
     return (
         <div className="p-2">
             <h1>Windows</h1>
             <WindowList
                 windows={windows}
-                onSaveWindowToSession={onSaveWindowToSession}
+                onSuspend={(window) => {
+                    suspend(window);
+                }}
             />
             <h1>Sessions</h1>
             <SessionList sessions={sessions} />
-            <button onClick={addSessionButtonOnClick}>Add Session</button>
         </div>
     );
 
@@ -111,5 +101,20 @@ function App() {
         getSessions();
     }
 }
+
+// Listen for our tab to become activated
+chrome.tabs.onActivated.addListener((activeInfo) => {
+    chrome.tabs.getCurrent((tab) => {
+        if (!tab) {
+            return;
+        }
+        if (tab.id === activeInfo.tabId) {
+            console.log("> Our tab activated");
+        } else {
+            console.log("> Another tab activated");
+        }
+    });
+    // console.log(`> Tab activated: ${activeInfo.tabId}`);
+});
 
 export default observer(App);

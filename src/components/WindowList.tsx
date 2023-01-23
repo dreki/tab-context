@@ -5,7 +5,8 @@ interface WindowListProps {
   windows: Window[];
 
   // A callback for when the user wants to save the window's current state to a session.
-  onSaveWindowToSession: (window: Window) => void;
+  // onSaveWindowToSession: (window: Window) => void;
+  onSuspend: (window: Window) => void;
 }
 
 export function WindowList(props: WindowListProps) {
@@ -19,7 +20,7 @@ export function WindowList(props: WindowListProps) {
           <li key={index}>
             <WindowComponent
               window={window}
-              onSaveWindowToSession={props.onSaveWindowToSession}
+              onSuspend={props.onSuspend}
             />
           </li>
         );

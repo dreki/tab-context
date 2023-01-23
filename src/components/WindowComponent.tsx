@@ -6,7 +6,8 @@ interface WindowComponentProps {
   window: Window;
 
   // A callback for when the user wants to save the window's current state to a session.
-  onSaveWindowToSession: (window: Window) => void;
+//   onSaveWindowToSession: (window: Window) => void;
+  onSuspend: (window: Window) => void;
 }
 
 export function WindowComponent(props: WindowComponentProps) {
@@ -18,7 +19,7 @@ export function WindowComponent(props: WindowComponentProps) {
           <TabList tabs={props.window.tabs} />
           <button
               className="btn btn-sm btn-primary"
-              onClick={() => props.onSaveWindowToSession(props.window)}
+              onClick={() => props.onSuspend(props.window)}
           >
               Suspend
           </button>

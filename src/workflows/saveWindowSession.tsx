@@ -115,7 +115,16 @@ async function reloadTabs(
     // return result;
 }
 
-export async function onSaveWindowToSession(window: Window) {
+/**
+ * Syncs all tabs in the window to the session, and then closes the window.
+ * @param window The window to suspend.
+ */
+export async function suspend(window: Window) {
+    // Reload all tabs in the window.
+    // await reloadTabs(window.tabs, true);
+}
+
+export async function onSaveWindowToSession__DEP(window: Window) {
     const tabs: Tab[] = window.tabs;
     const session = new Session(tabs.map((tab) => tabToSessionTab(tab)));
 
