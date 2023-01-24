@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
+// import App from "./App";
+import app from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 /* 
@@ -31,7 +32,8 @@ if (mainUIRootElement) {
   const mainUIRoot = ReactDOM.createRoot(mainUIRootElement);
   mainUIRoot.render(
     <React.StrictMode>
-      <App />
+      {/* <App /> */}
+      {app}
     </React.StrictMode>
   );
 }

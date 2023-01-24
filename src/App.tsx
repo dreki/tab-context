@@ -1,12 +1,10 @@
 import "./App.css";
-import logo from "./logo.svg";
 // import { windowsAtom, IWindow } from "./stores";
-import { Window } from "./stores/window";
-import { WindowList } from "./components/WindowList";
 import { observer } from "mobx-react";
+import { useEffect, useState } from "react";
+import { WindowList } from "./components/WindowList";
 import { Session } from "./stores/session";
-import { useState, useEffect } from "react";
-import React from "react";
+import { Window, WindowObserver } from "./stores/window";
 import { suspend } from "./workflows/saveWindowSession";
 
 /**
@@ -60,7 +58,7 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
         </ul>
     );
 });
-function App() {
+function App__DEPRECATED() {
     const [windows, setWindows] = useState<Window[]>([]);
     const [sessions, setSessions] = useState<Session[]>([]);
 
@@ -117,4 +115,29 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
     // console.log(`> Tab activated: ${activeInfo.tabId}`);
 });
 
-export default observer(App);
+// export default observer(App);
+
+interface IAppProps {
+    windowObserver: WindowObserver;
+}
+
+// function App(windowObserver: WindowObserver) {
+const App = observer(function App({ windowObserver }: IAppProps) {
+    return (
+        <div className="p-2">
+            <h1>Windows</h1>
+            <WindowList
+                windows={windowObserver.windows}
+                onSuspend={(window) => {
+                    suspend(window);
+                }}
+            />
+        </div>
+    );
+});
+
+const app = <App windowObserver={new WindowObserver()} />;
+
+// export default observer(App);
+// export default App;
+export default app;
