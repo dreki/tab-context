@@ -122,6 +122,11 @@ async function reloadTabs(
 export async function suspend(window: Window) {
     // Reload all tabs in the window.
     // await reloadTabs(window.tabs, true);
+
+    // Make a new `Session` from `window`'s tabs.
+    const session = new Session(window.tabs.map((tab) => tabToSessionTab(tab)));
+    console.log("> session:");
+    console.log(session);
 }
 
 export async function onSaveWindowToSession__DEP(window: Window) {

@@ -30,12 +30,29 @@ export enum SessionStatus {
 export class Session {
     // id is a unique identifier for the session
     id!: string;
-    tabs: Tab[] = [];
+    // tabs: Tab[] = [];
     // status is the status of the session
     status: SessionStatus = SessionStatus.Active;
 
     // static class-level `sessions` array
     // static sessions: Session[] = observable([]);
+
+    // `_tabs` should have getter/setter methods
+    private _tabs: Tab[] = [];
+
+    // Getter/setter for tabs
+    get tabs(): Tab[] {
+        return this._tabs;
+    }
+
+    set tabs(tabs: Tab[]) {
+        this._tabs = tabs;
+        // Set the ID to an MD5 hash of all of the tab URLs together.
+        // This is a unique identifier for the session.
+        const tabUrls = tabs.map((tab) => tab.url);
+        const tabUrlsString = tabUrls.join('');
+        this.id = SparkMD5.hash(tabUrlsString);
+    }
 
     constructor(tabs: Tab[]) {
         makeAutoObservable(this);
@@ -46,6 +63,7 @@ export class Session {
             this.id = uuidv4();
         }
         */
+        this.tabs = tabs;
     }
 
     // Static class method for loading all sessions

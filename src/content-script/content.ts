@@ -1,5 +1,5 @@
 import localForage from "localforage";
-import { ISaveWindowToSessionMessage, ISaveWindowToSessionResponse } from "../workflows/saveWindowSession";
+import { ISaveWindowToSessionMessage, ISaveWindowToSessionResponse } from "../workflows/suspend";
 import { v4 as uuidv4 } from 'uuid'
 
 localForage.config({

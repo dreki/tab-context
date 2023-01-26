@@ -44,3 +44,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Attributions
+
+Favicon is from <a target="_blank" href="https://icons8.com/icon/123433/open-view-in-new-tab">Open View In New Tab</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>. Thank you!

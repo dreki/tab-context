@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { WindowList } from "./components/WindowList";
 import { Session } from "./stores/session";
 import { Window, WindowObserver } from "./stores/window";
-import { suspend } from "./workflows/saveWindowSession";
+import { suspend } from "./workflows/suspend";
 
 /**
  * Log all window IDs and the titles of their tabs. Log as JSON string.
