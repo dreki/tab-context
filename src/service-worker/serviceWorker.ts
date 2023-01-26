@@ -57,4 +57,13 @@ chrome.windows.onRemoved.addListener((windowId) => {
     console.log(`> Window ${windowId} was closed.`);
 });
 
+chrome.tabs.onMoved.addListener((tabId, moveInfo) => {
+    console.log(`> Tab ${tabId} was moved to window ${moveInfo.windowId} at position ${moveInfo.toIndex}.`);
+});
+
+// Listen for tab order to change
+chrome.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
+    console.log(`> Tab ${removedTabId} was replaced by tab ${addedTabId}.`);
+});
+
 export { };

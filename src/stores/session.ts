@@ -50,8 +50,10 @@ export class Session {
         // Set the ID to an MD5 hash of all of the tab URLs together.
         // This is a unique identifier for the session.
         const tabUrls = tabs.map((tab) => tab.url);
+        console.log(tabUrls);
         const tabUrlsString = tabUrls.join('');
         this.id = SparkMD5.hash(tabUrlsString);
+        console.log(`> new session id: ${this.id}`);
     }
 
     constructor(tabs: Tab[]) {
