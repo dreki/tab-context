@@ -1,29 +1,10 @@
 import "./App.css";
 // import { windowsAtom, IWindow } from "./stores";
 import { observer } from "mobx-react";
-import { useEffect, useState } from "react";
 import { WindowList } from "./components/WindowList";
 import { Session } from "./stores/session";
-import { Window, WindowObserver } from "./stores/window";
+import { WindowObserver } from "./stores/window";
 import { suspend } from "./workflows/suspend";
-
-/**
- * Log all window IDs and the titles of their tabs. Log as JSON string.
- * @param windows Array of windows
- */
-function logWindowsAndTabs(windows: Window[]) {
-    const windowTabs: { tabs: { title: String }[] }[] = [];
-    for (let window of windows) {
-        if (!window.tabs) {
-            continue;
-        }
-        const tabTitles: String[] = window.tabs.map(
-            (tab) => tab.title
-        ) as String[];
-        windowTabs.push({ tabs: tabTitles.map((title) => ({ title })) });
-    }
-    console.log(JSON.stringify(windowTabs));
-}
 
 interface SessionComponentProps {
     session: Session;
@@ -58,47 +39,6 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
         </ul>
     );
 });
-function App__DEPRECATED() {
-    const [windows, setWindows] = useState<Window[]>([]);
-    const [sessions, setSessions] = useState<Session[]>([]);
-
-    useEffect(() => {
-        loadSessions();
-        loadWindows();
-    }, []);
-
-    return (
-        <div className="p-2">
-            <h1>Windows</h1>
-            <WindowList
-                windows={windows}
-                onSuspend={(window) => {
-                    suspend(window);
-                }}
-            />
-            <h1>Sessions</h1>
-            <SessionList sessions={sessions} />
-        </div>
-    );
-
-    function loadWindows() {
-        const getWindows = async () => {
-            const windows = await Window.loadAll();
-            console.log(`> windows:`);
-            console.log(windows);
-            setWindows(windows || []);
-        };
-        getWindows();
-    }
-
-    function loadSessions() {
-        const getSessions = async () => {
-            const sessions = await Session.loadAll();
-            setSessions(sessions || []);
-        };
-        getSessions();
-    }
-}
 
 const windowObserver = new WindowObserver();
 
@@ -161,6 +101,4 @@ const App = observer(function App({ windowObserver }: IAppProps) {
 
 const app = <App windowObserver={windowObserver} />;
 
-// export default observer(App);
-// export default App;
 export default app;
