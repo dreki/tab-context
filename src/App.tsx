@@ -4,6 +4,8 @@ import { observer } from "mobx-react";
 import { WindowList } from "./components/WindowList";
 import { Session } from "./stores/session";
 import { WindowObserver } from "./stores/window";
+import { onOurTabActivated } from "./utils/onOurTabActivated";
+import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { suspend } from "./workflows/suspend";
 
 interface SessionComponentProps {
@@ -42,43 +44,21 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
 
 const windowObserver = new WindowObserver();
 
-// Listen for our tab to become activated
-chrome.tabs.onActivated.addListener((activeInfo) => {
-    chrome.tabs.getCurrent((tab) => {
-        if (!tab) {
-            return;
-        }
-        if (tab.id === activeInfo.tabId) {
-            console.log("> Our tab activated");
-            const updater = async () => {
-                await windowObserver.loadChromeWindows();
-                console.log("> windows reloaded");
-            };
-            updater();
-        }
-    });
-    // console.log(`> Tab activated: ${activeInfo.tabId}`);
+// Reload windows from store when our tab is activated.
+onOurTabActivated({
+    onOurTabActivated: async () => {
+        await windowObserver.loadChromeWindows();
+        console.log("> windows reloaded");
+    },
 });
 
-// Listen to on _window_ activation as well
-chrome.windows.onFocusChanged.addListener((windowId) => {
-    // If the focused window is our window, reload the windows data.
-    // Otherwise, do nothing.
-    chrome.windows.getCurrent((window) => {
-        if (!window) {
-            return;
-        }
-        if (window.id === windowId) {
-            const updater = async () => {
-                await windowObserver.loadChromeWindows();
-                console.log("> windows reloaded");
-            };
-            updater();
-        }
-    });
+// Reload windows from store when our window is activated.
+onOurWindowActivated({
+    onOurWindowActivated: async () => {
+        await windowObserver.loadChromeWindows();
+        console.log("> windows reloaded");
+    },
 });
-
-// export default observer(App);
 
 interface IAppProps {
     windowObserver: WindowObserver;
