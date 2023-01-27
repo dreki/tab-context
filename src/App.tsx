@@ -100,6 +100,8 @@ function App__DEPRECATED() {
     }
 }
 
+const windowObserver = new WindowObserver();
+
 // Listen for our tab to become activated
 chrome.tabs.onActivated.addListener((activeInfo) => {
     chrome.tabs.getCurrent((tab) => {
@@ -108,11 +110,32 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
         }
         if (tab.id === activeInfo.tabId) {
             console.log("> Our tab activated");
-        } else {
-            console.log("> Another tab activated");
+            const updater = async () => {
+                await windowObserver.loadChromeWindows();
+                console.log("> windows reloaded");
+            };
+            updater();
         }
     });
     // console.log(`> Tab activated: ${activeInfo.tabId}`);
+});
+
+// Listen to on _window_ activation as well
+chrome.windows.onFocusChanged.addListener((windowId) => {
+    // If the focused window is our window, reload the windows data.
+    // Otherwise, do nothing.
+    chrome.windows.getCurrent((window) => {
+        if (!window) {
+            return;
+        }
+        if (window.id === windowId) {
+            const updater = async () => {
+                await windowObserver.loadChromeWindows();
+                console.log("> windows reloaded");
+            };
+            updater();
+        }
+    });
 });
 
 // export default observer(App);
@@ -136,7 +159,7 @@ const App = observer(function App({ windowObserver }: IAppProps) {
     );
 });
 
-const app = <App windowObserver={new WindowObserver()} />;
+const app = <App windowObserver={windowObserver} />;
 
 // export default observer(App);
 // export default App;

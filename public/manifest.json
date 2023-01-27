@@ -12,7 +12,8 @@
   "manifest_version": 3,
   "permissions": [
     "tabs",
-    "tabGroups"
+    "tabGroups",
+    "windows"
   ],
   "background": {
     "service_worker": "./static/js/serviceWorker.js"

@@ -1,3 +1,5 @@
+import { WindowObserver } from "../stores/window";
+
 
 // On install, open 'ui.html' from within the extension. Open a new pinned tab in all windows,
 // unless there's already a tab open for this extension pinned.
@@ -59,6 +61,12 @@ chrome.windows.onRemoved.addListener((windowId) => {
 
 chrome.tabs.onMoved.addListener((tabId, moveInfo) => {
     console.log(`> Tab ${tabId} was moved to window ${moveInfo.windowId} at position ${moveInfo.toIndex}.`);
+    
+    // const windowObserverReloader = async () => {
+    //     const windowObserver = new WindowObserver();
+    //     await windowObserver.loadChromeWindows();
+    // }
+
 });
 
 // Listen for tab order to change
