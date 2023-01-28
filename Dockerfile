@@ -10,6 +10,9 @@ RUN apk add --no-cache bash
 # Install build base
 RUN apk add --no-cache build-base
 
+# Install inotify-tools, so we can run `yarn build` in watch mode.
+RUN apk add --no-cache inotify-tools
+
 # Important for installing node packages
 WORKDIR /
 

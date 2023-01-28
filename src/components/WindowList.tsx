@@ -12,24 +12,8 @@ interface WindowListProps {
 
 export function WindowList(props: WindowListProps) {
     // Log the IDs of all the windows
-    console.log("> Window IDs:");
-    console.log(props.windows.map((window) => window.id));
-    /*
-  return (
-    <>
-      {props.windows.map((window, index) => {
-        return (
-          <div key={index}>
-            <WindowComponent
-              window={window}
-              onSuspend={props.onSuspend}
-            />
-          </div>
-        );
-      })}
-    </>
-  );
-  */
+    // console.log("> Window IDs:");
+    // console.log(props.windows.map((window) => window.id));
 
     // Render `WindowComponent`s in a `DivideChildren` component
     return (

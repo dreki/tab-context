@@ -7,7 +7,7 @@ interface TabListProps {
 
 export function TabList({ tabs }: TabListProps) {
   return (
-    <div className="flex flex-nowrap">
+    <div className="flex flex-row flex-wrap">
       {tabs.map((tab, index) => {
         return (
           <div key={index}>

@@ -65,8 +65,9 @@ interface IAppProps {
 // function App(windowObserver: WindowObserver) {
 const App = observer(function App({ windowObserver }: IAppProps) {
     return (
-        <div className="prose p-2">
-            <h1>Windows</h1>
+        <div className="container p-2">
+            
+            <h1 className="text-lg font-bold">Windows</h1>
             <WindowList
                 windows={windowObserver.windows}
                 onSuspend={(window) => {

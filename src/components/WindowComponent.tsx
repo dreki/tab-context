@@ -13,7 +13,9 @@ interface WindowComponentProps {
 export function WindowComponent(props: WindowComponentProps) {
     return (
         <div className="mb-2">
-            <TabList tabs={props.window.tabs} />
+            <div className="overflow-hidden">
+                <TabList tabs={props.window.tabs} />
+            </div>
             <div>
                 Window ID: {props.window.id} (index: {props.window.index})
             </div>
