@@ -46,17 +46,15 @@ const windowObserver = new WindowObserver();
 
 // Reload windows from store when our tab is activated.
 onOurTabActivated({
-    onOurTabActivated: async () => {
+    callback: async () => {
         await windowObserver.loadChromeWindows();
-        console.log("> windows reloaded");
     },
 });
 
 // Reload windows from store when our window is activated.
 onOurWindowActivated({
-    onOurWindowActivated: async () => {
+    callback: async () => {
         await windowObserver.loadChromeWindows();
-        console.log("> windows reloaded");
     },
 });
 
@@ -67,7 +65,7 @@ interface IAppProps {
 // function App(windowObserver: WindowObserver) {
 const App = observer(function App({ windowObserver }: IAppProps) {
     return (
-        <div className="p-2">
+        <div className="prose p-2">
             <h1>Windows</h1>
             <WindowList
                 windows={windowObserver.windows}

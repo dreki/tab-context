@@ -1,11 +1,11 @@
 
 interface IOnOurTabActivatedParams {
     // An async function to call when our tab is activated.
-    onOurTabActivated: () => Promise<void>;
+    callback: () => Promise<void>;
 }
 
 export function onOurTabActivated({
-    onOurTabActivated,
+    callback: onOurTabActivated,
 }: IOnOurTabActivatedParams) {
     // Listen for our tab to become activated
     chrome.tabs.onActivated.addListener((activeInfo) => {

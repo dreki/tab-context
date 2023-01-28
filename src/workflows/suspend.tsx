@@ -1,4 +1,4 @@
-import { Session, Tab as SessionTab } from "../stores/session";
+import { Session, SessionStore, Tab as SessionTab } from "../stores/session";
 import { Tab, Window } from "../stores/window";
 
 function sessionIdFactory(): string {
@@ -53,6 +53,8 @@ export async function suspend(window: Window) {
     const session = new Session(window.tabs.map((tab) => tabToSessionTab(tab)));
     console.log("> session:");
     console.log(session);
+    // await SessionStore.save(session);
+    await SessionStore.getInstance().save(session);
 }
 
 export async function onSaveWindowToSession__DEP(window: Window) {

@@ -14,17 +14,17 @@ export function WindowList(props: WindowListProps) {
   console.log("> Window IDs:");
   console.log(props.windows.map((window) => window.id));
   return (
-    <ul>
+    <>
       {props.windows.map((window, index) => {
         return (
-          <li key={index}>
+          <div key={index}>
             <WindowComponent
               window={window}
               onSuspend={props.onSuspend}
             />
-          </li>
+          </div>
         );
       })}
-    </ul>
+    </>
   );
 }

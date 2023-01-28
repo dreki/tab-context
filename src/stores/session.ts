@@ -75,10 +75,24 @@ export class Session {
  * Manages access to sessions data.
  */
 export class SessionStore {
+    // Singleton instance
+    static instance: SessionStore;
+
     sessions: Session[] = observable([]);
 
     constructor() {
         makeAutoObservable(this);
+    }
+
+    /**
+     * Get the singleton instance of SessionStore.
+     * @returns Singleton instance of SessionStore
+     */
+    static getInstance(): SessionStore {
+        if (!SessionStore.instance) {
+            SessionStore.instance = new SessionStore();
+        }
+        return SessionStore.instance;
     }
 
     /**
@@ -105,7 +119,7 @@ export class SessionStore {
      * Load all active sessions.
      * @deprecated
      */
-    static async loadActive(): Promise<Session[] | null> {
+    async loadActive(): Promise<Session[] | null> {
         // const sessions: Session[] | null = await get<Session>('sessions', { status: SessionStatus.Active });
         const sessions: Session[] | null = await get<Session>("activeSessions");
         return sessions;
@@ -118,7 +132,7 @@ export class SessionStore {
      * method.
      * @param session Session to save
      */
-    async save(session: Session) {
+    async save(session: Session): Promise<void> {
         await upsert<Session>("sessions", session);
     }
 }

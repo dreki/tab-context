@@ -1,11 +1,11 @@
 
 interface IOnOurWindowActivatedParams {
     // An async function to call when our window is activated.
-    onOurWindowActivated: () => Promise<void>;
+    callback: () => Promise<void>;
 }
 
 export function onOurWindowActivated({
-    onOurWindowActivated,
+    callback: onOurWindowActivated,
 }: IOnOurWindowActivatedParams) {
     // Listen to on _window_ activation as well
     chrome.windows.onFocusChanged.addListener((windowId) => {
