@@ -80,8 +80,9 @@ export class SessionStore {
 
     sessions: Session[] = observable([]);
 
-    constructor() {
+    private constructor() {
         makeAutoObservable(this);
+        this.loadSessions();
     }
 
     /**
@@ -101,18 +102,12 @@ export class SessionStore {
      * Important: This method must be called upon construction, or after any changes to the sessions
      * array (e.g. via `save`).
      */
-    async loadAll() {
+    async loadSessions() {
         const sessions = await get<Session>("sessions");
         if (!sessions) {
             return;
         }
-        // return sessions;
         this.sessions = sessions;
-
-        // if (!sessions) {
-        //     return;
-        // }
-        // Session.sessions = sessions;
     }
 
     /**

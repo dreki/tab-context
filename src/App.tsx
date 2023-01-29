@@ -2,7 +2,7 @@ import "./App.css";
 // import { windowsAtom, IWindow } from "./stores";
 import { observer } from "mobx-react";
 import { WindowList } from "./components/WindowList";
-import { Session } from "./stores/session";
+import { Session, SessionStore } from "./stores/session";
 import { WindowObserver } from "./stores/window";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
@@ -43,11 +43,13 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
 });
 
 const windowObserver = new WindowObserver();
+const sessionStore: SessionStore = SessionStore.getInstance();
 
 // Reload windows from store when our tab is activated.
 onOurTabActivated({
     callback: async () => {
         await windowObserver.loadChromeWindows();
+        await sessionStore.loadSessions();
     },
 });
 
@@ -55,6 +57,7 @@ onOurTabActivated({
 onOurWindowActivated({
     callback: async () => {
         await windowObserver.loadChromeWindows();
+        await sessionStore.loadSessions();
     },
 });
 
@@ -66,7 +69,6 @@ interface IAppProps {
 const App = observer(function App({ windowObserver }: IAppProps) {
     return (
         <div className="container p-2">
-            
             <h1 className="text-lg font-bold">Windows</h1>
             <WindowList
                 windows={windowObserver.windows}
@@ -74,6 +76,9 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                     suspend(window);
                 }}
             />
+
+            <h1 className="mt-4 text-lg font-bold">Sessions</h1>
+            <SessionList sessions={sessionStore.sessions} />
         </div>
     );
 });
