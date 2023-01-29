@@ -116,16 +116,6 @@ export class SessionStore {
     }
 
     /**
-     * Load all active sessions.
-     * @deprecated
-     */
-    async loadActive(): Promise<Session[] | null> {
-        // const sessions: Session[] | null = await get<Session>('sessions', { status: SessionStatus.Active });
-        const sessions: Session[] | null = await get<Session>("activeSessions");
-        return sessions;
-    }
-
-    /**
      * Save a session. If it already exists, update it. Otherwise, create a new session.
      *
      * Note that you'll have to call `loadAll` again to update the sessions array after calling this
