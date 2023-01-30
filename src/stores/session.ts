@@ -1,23 +1,19 @@
 import { makeAutoObservable, observable } from "mobx";
 import SparkMD5 from "spark-md5";
+import { ITab } from "../types/ITab";
 import { get, upsert } from "./db";
 
-export class Tab {
-    title: string;
-    groupId: number;
-    url: string;
-    favIconUrl: string;
-
+export class Tab implements ITab {
+    // Constructor that defines public properties, based on ITab interface
     constructor(
-        title: string,
-        groupId: number,
-        url: string,
-        favIconUrl: string
+        public id: number,
+        public title: string,
+        public url: string,
+        public groupName?: string,
+        public groupColor?: string,
+        public favIconUrl?: string
     ) {
-        this.title = title;
-        this.groupId = groupId;
-        this.url = url;
-        this.favIconUrl = favIconUrl;
+        makeAutoObservable(this);
     }
 }
 
@@ -42,14 +38,14 @@ export class Session {
     // static sessions: Session[] = observable([]);
 
     // `_tabs` should have getter/setter methods
-    private _tabs: Tab[] = [];
+    private _tabs: ITab[] = [];
 
     // Getter/setter for tabs
-    get tabs(): Tab[] {
+    get tabs(): ITab[] {
         return this._tabs;
     }
 
-    set tabs(tabs: Tab[]) {
+    set tabs(tabs: ITab[]) {
         this._tabs = tabs;
         // Set the ID to an MD5 hash of all of the tab URLs together.
         // This is a unique identifier for the session.

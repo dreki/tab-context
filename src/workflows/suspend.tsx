@@ -26,13 +26,8 @@ export interface ISaveWindowToSessionResponse {
  * @param tab The window tab to use to create a session tab.
  * @returns A session tab.
  */
+/*
 function tabToSessionTab(tab: Tab): SessionTab {
-    /*
-        title: string;
-    groupId: number;
-    url: string;
-    favIconUrl: string;
-    */
     return {
         title: tab.title,
         groupId: tab.groupId,
@@ -40,6 +35,7 @@ function tabToSessionTab(tab: Tab): SessionTab {
         favIconUrl: tab.favIconUrl,
     } as SessionTab;
 }
+*/
 
 /**
  * Syncs all tabs in the window to the session, and then closes the window.
@@ -50,34 +46,10 @@ export async function suspend(window: Window) {
     // await reloadTabs(window.tabs, true);
 
     // Make a new `Session` from `window`'s tabs.
-    const session = new Session(window.tabs.map((tab) => tabToSessionTab(tab)));
+    // const session = new Session(window.tabs.map((tab) => tabToSessionTab(tab)));
+    const session = new Session(window.tabs);
     console.log("> session:");
     console.log(session);
     // await SessionStore.save(session);
     await SessionStore.getInstance().save(session);
-}
-
-export async function onSaveWindowToSession__DEP(window: Window) {
-    const tabs: Tab[] = window.tabs;
-    const session = new Session(tabs.map((tab) => tabToSessionTab(tab)));
-
-    /*
-    // Deprecated usage, but might be useful to see how it worked.
-    const message: ISaveWindowToSessionMessage = {
-        type: "saveWindowToSession",
-        payload: {
-            generatedId: sessionIdFactory(),
-        },
-    };
-    chrome.tabs
-        .sendMessage<ISaveWindowToSessionMessage, ISaveWindowToSessionResponse>(
-          tab.id,
-          message
-        )
-        .then((response) => {
-          console.log(`> response:`);
-          console.log(response);
-          // sessionId = sessionId;
-        });
-  */
 }

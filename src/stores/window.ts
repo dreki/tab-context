@@ -1,32 +1,25 @@
 import { makeAutoObservable } from "mobx";
+import { ITab } from "../types/ITab";
+import { Maybe } from "../types/Maybe";
 
-export class Tab {
-    id!: number;
-    title: string;
-    groupId: number;
-    url: string;
-    favIconUrl: string;
-
+export class Tab implements ITab {
     constructor(
-        id: number,
-        title: string,
-        groupId: number,
-        url: string,
-        favIconUrl: string
+        public id: number,
+        public title: string,
+        public url: string,
+        public groupName?: string,
+        public groupColor?: string,
+        public favIconUrl?: string
     ) {
         makeAutoObservable(this);
-        this.id = id;
-        this.title = title;
-        this.groupId = groupId;
-        this.url = url;
-        this.favIconUrl = favIconUrl;
     }
 
     /**
      * Is this tab in a group?
      */
     isInGroup() {
-        return this.groupId !== -1;
+        // If the group name is a defined string, return true
+        return this.groupName !== undefined;
     }
 }
 
@@ -55,6 +48,34 @@ export class WindowObserver {
             if (!window.tabs || !window.id) {
                 continue;
             }
+            for (let tab of window.tabs) {
+                if (
+                    !tab ||
+                    tab.id === undefined ||
+                    tab.title === undefined ||
+                    tab.groupId === undefined
+                ) {
+                    return;
+                }
+                // Use the Chrome tabGroups API to get the group name and color.
+                let group: Maybe<chrome.tabGroups.TabGroup> = null;
+                if (tab.groupId !== -1) {
+                    group = await chrome.tabGroups.get(tab.groupId);
+                }
+                // const group: chrome.tabGroups.TabGroup =
+                //     await chrome.tabGroups.get(tab.groupId);
+                tabs.push(
+                    new Tab(
+                        tab.id,
+                        tab.title,
+                        tab.url || "",
+                        group?.title || undefined,
+                        group?.color || undefined,
+                        tab.favIconUrl || ""
+                    )
+                );
+            }
+            /*
             window.tabs.forEach((tab) => {
                 if (
                     !tab ||
@@ -64,6 +85,9 @@ export class WindowObserver {
                 ) {
                     return;
                 }
+                // Use the Chrome tabGroups API to get the group name and color
+                // const group = await chrome.tabGroups.get(tab.groupId);
+                
                 tabs.push(
                     new Tab(
                         tab.id,
@@ -74,6 +98,7 @@ export class WindowObserver {
                     )
                 );
             });
+            */
             // result.push({ id: window.id, tabs: tabs });
             // this.windows.push(new Window(window.id, i, tabs));
             newWindows.push(new Window(window.id, i, tabs));
