@@ -12,19 +12,43 @@ interface WindowComponentProps {
 
 export function WindowComponent(props: WindowComponentProps) {
     return (
-        <div className="mb-2">
-            <div className="overflow-hidden">
-                <TabList tabs={props.window.tabs} />
+        <div className="card-bordered card card-compact mb-8 bg-base-100 shadow-md">
+            <div className="card-body">
+                <div className="overflow-hidden">
+                    <TabList tabs={props.window.tabs} />
+                </div>
+                <div>
+                    Window ID: {props.window.id} (index: {props.window.index})
+                </div>
+                <div className="divider" />
+                <div className="card-actions">
+                    <button
+                        className="btn-primary btn-sm btn"
+                        onClick={() => props.onSuspend(props.window)}
+                    >
+                        Suspend
+                    </button>
+                </div>
             </div>
-            <div>
-                Window ID: {props.window.id} (index: {props.window.index})
-            </div>
-            <button
-                className="btn-primary btn-sm btn"
-                onClick={() => props.onSuspend(props.window)}
-            >
-                Suspend
-            </button>
         </div>
     );
+    // return (
+    //     <div className="flex justify-start">
+    //         <div className="block max-w-sm rounded-lg bg-white text-left shadow-lg">
+    //             <div className="p-6">
+    //                 <div className="overflow-hidden">
+    //                     <TabList tabs={props.window.tabs} />
+    //                 </div>
+    //             </div>
+    //             <div className="border-t border-gray-300 py-3 px-6 text-gray-600">
+    //                 <button
+    //                     className="btn-primary btn-sm btn"
+    //                     onClick={() => props.onSuspend(props.window)}
+    //                 >
+    //                     Suspend
+    //                 </button>
+    //             </div>
+    //         </div>
+    //     </div>
+    // );
 }

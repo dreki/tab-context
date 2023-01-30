@@ -17,7 +17,7 @@ export function WindowList(props: WindowListProps) {
 
     // Render `WindowComponent`s in a `DivideChildren` component
     return (
-        <DivideChildren>
+        <>
             {props.windows.map((window, index) => {
                 return (
                     <WindowComponent
@@ -27,6 +27,6 @@ export function WindowList(props: WindowListProps) {
                     />
                 );
             })}
-        </DivideChildren>
+        </>
     );
 }
