@@ -1,7 +1,7 @@
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
-import { Tab } from "../stores/window";
+import { ITab } from "../types/ITab";
 
-export function FavIconWithDefault({ tab }: { tab: Tab }) {
+export function FavIconWithDefault({ tab }: { tab: ITab }) {
   let favIconSrc: string | undefined = tab.favIconUrl;
   if (!favIconSrc) {
     return <GlobeAltIcon className="h-4 w-4" />;

@@ -42,6 +42,7 @@ export class Session {
 
     // Getter/setter for tabs
     get tabs(): ITab[] {
+        console.log(`> getter for tabs for session ${this.id}`)
         return this._tabs;
     }
 
@@ -100,6 +101,13 @@ export class SessionStore {
      */
     async loadSessions() {
         const sessions = await get<Session>("sessions");
+        console.log(`> sessions loaded`);
+        console.log(sessions);
+        if (sessions) {
+            console.log(`> session.tabs after load:`);
+            console.log(sessions[0].tabs);
+        }
+        
         if (!sessions) {
             return;
         }

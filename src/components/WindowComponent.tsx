@@ -12,7 +12,7 @@ interface WindowComponentProps {
 
 export function WindowComponent(props: WindowComponentProps) {
     return (
-        <div className="card-bordered card card-compact mb-8 bg-base-100 shadow-md">
+        <div className="card-bordered card card-compact mb-8 bg-slate-50 shadow-md">
             <div className="card-body">
                 <div className="overflow-hidden">
                     <TabList tabs={props.window.tabs} />
@@ -20,8 +20,7 @@ export function WindowComponent(props: WindowComponentProps) {
                 <div>
                     Window ID: {props.window.id} (index: {props.window.index})
                 </div>
-                <div className="divider" />
-                <div className="card-actions">
+                <div className="card-actions mt-2">
                     <button
                         className="btn-primary btn-sm btn"
                         onClick={() => props.onSuspend(props.window)}

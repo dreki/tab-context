@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     else {
         // If the session ID is in the query string, save it.
-        console.log(`> Saving session ID: ${urlSessionId}`);
+        // console.log(`> Saving session ID: ${urlSessionId}`);
         sessionId = urlSessionId;
     }
 

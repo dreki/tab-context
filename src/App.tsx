@@ -7,15 +7,21 @@ import { WindowObserver } from "./stores/window";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { suspend } from "./workflows/suspend";
+import { TabList } from "./components/TabList";
 
 interface SessionComponentProps {
     session: Session;
 }
 
+
+
 const SessionComponent = observer(({ session }: SessionComponentProps) => {
+    console.log(`> session.tabs:`);
+    console.log(session.tabs);
+    
     return (
         <div>
-            <p>Session ID: {session.id}</p>
+            <TabList tabs={session.tabs} />
         </div>
     );
 });
@@ -29,16 +35,11 @@ const SessionList = observer(({ sessions }: SessionListProps) => {
         return null;
     }
     return (
-        <ul>
+        <>
             {sessions.map((session, index) => {
-                return (
-                    <li key={index}>
-                        <h2>Session</h2>
-                        <SessionComponent session={session} />
-                    </li>
-                );
+                return <SessionComponent session={session} />;
             })}
-        </ul>
+        </>
     );
 });
 
@@ -68,8 +69,8 @@ interface IAppProps {
 // function App(windowObserver: WindowObserver) {
 const App = observer(function App({ windowObserver }: IAppProps) {
     return (
-        <div className="container p-4">
-            <h1 className="mt-4 mb-2 text-2xl font-bold">Windows</h1>
+        <div className="container p-8">
+            <h1 className="mt-4 mb-4 text-2xl font-bold">Windows</h1>
             <WindowList
                 windows={windowObserver.windows}
                 onSuspend={(window) => {
