@@ -1,7 +1,7 @@
 import { makeAutoObservable, observable } from "mobx";
 import SparkMD5 from "spark-md5";
 import { ITab } from "../types/ITab";
-import { get, upsert } from "./db";
+import { get, Model, upsert } from "./db";
 
 export class Tab implements ITab {
     // Constructor that defines public properties, based on ITab interface
@@ -27,9 +27,10 @@ export enum SessionStatus {
 /**
  * Session class. Represents a tab session.
  */
-export class Session {
+export class Session extends Model {
     // id is a unique identifier for the session
-    id!: string;
+    // id!: string;
+
     // tabs: Tab[] = [];
     // status is the status of the session
     status: SessionStatus = SessionStatus.Active;
@@ -42,7 +43,7 @@ export class Session {
 
     // Getter/setter for tabs
     get tabs(): ITab[] {
-        console.log(`> getter for tabs for session ${this.id}`)
+        console.log(`> getter for tabs for session ${this.id}`);
         return this._tabs;
     }
 
@@ -57,9 +58,17 @@ export class Session {
         console.log(`> new session id: ${this.id}`);
     }
 
-    constructor(tabs: Tab[]) {
+    // constructor(tabs: Tab[]) {
+    //     makeAutoObservable(this);
+    //     this.tabs = tabs;
+    // }
+    constructor() {
+        super();
         makeAutoObservable(this);
-        this.tabs = tabs;
+    }
+
+    coolDude() {
+        console.log(`> cool dude`);
     }
 
     // Allow adding a tab to the session
@@ -100,14 +109,21 @@ export class SessionStore {
      * array (e.g. via `save`).
      */
     async loadSessions() {
-        const sessions = await get<Session>("sessions");
+        // const sessions = await get<Session>("sessions");
+        const sessions = await get(Session, "sessions");
         console.log(`> sessions loaded`);
         console.log(sessions);
         if (sessions) {
-            console.log(`> session.tabs after load:`);
-            console.log(sessions[0].tabs);
+            // console.log(`> session.tabs after load:`);
+            // console.log(sessions[0].tabs);
+            // console.log(`> type of sessions[0] is ${typeof sessions[0]}`);
+
+            // If sessions length is greater than 0
+            if (sessions.length > 0) {
+                sessions[0].coolDude();
+            }
         }
-        
+
         if (!sessions) {
             return;
         }
@@ -122,6 +138,6 @@ export class SessionStore {
      * @param session Session to save
      */
     async save(session: Session): Promise<void> {
-        await upsert<Session>("sessions", session);
+        await upsert(Session, "sessions", session);
     }
 }

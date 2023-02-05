@@ -47,7 +47,9 @@ export async function suspend(window: Window) {
 
     // Make a new `Session` from `window`'s tabs.
     // const session = new Session(window.tabs.map((tab) => tabToSessionTab(tab)));
-    const session = new Session(window.tabs);
+    // const session = new Session(window.tabs);
+    const session = new Session();
+    session.tabs = window.tabs;
     console.log("> session:");
     console.log(session);
     // await SessionStore.save(session);
