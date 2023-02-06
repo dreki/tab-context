@@ -13,10 +13,10 @@ interface WindowComponentProps {
 export function WindowComponent(props: WindowComponentProps) {
     return (
         <div className="card-bordered card card-compact mb-8 bg-slate-50 shadow-md">
+            <div className="overflow-hidden bg-slate-200 rounded-t-2xl p-2">
+                <TabList tabs={props.window.tabs} />
+            </div>
             <div className="card-body">
-                <div className="overflow-hidden">
-                    <TabList tabs={props.window.tabs} />
-                </div>
                 <div>
                     Window ID: {props.window.id} (index: {props.window.index})
                 </div>

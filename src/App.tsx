@@ -2,46 +2,12 @@ import "./App.css";
 // import { windowsAtom, IWindow } from "./stores";
 import { observer } from "mobx-react";
 import { WindowList } from "./components/WindowList";
-import { Session, SessionStore } from "./stores/session";
+import { SessionStore } from "./stores/session";
 import { WindowObserver } from "./stores/window";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { suspend } from "./workflows/suspend";
-import { TabList } from "./components/TabList";
-
-interface SessionComponentProps {
-    session: Session;
-}
-
-
-
-const SessionComponent = observer(({ session }: SessionComponentProps) => {
-    console.log(`> session.tabs:`);
-    console.log(session.tabs);
-    
-    return (
-        <div>
-            <TabList tabs={session.tabs} />
-        </div>
-    );
-});
-
-interface SessionListProps {
-    sessions: Session[] | null;
-}
-
-const SessionList = observer(({ sessions }: SessionListProps) => {
-    if (!sessions) {
-        return null;
-    }
-    return (
-        <>
-            {sessions.map((session, index) => {
-                return <SessionComponent session={session} />;
-            })}
-        </>
-    );
-});
+import { SessionList } from "./components/SessionList";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
