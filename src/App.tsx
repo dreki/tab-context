@@ -44,7 +44,7 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                 }}
             />
 
-            <h1 className="mt-8 text-2xl font-bold">Sessions</h1>
+            <h1 className="mt-8 mb-4 text-2xl font-bold">Sessions</h1>
             <SessionList sessions={sessionStore.sessions} />
         </div>
     );

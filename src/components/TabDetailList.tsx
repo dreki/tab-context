@@ -11,14 +11,16 @@ export function TabDetailList({ tabs }: TabDetailListProps) {
         return null;
     }
     return (
-        <div className="flex flex-row flex-wrap gap-1.5">
-            {tabs.map((tab, index) => {
-                return (
-                    <div key={index}>
-                        <TabDetailComponent tab={tab} />
-                    </div>
-                );
-            })}
+        <div className="card-bordered card card-compact mb-4 bg-purple-100 shadow-md">
+            <div className="card-body">
+                {tabs.map((tab, index) => {
+                    return (
+                        <div key={index}>
+                            <TabDetailComponent tab={tab} />
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }
