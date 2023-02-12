@@ -1,13 +1,14 @@
 import "./App.css";
 // import { windowsAtom, IWindow } from "./stores";
 import { observer } from "mobx-react";
+import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
 import { SessionStore } from "./stores/session";
 import { WindowObserver } from "./stores/window";
+import { ITab } from "./types/ITab";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { suspend } from "./workflows/suspend";
-import { SessionList } from "./components/SessionList";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
@@ -28,6 +29,11 @@ onOurWindowActivated({
     },
 });
 
+function onRestore(tabs: ITab[]) {
+    console.log(`> onRestore:`);
+    console.log(tabs);
+}
+
 interface IAppProps {
     windowObserver: WindowObserver;
 }
@@ -45,7 +51,10 @@ const App = observer(function App({ windowObserver }: IAppProps) {
             />
 
             <h1 className="mt-8 mb-4 text-2xl font-bold">Sessions</h1>
-            <SessionList sessions={sessionStore.sessions} />
+            <SessionList
+                sessions={sessionStore.sessions}
+                onRestore={onRestore}
+            />
         </div>
     );
 });

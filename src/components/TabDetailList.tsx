@@ -3,9 +3,10 @@ import { TabDetailComponent } from "./TabDetailComponent";
 
 interface TabDetailListProps {
     tabs: ITab[];
+    onRestore: (tabs: ITab[]) => void;
 }
 
-export function TabDetailList({ tabs }: TabDetailListProps) {
+export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
     if (!tabs) {
         console.log(`> tabs is null or undefined.`);
         return null;
@@ -20,6 +21,15 @@ export function TabDetailList({ tabs }: TabDetailListProps) {
                         </div>
                     );
                 })}
+
+                <div className="card-actions mt-2">
+                    <button
+                        className="btn-primary btn-sm btn"
+                        onClick={() => onRestore(tabs)}
+                    >
+                        Restore
+                    </button>
+                </div>
             </div>
         </div>
     );
