@@ -6,6 +6,7 @@ export class Tab implements ITab {
     constructor(
         public id: number,
         public title: string,
+        public pinned: boolean,
         public url: string,
         public groupName?: string,
         public groupColor?: string,
@@ -68,6 +69,7 @@ export class WindowObserver {
                     new Tab(
                         tab.id,
                         tab.title,
+                        tab.pinned,
                         tab.url || "",
                         group?.title || undefined,
                         group?.color || undefined,

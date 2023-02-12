@@ -8,6 +8,7 @@ export class Tab implements ITab {
     constructor(
         public id: number,
         public title: string,
+        public pinned: boolean,
         public url: string,
         public groupName?: string,
         public groupColor?: string,
