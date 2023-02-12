@@ -9,9 +9,6 @@ interface SessionComponentProps {
 }
 export const SessionComponent = observer(
     ({ session, onRestore }: SessionComponentProps) => {
-        console.log(`> session.tabs:`);
-        console.log(session.tabs);
-
         return (
             <div>
                 <TabDetailList tabs={session.tabs} onRestore={onRestore} />

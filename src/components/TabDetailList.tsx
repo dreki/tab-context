@@ -8,7 +8,6 @@ interface TabDetailListProps {
 
 export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
     if (!tabs) {
-        console.log(`> tabs is null or undefined.`);
         return null;
     }
     return (

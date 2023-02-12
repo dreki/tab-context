@@ -15,7 +15,6 @@ chrome.runtime.onInstalled.addListener(() => {
         windows.forEach((window) => {
             // If the window is not a popup window
             if (!window.type || window.type === 'normal') {
-                console.log(`> Checking window ${window.id}...`)
                 if (!window.tabs) {
                     return;
                 }

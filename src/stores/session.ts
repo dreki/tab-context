@@ -43,7 +43,6 @@ export class Session extends Model {
 
     // Getter/setter for tabs
     get tabs(): ITab[] {
-        console.log(`> getter for tabs for session ${this.id}`);
         return this._tabs;
     }
 
@@ -65,10 +64,6 @@ export class Session extends Model {
     constructor() {
         super();
         makeAutoObservable(this);
-    }
-
-    coolDude() {
-        console.log(`> cool dude`);
     }
 
     // Allow adding a tab to the session
@@ -111,19 +106,6 @@ export class SessionStore {
     async loadSessions() {
         // const sessions = await get<Session>("sessions");
         const sessions = await get(Session, "sessions");
-        console.log(`> sessions loaded`);
-        console.log(sessions);
-        if (sessions) {
-            // console.log(`> session.tabs after load:`);
-            // console.log(sessions[0].tabs);
-            // console.log(`> type of sessions[0] is ${typeof sessions[0]}`);
-
-            // If sessions length is greater than 0
-            if (sessions.length > 0) {
-                sessions[0].coolDude();
-            }
-        }
-
         if (!sessions) {
             return;
         }
