@@ -9,6 +9,7 @@ import { ITab } from "./types/ITab";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { suspend } from "./workflows/suspend";
+import { restore } from "./workflows/restore";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
@@ -29,9 +30,8 @@ onOurWindowActivated({
     },
 });
 
-function onRestore(tabs: ITab[]) {
-    console.log(`> onRestore:`);
-    console.log(tabs);
+async function onRestore(tabs: ITab[]) {
+    await restore(tabs);
 }
 
 interface IAppProps {
