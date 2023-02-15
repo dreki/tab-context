@@ -42,9 +42,6 @@ export class WindowObserver {
         // Iterate over each window, along with an index
         let i = 0;
         for (let window of chromeWindows) {
-            // get Session ID for window, from Chrome
-            // const sessionId = window.sessionId;
-            // console.log(`> sessionId for window ${window.id}: ${sessionId}`);
             const tabs: Tab[] = [];
             if (!window.tabs || !window.id) {
                 continue;
@@ -63,8 +60,6 @@ export class WindowObserver {
                 if (tab.groupId !== -1) {
                     group = await chrome.tabGroups.get(tab.groupId);
                 }
-                // const group: chrome.tabGroups.TabGroup =
-                //     await chrome.tabGroups.get(tab.groupId);
                 tabs.push(
                     new Tab(
                         tab.id,
@@ -77,32 +72,6 @@ export class WindowObserver {
                     )
                 );
             }
-            /*
-            window.tabs.forEach((tab) => {
-                if (
-                    !tab ||
-                    tab.id === undefined ||
-                    tab.title === undefined ||
-                    tab.groupId === undefined
-                ) {
-                    return;
-                }
-                // Use the Chrome tabGroups API to get the group name and color
-                // const group = await chrome.tabGroups.get(tab.groupId);
-                
-                tabs.push(
-                    new Tab(
-                        tab.id,
-                        tab.title,
-                        tab.groupId,
-                        tab.url || "",
-                        tab.favIconUrl || ""
-                    )
-                );
-            });
-            */
-            // result.push({ id: window.id, tabs: tabs });
-            // this.windows.push(new Window(window.id, i, tabs));
             newWindows.push(new Window(window.id, i, tabs));
             i++;
         }
