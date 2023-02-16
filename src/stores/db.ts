@@ -43,12 +43,12 @@ export async function get<T extends Object>(
     t: { new (): T },
     key: string
 ): Promise<T | null> {
-    const itemJson: string | null = await localForage.getItem(key);
-    if (!itemJson) {
+    const item: string | null = await localForage.getItem(key);
+    if (!item) {
         return null;
     }
-    const itemObject: Object = JSON.parse(itemJson);
-    return deserialize(t, itemObject);
+    // const itemObject: Object = JSON.parse(itemJson);
+    return deserialize(t, item);
 }
 
 /**
@@ -61,14 +61,12 @@ export async function getArray<T extends Object>(
     t: { new (): T },
     key: string
 ): Promise<T[] | null> {
-    const itemJson: string | null = await localForage.getItem(key);
-    if (!itemJson) {
+    const item: object[] | null = await localForage.getItem(key);
+    if (!item) {
         return null;
     }
-    console.log("> getArray, itemJson:")
-    console.log(itemJson)
-    const itemObject: Object[] = JSON.parse(itemJson);
-    return deserializeAll(t, itemObject);
+    // const itemObject: Object[] = JSON.parse(item);
+    return deserializeAll(t, item);
 }
 
 /**
