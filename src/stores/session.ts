@@ -1,7 +1,7 @@
 import { makeAutoObservable, observable } from "mobx";
 import SparkMD5 from "spark-md5";
 import { ITab } from "../types/ITab";
-import { get, Model, upsert } from "./db";
+import { getArray, set } from "./db";
 
 export class Tab implements ITab {
     // Constructor that defines public properties, based on ITab interface
@@ -28,9 +28,9 @@ export enum SessionStatus {
 /**
  * Session class. Represents a tab session.
  */
-export class Session extends Model {
+export class Session {
     // id is a unique identifier for the session
-    // id!: string;
+    id!: string;
 
     // tabs: Tab[] = [];
     // status is the status of the session
@@ -55,7 +55,7 @@ export class Session extends Model {
         console.log(tabUrls);
         const tabUrlsString = tabUrls.join("");
         this.id = SparkMD5.hash(tabUrlsString);
-        console.log(`> new session id: ${this.id}`);
+        // console.log(`> new session id: ${this.id}`);
     }
 
     // constructor(tabs: Tab[]) {
@@ -63,7 +63,6 @@ export class Session extends Model {
     //     this.tabs = tabs;
     // }
     constructor() {
-        super();
         makeAutoObservable(this);
     }
 
@@ -106,7 +105,7 @@ export class SessionStore {
      */
     async loadSessions() {
         // const sessions = await get<Session>("sessions");
-        const sessions = await get(Session, "sessions");
+        const sessions = await getArray(Session, "sessions");
         if (!sessions) {
             return;
         }
@@ -121,6 +120,18 @@ export class SessionStore {
      * @param session Session to save
      */
     async save(session: Session): Promise<void> {
-        await upsert(Session, "sessions", session);
+        // await upsert(Session, "sessions", session);
+        // await set("sessions", )
+        
+        // Update this.sessions with the new session
+        const index = this.sessions.findIndex((s) => s.id === session.id);
+        if (index >= 0) {
+            this.sessions[index] = session;
+        }
+        if (index < 0) {
+            this.sessions.push(session);
+        }
+        // Save the sessions array
+        await set("sessions", this.sessions);
     }
 }

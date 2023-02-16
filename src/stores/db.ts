@@ -7,102 +7,86 @@ localForage.config({
     driver: localForage.LOCALSTORAGE,
 });
 
-// Abstract class that all types must adhere to. Just has an ID.
-export abstract class Model {
-    id!: string;
+/**
+ * Deserialize an object into a given type.
+ * @param t Type of object to deserialize into
+ * @param input Object to deserialize
+ * @returns Deserialized object
+ */
+function deserialize<T extends Object, U extends Object>(
+    t: { new (): T },
+    input: U
+): T {
+    const instance = new t();
+    Object.assign(instance, input);
+    return instance;
 }
 
-function deserialize<T extends Model>(t: { new (): T }, input: any) {
-    const model = new t();
-    Object.assign(model, input);
-    return model;
-}
-
-function deserializeAll<T extends Model>(t: { new (): T }, input: any[]) {
+/**
+ * Deserialize an array of objects into an array of a given type.
+ * @param t Type of object to deserialize into
+ * @param input Array of objects to deserialize
+ * @returns Array of deserialized objects
+ */
+function deserializeAll<T extends Object, U extends Object>(
+    t: { new (): T },
+    input: U[]
+): T[] {
     return input.map((i) => deserialize(t, i));
 }
 
-
-export async function get<T extends Model>(t: { new(): T }, key: string): Promise<T[] | null> {
-    const item: T[] | null = await localForage.getItem(key);
-    if (!item) {
-        return null;
-    }
-    return deserializeAll(t, item);
-
-    // return (await localForage.getItem(key)) as T[];
-    /*
-    let result: T[] | null = null;
-
-    const item: T[] | null = await localForage.getItem<T[]>(key);
-    if (item) {
-        result = [];
-        for (const i of item) {
-            // result.push(deserialize(T, i));
-            result.push(i as T);
-            new T();
-        }
-    }
-    return result;
-    */
-}
-    
-/* 
-export async function get<T extends Model>(key: string): Promise<T[] | null> {
-    // return (await localForage.getItem(key)) as T[];
-    let result: T[] | null = null;
-
-    const item: T[] | null = await localForage.getItem<T[]>(key);
-    if (item) {
-        result = [];
-        for (const i of item) {
-            // result.push(deserialize(T, i));
-            result.push(i as T);
-            new T();
-        }
-    }
-    return result;
-}
-
+/**
+ * Load an item from local storage, deserializing it into a type.
+ * @param key The key to get the item from.
  */
-
-
-// Allow fetching by key, ID, and generic type.
-export async function find<T extends Model>(
-    t: { new(): T },
-    key: string,
-    id: string
+export async function get<T extends Object>(
+    t: { new (): T },
+    key: string
 ): Promise<T | null> {
-    // Get all items in the key
-    const allItems: T[] | null = await get(t, key);
-    if (!allItems) {
+    const itemJson: string | null = await localForage.getItem(key);
+    if (!itemJson) {
         return null;
     }
-    return allItems.find((item) => item.id === id) || null;
+    const itemObject: Object = JSON.parse(itemJson);
+    return deserialize(t, itemObject);
 }
 
-
-
-// Allow upserting an item by key and instance.
-export async function upsert<T extends Model>(t: { new(): T }, key: string, item: T): Promise<T | null> {
-    // Get all items in the key. If there are no items in the key, set it to an empty array in local
-    // storage.
-    let allItems: T[] | null = await get(t, key);
-    if (!allItems) {
-        await localForage.setItem(key, []);
-        allItems = [];
+/**
+ * Load an array of items from local storage by key, deserializing them into a type.
+ * @param t Type of object to deserialize into
+ * @param key Key to get the item from
+ * @returns Array of deserialized objects
+ */
+export async function getArray<T extends Object>(
+    t: { new (): T },
+    key: string
+): Promise<T[] | null> {
+    const itemJson: string | null = await localForage.getItem(key);
+    if (!itemJson) {
+        return null;
     }
+    console.log("> getArray, itemJson:")
+    console.log(itemJson)
+    const itemObject: Object[] = JSON.parse(itemJson);
+    return deserializeAll(t, itemObject);
+}
 
-    // Find the item to update
-    const itemToUpdate = allItems.find((otherItem) => otherItem.id === item.id);
-    if (!itemToUpdate) {
-        // Item does not exist, so add it
-        allItems.push(item);
-    } else {
-        // Item exists, so update it
-        Object.assign(itemToUpdate, item);
-    }
-    // Save the updated items
-    await localForage.setItem(key, allItems);
-    return item;
+/**
+ * Set an item in local storage.
+ * @param key The key to set the item to.
+ * @param item The item to set. Will be serialized to JSON.
+ */
+export async function set<T extends Object>(key: string, item: T) {
+    // await localForage.setItem(key, JSON.stringify(item));
+    await localForage.setItem(key, item);
+}
+
+/**
+ * Set an array of items in local storage.
+ * @param key The key to set the item to.
+ * @param item The array of items to set. Will be serialized to JSON.
+ */
+export async function setArray<T extends Object>(key: string, item: T[]) {
+    // await localForage.setItem(key, JSON.stringify(item));
+    await localForage.setItem(key, item);
 }

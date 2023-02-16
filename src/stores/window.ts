@@ -82,9 +82,10 @@ export class WindowObserver {
 export class Window {
     id!: number;
     index!: number;
-    tabs: Tab[] = [];
+    tabs: ITab[] = [];
+    closedTabs: ITab[] = [];
 
-    constructor(id: number, index: number, tabs: Tab[]) {
+    constructor(id: number, index: number, tabs: ITab[]) {
         makeAutoObservable(this);
         this.id = id;
         this.index = index;
