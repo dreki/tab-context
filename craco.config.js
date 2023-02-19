@@ -96,7 +96,7 @@ module.exports = {
                             ),
                         paths.appIndexJs,
                     ].filter(Boolean),
-                    content: paths.appSrc + "/content-script/content.ts",
+                    // content: paths.appSrc + "/content-script/content.ts",
                     serviceWorker:
                         paths.appSrc + "/service-worker/serviceWorker.ts",
                 },

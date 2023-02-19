@@ -7,7 +7,6 @@ interface TabListProps {
 
 export function TabList({ tabs }: TabListProps) {
     if (!tabs) {
-        console.log(`> tabs is null or undefined.`);
         return null;
     }
     return (
