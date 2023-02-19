@@ -4,7 +4,11 @@ localForage.config({
     name: "tab-context",
     storeName: "keyvaluepairs",
     version: 1.0,
-    driver: localForage.LOCALSTORAGE,
+    driver: [
+        localForage.LOCALSTORAGE,
+        localForage.INDEXEDDB,
+        localForage.WEBSQL,
+    ],
 });
 
 /**
@@ -43,11 +47,11 @@ export async function get<T extends Object>(
     t: { new (): T },
     key: string
 ): Promise<T | null> {
+    await localForage.ready();
     const item: string | null = await localForage.getItem(key);
     if (!item) {
         return null;
     }
-    // const itemObject: Object = JSON.parse(itemJson);
     return deserialize(t, item);
 }
 
@@ -61,11 +65,14 @@ export async function getArray<T extends Object>(
     t: { new (): T },
     key: string
 ): Promise<T[] | null> {
+    await localForage.ready();
+    console.log("> getArray, ready");
     const item: object[] | null = await localForage.getItem(key);
+    console.log("> item:");
+    console.log(item);
     if (!item) {
         return null;
     }
-    // const itemObject: Object[] = JSON.parse(item);
     return deserializeAll(t, item);
 }
 
@@ -75,7 +82,7 @@ export async function getArray<T extends Object>(
  * @param item The item to set. Will be serialized to JSON.
  */
 export async function set<T extends Object>(key: string, item: T) {
-    // await localForage.setItem(key, JSON.stringify(item));
+    await localForage.ready();
     await localForage.setItem(key, item);
 }
 
@@ -85,6 +92,6 @@ export async function set<T extends Object>(key: string, item: T) {
  * @param item The array of items to set. Will be serialized to JSON.
  */
 export async function setArray<T extends Object>(key: string, item: T[]) {
-    // await localForage.setItem(key, JSON.stringify(item));
+    await localForage.ready();
     await localForage.setItem(key, item);
 }

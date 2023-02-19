@@ -1,9 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import { ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
-import { get } from "./db";
+import { get, set } from "./db";
 
-class TabCollection {
+export class TabCollection {
+    public windowIndex!: number;
     // Have a read-only `tabs` property.
     private _tabs: ITab[] = [];
     get tabs(): ITab[] {
@@ -23,6 +24,27 @@ class TabCollection {
     // }
     constructor() {
         makeAutoObservable(this);
+    }
+
+    // Make a static async function to load closed tabs.
+    public static async loadClosedTabs(windowIndex: number): Promise<TabCollection> {
+        let collection: Maybe<TabCollection> = await get(
+            TabCollection,
+            `closedTabs-${windowIndex}`
+        );
+
+        // If not found, create a new TabCollection.
+        if (!collection) {
+            collection = new TabCollection();
+            collection.windowIndex = windowIndex;
+        }
+
+        return collection;
+    }
+
+    async save() {
+        // Save the collection to local storage.
+        await set(`closedTabs-${this.windowIndex}`, this);
     }
 }
 

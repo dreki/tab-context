@@ -59,6 +59,14 @@ const App = observer(function App({ windowObserver }: IAppProps) {
     );
 });
 
+// Listen for messages from the service worker.
+// navigator.serviceWorker.addEventListener("message", (event) => {
+//     console.log("Received message from service worker:", event.data);
+// });
+chrome.runtime.onMessage.addListener((message) => {
+    console.log("Received message from service worker:", message);
+});
+
 const app = <App windowObserver={windowObserver} />;
 
 export default app;

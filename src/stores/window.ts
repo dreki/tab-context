@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
+import { TabCollection } from "./closedTabs";
 
 export class Tab implements ITab {
     constructor(
@@ -83,12 +84,18 @@ export class Window {
     id!: number;
     index!: number;
     tabs: ITab[] = [];
-    closedTabs: ITab[] = [];
+    // closedTabs: ITab[] = [];
+    closedTabs!: TabCollection;
 
     constructor(id: number, index: number, tabs: ITab[]) {
         makeAutoObservable(this);
         this.id = id;
         this.index = index;
         this.tabs = tabs;
+        this.loadClosedTabs();
+    }
+
+    public async loadClosedTabs() {
+        this.closedTabs = await TabCollection.loadClosedTabs(this.index);
     }
 }
