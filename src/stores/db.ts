@@ -66,10 +66,7 @@ export async function getArray<T extends Object>(
     key: string
 ): Promise<T[] | null> {
     await localForage.ready();
-    console.log("> getArray, ready");
     const item: object[] | null = await localForage.getItem(key);
-    console.log("> item:");
-    console.log(item);
     if (!item) {
         return null;
     }
