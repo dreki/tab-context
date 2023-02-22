@@ -4,12 +4,14 @@ import { observer } from "mobx-react";
 import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
 import { SessionStore } from "./stores/session";
-import { WindowObserver } from "./stores/window";
+import { WindowObserver, Window } from "./stores/window";
 import { ITab } from "./types/ITab";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { suspend } from "./workflows/suspend";
 import { restore } from "./workflows/restore";
+import { IMessage, IResponse } from "./types/Message";
+import { Maybe } from "./types/Maybe";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
@@ -63,9 +65,48 @@ const App = observer(function App({ windowObserver }: IAppProps) {
 // navigator.serviceWorker.addEventListener("message", (event) => {
 //     console.log("Received message from service worker:", event.data);
 // });
-chrome.runtime.onMessage.addListener((message) => {
-    console.log("Received message from service worker:", message);
+/* 
+chrome.runtime.onMessage.addListener((message: IMessage): Promise<IResponse> => {
+    // console.log("Received message from service worker:", message);
+
+    const promise = new Promise<IResponse>((resolve, reject) => {
+        const asyncFunction = async () => {
+            const currentWindowId: Maybe<number> = await Window.getCurrentWindowId();
+            if (currentWindowId === null) {
+                reject("Could not get current window id");
+                return;
+            }
+            if (currentWindowId === message.targetWindowId) {
+                resolve({ success: true });
+                return;
+            }
+            reject("Wrong window id");
+        };
+
+        asyncFunction();
+    });
+
+    return promise;
 });
+ */
+
+chrome.runtime.onMessage.addListener(
+    // async handler
+    async (message: IMessage) => {
+        // console.log("Received message from service worker:", message);
+        console.log("> Received message from service worker:", message);
+
+        const currentWindowId: Maybe<number> = await Window.getCurrentWindowId();
+        // if (currentWindowId === null) {
+        //     return { success: false };
+        // }
+        if (currentWindowId === message.targetWindowId) {
+            console.log("> Message target window id matches current window id")
+            // return { success: true } as IResponse;
+        }
+        // return { success: false } as IResponse;
+    }
+);
 
 const app = <App windowObserver={windowObserver} />;
 

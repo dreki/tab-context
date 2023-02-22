@@ -98,4 +98,19 @@ export class Window {
     public async loadClosedTabs() {
         this.closedTabs = await TabCollection.loadClosedTabs(this.index);
     }
+
+    /**
+     * Convenience method to get the current window ID.
+     * @returns The ID of the current window, or null if it cannot be found.
+     */
+    public static async getCurrentWindowId(): Promise<Maybe<number>> {
+        const window = await chrome.windows.getCurrent();
+        if (!window) {
+            return null;
+        }
+        if (!window.id) {
+            return null;
+        }
+        return window.id;
+    }
 }

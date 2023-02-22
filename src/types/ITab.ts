@@ -1,4 +1,5 @@
 import { Maybe } from "./Maybe";
+import { } from "../stores/window";
 
 export interface ITab {
     id: number;
@@ -18,9 +19,13 @@ export async function fromChromeTab(tabId: number): Promise<Maybe<ITab>> {
     if (!tab) {
         return null;
     }
-    const group: Maybe<chrome.tabGroups.TabGroup> = await chrome.tabGroups.get(
-        tab.groupId
-    );
+    let group: Maybe<chrome.tabGroups.TabGroup> = null;
+    // If tab has a groupId, get the group.
+    if (tab.groupId !== -1) {
+        group = await chrome.tabGroups.get(
+            tab.groupId
+        );
+    }
     // If the tab is found, return it
     return {
         id: tabId,
@@ -114,6 +119,34 @@ export async function fromClosedChromeTab(tabId: number): Promise<Maybe<ITab>> {
     // const sessions: chrome.sessions.Session[] = await chrome.sessions.getRecentlyClosed();
     // const sessions = await chrome.sessions.getRecentlyClosed({maxSessions: 100});
     // return null;
+}
+
+export async function getExtensionUiTab(windowId: number): Promise<Maybe<ITab>> {
+    // const currentWindowId: Maybe<number> = await Window.
+
+    // Get the Chrome tab for the extension's "ui.html" for the given window.
+    const tabs: chrome.tabs.Tab[] = await chrome.tabs.query({
+        url: chrome.runtime.getURL("ui.html"),
+        windowId: windowId,
+    });
+    // If the tab is not found, return null
+    if (tabs.length === 0) {
+        return null;
+    }
+    // Make sure tab has a valid ID
+    if (tabs[0].id === undefined) {
+        return null;
+    }
+    // If the tab is found, return it
+    return await fromChromeTab(tabs[0].id);
+
+    /*
+    const tabs = await chrome.tabs.query({ url: chrome.runtime.getURL("index.html") });
+    if (tabs.length === 0) {
+        return null;
+    }
+    return fromChromeTab(tabs[0].id);
+    */
 }
 
 export { };
