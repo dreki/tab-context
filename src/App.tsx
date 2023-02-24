@@ -5,7 +5,7 @@ import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
 import { SessionStore } from "./stores/session";
 import { WindowObserver, Window } from "./stores/window";
-import { getCurrentTabId, ITab } from "./types/ITab";
+import { fromClosedChromeTab, fromMostRecentClosedTab, getCurrentTabId, ITab } from "./types/ITab";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { suspend } from "./workflows/suspend";
@@ -90,6 +90,9 @@ chrome.runtime.onMessage.addListener((message: IMessage): Promise<IResponse> => 
 });
  */
 
+// TODO: Decouple closed tabs from `Window` store class. Seems like this would have the added
+// benefit of the UI being updated.
+
 chrome.runtime.onMessage.addListener(
     (message: IMessage): Promise<IResponse> => {
         // return {success: true} as IResponse;
@@ -106,6 +109,20 @@ chrome.runtime.onMessage.addListener(
                 return;
             }
             console.log(`> Received message from service worker: ${message}`);
+            // Find `Window` with matching ID.
+            const window: Maybe<Window> = windowObserver.windows.find(
+                (window) => window.id === message.targetWindowId
+            ) || null;
+            if (window === null) {
+                return;
+            }
+            const closedTab: Maybe<ITab> = await fromMostRecentClosedTab();
+            if (closedTab === null) {
+                return;
+            }
+            // Add to the list of `window`'s closed tabs.
+            window.closedTabs.addTab(closedTab);
+            await window.closedTabs.save();
         })();
         return Promise.resolve({ success: true } as IResponse);
     }

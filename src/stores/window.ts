@@ -85,19 +85,19 @@ export class Window {
     index!: number;
     tabs: ITab[] = [];
     // closedTabs: ITab[] = [];
-    closedTabs!: TabCollection;
+    // closedTabs!: TabCollection;
 
     constructor(id: number, index: number, tabs: ITab[]) {
         makeAutoObservable(this);
         this.id = id;
         this.index = index;
         this.tabs = tabs;
-        this.loadClosedTabs();
+        // this.loadClosedTabs();
     }
 
-    public async loadClosedTabs() {
-        this.closedTabs = await TabCollection.loadClosedTabs(this.index);
-    }
+    // public async loadClosedTabs() {
+    //     this.closedTabs = await TabCollection.loadClosedTabs(this.index);
+    // }
 
     /**
      * Convenience method to get the current window ID.
