@@ -1,5 +1,5 @@
-import { Maybe } from "./Maybe";
 import { } from "../stores/window";
+import { Maybe } from "./Maybe";
 
 export interface ITab {
     id: number;
@@ -22,9 +22,7 @@ export async function fromChromeTab(tabId: number): Promise<Maybe<ITab>> {
     let group: Maybe<chrome.tabGroups.TabGroup> = null;
     // If tab has a groupId, get the group.
     if (tab.groupId !== -1) {
-        group = await chrome.tabGroups.get(
-            tab.groupId
-        );
+        group = await chrome.tabGroups.get(tab.groupId);
     }
     // If the tab is found, return it
     return {
@@ -87,8 +85,8 @@ export async function fromClosedChromeTab(tabId: number): Promise<Maybe<ITab>> {
         chrome.sessions.getRecentlyClosed(async (sessions) => {
             // Iterate over each session
             for (let session of sessions) {
-                console.log(`> session:`)
-                console.log(session)
+                console.log(`> session:`);
+                console.log(session);
                 // If the session is not a tab, continue
                 if (session.tab === undefined) {
                     continue;
@@ -121,7 +119,9 @@ export async function fromClosedChromeTab(tabId: number): Promise<Maybe<ITab>> {
     // return null;
 }
 
-export async function getExtensionUiTab(windowId: number): Promise<Maybe<ITab>> {
+export async function getExtensionUiTab(
+    windowId: number
+): Promise<Maybe<ITab>> {
     // const currentWindowId: Maybe<number> = await Window.
 
     // Get the Chrome tab for the extension's "ui.html" for the given window.
@@ -147,6 +147,18 @@ export async function getExtensionUiTab(windowId: number): Promise<Maybe<ITab>> 
     }
     return fromChromeTab(tabs[0].id);
     */
+}
+
+/**
+ * Get the ID of the current tab.
+ * @returns The ID of the current tab, or null if the current tab is not found.
+ */
+export async function getCurrentTabId(): Promise<Maybe<number>> {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tabs.length === 0) {
+        return null;
+    }
+    return tabs[0].id || null;
 }
 
 export { };

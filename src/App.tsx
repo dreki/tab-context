@@ -5,7 +5,7 @@ import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
 import { SessionStore } from "./stores/session";
 import { WindowObserver, Window } from "./stores/window";
-import { ITab } from "./types/ITab";
+import { getCurrentTabId, ITab } from "./types/ITab";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { suspend } from "./workflows/suspend";
@@ -91,20 +91,23 @@ chrome.runtime.onMessage.addListener((message: IMessage): Promise<IResponse> => 
  */
 
 chrome.runtime.onMessage.addListener(
-    // async handler
-    async (message: IMessage) => {
-        // console.log("Received message from service worker:", message);
-        console.log("> Received message from service worker:", message);
+    (message: IMessage): Promise<IResponse> => {
+        // return {success: true} as IResponse;
 
-        const currentWindowId: Maybe<number> = await Window.getCurrentWindowId();
-        // if (currentWindowId === null) {
-        //     return { success: false };
-        // }
-        if (currentWindowId === message.targetWindowId) {
-            console.log("> Message target window id matches current window id")
-            // return { success: true } as IResponse;
-        }
-        // return { success: false } as IResponse;
+        (async () => {
+            // If the message is for this window and tab, then handle.
+            const currentWindowId: Maybe<number> =
+                await Window.getCurrentWindowId();
+            const currentTabId: Maybe<number> = await getCurrentTabId();
+            if (
+                currentWindowId !== message.targetWindowId ||
+                currentTabId !== message.targetTabId
+            ) {
+                return;
+            }
+            console.log(`> Received message from service worker: ${message}`);
+        })();
+        return Promise.resolve({ success: true } as IResponse);
     }
 );
 

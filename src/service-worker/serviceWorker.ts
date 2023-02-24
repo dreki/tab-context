@@ -53,10 +53,6 @@ chrome.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
 
 chrome.tabs.onRemoved.addListener((tabId, removeInfo: chrome.tabs.TabRemoveInfo) => {
     (async () => {
-        const message: IMessage = {
-            type: MessageType.AddMostRecentClosedTab,
-            targetWindowId: removeInfo.windowId,
-        };
         // If the window ID in removeInfo isn't the current window ID, then return;
         const currentWindow = await chrome.windows.getCurrent();
         if (!currentWindow) {
@@ -65,11 +61,21 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo: chrome.tabs.TabRemoveInfo)
         if (!currentWindow || currentWindow.id !== removeInfo.windowId) {
             return;
         }
-        console.log(`> Tab ${tabId} was closed (in window ${removeInfo.windowId})`);
+        // console.log(`> Tab ${tabId} was closed (in window ${removeInfo.windowId})`);
         // Get the tab for the extension's UI in the window that the tab was closed in.
-        const extensionUiTab = await getExtensionUiTab(removeInfo.windowId);
+        const extensionUiTab: Maybe<ITab> = await getExtensionUiTab(removeInfo.windowId);
         console.log(`> Extension UI tab: ${extensionUiTab?.id}`);
-        
+        if (extensionUiTab) {
+            console.log(`> Sending message to UI tab ${extensionUiTab.id}`)
+            // Send a message to the extension's UI tab to add the most recently closed tab.
+            // chrome.tabs.sendMessage(extensionUiTab.id, message);
+            const message: IMessage = {
+                type: MessageType.AddMostRecentClosedTab,
+                targetWindowId: removeInfo.windowId,
+                targetTabId: extensionUiTab.id,
+            };    
+            chrome.runtime.sendMessage(message);
+        }
         // TODO: Replace with a message send directly to our extension's tab for the window
         // await chrome.runtime.sendMessage(message);
     })();

@@ -11,6 +11,7 @@ export enum MessageType {
 export interface IMessage {
     type: MessageType;
     targetWindowId: number;
+    targetTabId: number;
 }
 
 /**
