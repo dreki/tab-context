@@ -3,32 +3,45 @@ import "./App.css";
 import { observer } from "mobx-react";
 import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
+import { TabCollection } from "./stores/closedTabs";
 import { SessionStore } from "./stores/session";
-import { WindowObserver, Window } from "./stores/window";
-import { fromClosedChromeTab, fromMostRecentClosedTab, getCurrentTabId, ITab } from "./types/ITab";
+import { Window, WindowObserver } from "./stores/window";
+import { fromMostRecentClosedTab, getCurrentTabId, ITab } from "./types/ITab";
+import { Maybe } from "./types/Maybe";
+import { IMessage, IResponse } from "./types/Message";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
-import { suspend } from "./workflows/suspend";
 import { restore } from "./workflows/restore";
-import { IMessage, IResponse } from "./types/Message";
-import { Maybe } from "./types/Maybe";
+import { suspend } from "./workflows/suspend";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
+let closedTabs: TabCollection[] = [];
+
+async function loadStores() {
+    await windowObserver.loadChromeWindows();
+    await sessionStore.loadSessions();
+    // Look through windows, loading closed tabs via index.
+    closedTabs = [];
+    for (const window of windowObserver.windows) {
+        // closedTabs.push(await TabCollection.loadClosedTabs(window.index));
+        closedTabs[window.index] = await TabCollection.loadClosedTabs(
+            window.index
+        );
+    }
+}
 
 // Reload windows from store when our tab is activated.
 onOurTabActivated({
     callback: async () => {
-        await windowObserver.loadChromeWindows();
-        await sessionStore.loadSessions();
+        await loadStores();
     },
 });
 
 // Reload windows from store when our window is activated.
 onOurWindowActivated({
     callback: async () => {
-        await windowObserver.loadChromeWindows();
-        await sessionStore.loadSessions();
+        await loadStores();
     },
 });
 
@@ -110,9 +123,10 @@ chrome.runtime.onMessage.addListener(
             }
             console.log(`> Received message from service worker: ${message}`);
             // Find `Window` with matching ID.
-            const window: Maybe<Window> = windowObserver.windows.find(
-                (window) => window.id === message.targetWindowId
-            ) || null;
+            const window: Maybe<Window> =
+                windowObserver.windows.find(
+                    (window) => window.id === message.targetWindowId
+                ) || null;
             if (window === null) {
                 return;
             }
@@ -121,8 +135,13 @@ chrome.runtime.onMessage.addListener(
                 return;
             }
             // Add to the list of `window`'s closed tabs.
+            /*
             window.closedTabs.addTab(closedTab);
             await window.closedTabs.save();
+             */
+            const tabCollection: TabCollection = closedTabs[window.index];
+            tabCollection.addTab(closedTab);
+            await tabCollection.save();
         })();
         return Promise.resolve({ success: true } as IResponse);
     }
