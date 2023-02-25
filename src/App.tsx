@@ -60,6 +60,7 @@ const App = observer(function App({ windowObserver }: IAppProps) {
             <h1 className="mt-4 mb-4 text-2xl font-bold">Windows</h1>
             <WindowList
                 windows={windowObserver.windows}
+                closedTabs={closedTabs}
                 onSuspend={(window) => {
                     suspend(window);
                 }}

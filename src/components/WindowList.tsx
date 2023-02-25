@@ -1,9 +1,11 @@
 import { WindowComponent } from "./WindowComponent";
 import { Window } from "../stores/window";
 import { DivideChildren } from "../components/DivideChildren";
+import { TabCollection } from "../stores/closedTabs";
 
 interface WindowListProps {
     windows: Window[];
+    closedTabs: TabCollection[];
 
     // A callback for when the user wants to save the window's current state to a session.
     // onSaveWindowToSession: (window: Window) => void;
@@ -23,6 +25,7 @@ export function WindowList(props: WindowListProps) {
                     <WindowComponent
                         key={index}
                         window={window}
+                        closedTabs={props.closedTabs[window.index]}
                         onSuspend={props.onSuspend}
                     />
                 );

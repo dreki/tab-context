@@ -4,6 +4,7 @@ import { TabList } from "./TabList";
 
 interface WindowComponentProps {
     window: Window;
+    closedTabs: TabCollection;
 
     // A callback for when the user wants to save the window's current state to a session.
     //   onSaveWindowToSession: (window: Window) => void;
@@ -11,7 +12,8 @@ interface WindowComponentProps {
 }
 
 export function WindowComponent(props: WindowComponentProps) {
-    const closedTabs = props.window.closedTabs.tabs.map((tab) => {
+    // const closedTabs = props.window.closedTabs.tabs.map((tab) => {
+    const closedTabs = props.closedTabs.tabs.map((tab) => {
         return <li key={tab.id}>{tab.title}</li>;
     });
     return (
