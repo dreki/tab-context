@@ -7,17 +7,19 @@ interface WindowListProps {
     windows: Window[];
     closedTabs: TabCollection[];
 
-    // A callback for when the user wants to save the window's current state to a session.
-    // onSaveWindowToSession: (window: Window) => void;
+    /**
+     * A callback for when the user wants to save the window's current state to a session.
+     * @param window  The window to suspend.
+     * @returns  A promise that resolves when the window has been suspended.
+     */
     onSuspend: (window: Window) => void;
 }
 
-// export function WindowList(props: WindowListProps) {
+/**
+ * WindowList component. Renders a list of `WindowComponent`s for each `Window`.
+ * @param {WindowListProps} props
+ */
 export const WindowList = observer(function WindowList(props: WindowListProps) {
-    // Log the IDs of all the windows
-    // console.log("> Window IDs:");
-    // console.log(props.windows.map((window) => window.id));
-
     // Render `WindowComponent`s in a `DivideChildren` component
     return (
         <>

@@ -3,6 +3,11 @@ interface IOnOurTabActivatedParams {
     callback: () => Promise<void>;
 }
 
+/**
+ * Listen for our tab to become activated.
+ * @param {IOnOurTabActivatedParams} params
+ * @param {() => Promise<void>} params.callback An async function to call when our tab is activated.
+ */
 export function onOurTabActivated({
     callback: onOurTabActivated,
 }: IOnOurTabActivatedParams) {

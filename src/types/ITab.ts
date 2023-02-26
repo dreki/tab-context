@@ -1,6 +1,8 @@
 import { } from "../stores/window";
 import { Maybe } from "./Maybe";
 
+// ─── Types ───────────────────────────────────────────────────────────────────
+
 export interface ITab {
     id: number;
     title: string;
@@ -12,6 +14,13 @@ export interface ITab {
     favIconUrl?: string;
 }
 
+// ─── Functions ───────────────────────────────────────────────────────────────
+
+/**
+ * Make an `ITab` object from a Chrome tab.
+ * @param tabId ID of the Chrome tab to use.
+ * @returns The tab, as an `ITab` object, or `null` if the tab is not found.
+ */
 export async function fromChromeTab(tabId: number): Promise<Maybe<ITab>> {
     // Load the tab from Chrome
     const tab: Maybe<chrome.tabs.Tab> = await chrome.tabs.get(tabId);
@@ -34,15 +43,12 @@ export async function fromChromeTab(tabId: number): Promise<Maybe<ITab>> {
         groupName: group?.title || undefined,
         groupColor: group?.color || undefined,
     } as ITab;
-
-    // return {
-    //     id: tabId,
-    //     title: "",
-    //     pinned: false,
-    //     url: "",
-    // };
 }
 
+/**
+ * Make an `ITab` object from the most recently closed Chrome tab.
+ * @returns The tab, as an `ITab` object, or `null` if the tab is not found.
+ */
 export async function fromMostRecentClosedTab(): Promise<Maybe<ITab>> {
     // Create a Promise that will resolve when the tab is found.
     const promise = new Promise<Maybe<ITab>>((resolve) => {
@@ -61,6 +67,7 @@ export async function fromMostRecentClosedTab(): Promise<Maybe<ITab>> {
                     pinned: session.tab.pinned || false,
                     url: session.tab.url || "",
                     favIconUrl: session.tab.favIconUrl || "",
+                    // TODO: Implement group data population
                     // groupName: session.tab.groupName || undefined,
                     // groupColor: session.tab.groupColor || undefined,
                 } as ITab);
@@ -72,51 +79,6 @@ export async function fromMostRecentClosedTab(): Promise<Maybe<ITab>> {
     });
     // Return the promise
     return promise;
-}
-
-/**
- * Use the chrome.sessions API to get a tab that was recently closed.
- * @param tabId ID of a tab that was recently closed.
- */
-export async function fromClosedChromeTab(tabId: number): Promise<Maybe<ITab>> {
-    // Create a Promise that will resolve when the tab is found.
-    const promise = new Promise<Maybe<ITab>>((resolve) => {
-        // Get the recently closed tabs
-        chrome.sessions.getRecentlyClosed(async (sessions) => {
-            // Iterate over each session
-            for (let session of sessions) {
-                console.log(`> session:`);
-                console.log(session);
-                // If the session is not a tab, continue
-                if (session.tab === undefined) {
-                    continue;
-                }
-                // console.log(`> ${session.tab.id} === ${tabId} ?`)
-                // If the session is a tab, but the ID does not match, continue
-                if (session.tab.id !== tabId) {
-                    continue;
-                }
-                // If the session is a tab, and the ID matches, resolve the promise
-                resolve({
-                    id: tabId,
-                    title: session.tab.title || "",
-                    pinned: session.tab.pinned || false,
-                    url: session.tab.url || "",
-                    favIconUrl: session.tab.favIconUrl || "",
-                    // groupName: session.tab.groupName || undefined,
-                    // groupColor: session.tab.groupColor || undefined,
-                } as ITab);
-            }
-            // If the tab is not found, resolve the promise with null
-            resolve(null);
-        });
-    });
-    // Return the promise
-    return promise;
-
-    // const sessions: chrome.sessions.Session[] = await chrome.sessions.getRecentlyClosed();
-    // const sessions = await chrome.sessions.getRecentlyClosed({maxSessions: 100});
-    // return null;
 }
 
 export async function getExtensionUiTab(

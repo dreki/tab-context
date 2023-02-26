@@ -8,23 +8,25 @@ interface WindowComponentProps {
     window: Window;
     closedTabs: TabCollection;
 
-    // A callback for when the user wants to save the window's current state to a session.
-    //   onSaveWindowToSession: (window: Window) => void;
+    /**
+     * A callback for when the user wants to save the window's current state to a session.
+     * @param window  The window to suspend.
+     * @returns  A promise that resolves when the window has been suspended.
+     */
     onSuspend: (window: Window) => void;
 }
 
-// export function WindowComponent(props: WindowComponentProps) {
+/**
+ * WindowComponent component. Renders a `Window`.
+ * @param {WindowComponentProps} props
+ */
 export const WindowComponent = observer(function WindowComponent(
     props: WindowComponentProps
 ) {
-    // const closedTabs = props.window.closedTabs.tabs.map((tab) => {
-
     const closedTabs =
         props.closedTabs?.tabs?.map((tab) => {
             return <li key={tab.id}>{tab.title}</li>;
         }) || null;
-    // console.log(`> WindowComponent, closedTabs: ${props.closedTabs}, closedTabs.tabs: ${props.closedTabs?.tabs}`)
-    // const closedTabs = "";
     return (
         <div className="card-bordered card card-compact mb-8 bg-slate-50 shadow-md">
             {/* Hidden h2, for accessibility, noting window */}

@@ -5,26 +5,12 @@ import { Maybe } from "../types/Maybe";
 import { IMessage } from "../types/Message";
 
 /**
- *
- * @param windowObserver WindowObserver instance to use.
- * @param targetWindowId
- * @param targetTabId
- * @param tabCollection
- * @returns
+ * Add the most recently closed tab to the correct tab collection.
+ * @param message  Message from service worker
+ * @param windowObserver  Window observer
+ * @param collections  Tab collections. The correct one will be found, and the most recent closed tab will be added to it.
+ * @returns  Nothing.
  */
-// async function addMostRecentClosedTabToCollection(
-//     targetWindowId: number,
-//     targetTabId: number,
-//     tabCollection: TabCollection
-// ) {
-//     const closedTab: Maybe<ITab> = await fromMostRecentClosedTab();
-//     if (closedTab === null) {
-//         return;
-//     }
-//     tabCollection.addTab(closedTab);
-//     await tabCollection.save();
-// }
-
 export async function addMostRecentClosedTabToCollection(
     message: IMessage,
     windowObserver: WindowObserver,
@@ -39,7 +25,6 @@ export async function addMostRecentClosedTabToCollection(
     ) {
         return;
     }
-    console.log(`> Received message from service worker: ${message}`);
     // Find `Window` with matching ID.
     const window: Maybe<Window> =
         windowObserver.windows.find(
@@ -53,10 +38,6 @@ export async function addMostRecentClosedTabToCollection(
         return;
     }
     // Add to the list of `window`'s closed tabs.
-    /*
-            window.closedTabs.addTab(closedTab);
-            await window.closedTabs.save();
-             */
     const tabCollection: TabCollection = collections[window.index];
     tabCollection.addTab(closedTab);
     await tabCollection.save();
