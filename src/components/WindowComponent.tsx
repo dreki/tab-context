@@ -1,4 +1,5 @@
 // import { IWindow } from "../stores";
+import { observer } from "mobx-react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { TabList } from "./TabList";
@@ -12,12 +13,16 @@ interface WindowComponentProps {
     onSuspend: (window: Window) => void;
 }
 
-export function WindowComponent(props: WindowComponentProps) {
+// export function WindowComponent(props: WindowComponentProps) {
+export const WindowComponent = observer(function WindowComponent(
+    props: WindowComponentProps
+) {
     // const closedTabs = props.window.closedTabs.tabs.map((tab) => {
 
-    const closedTabs = props.closedTabs?.tabs?.map((tab) => {
-        return <li key={tab.id}>{tab.title}</li>;
-    }) || null;
+    const closedTabs =
+        props.closedTabs?.tabs?.map((tab) => {
+            return <li key={tab.id}>{tab.title}</li>;
+        }) || null;
     // console.log(`> WindowComponent, closedTabs: ${props.closedTabs}, closedTabs.tabs: ${props.closedTabs?.tabs}`)
     // const closedTabs = "";
     return (
@@ -46,4 +51,4 @@ export function WindowComponent(props: WindowComponentProps) {
             </div>
         </div>
     );
-}
+});

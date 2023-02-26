@@ -1,18 +1,19 @@
-import { WindowComponent } from "./WindowComponent";
+import { observer } from "mobx-react";
+import { TabCollectionArray } from "../stores/closedTabs";
 import { Window } from "../stores/window";
-import { DivideChildren } from "../components/DivideChildren";
-import { TabCollection } from "../stores/closedTabs";
+import { WindowComponent } from "./WindowComponent";
 
 interface WindowListProps {
     windows: Window[];
-    closedTabs: TabCollection[];
+    closedTabs: TabCollectionArray;
 
     // A callback for when the user wants to save the window's current state to a session.
     // onSaveWindowToSession: (window: Window) => void;
     onSuspend: (window: Window) => void;
 }
 
-export function WindowList(props: WindowListProps) {
+// export function WindowList(props: WindowListProps) {
+export const WindowList = observer(function WindowList(props: WindowListProps) {
     // Log the IDs of all the windows
     // console.log("> Window IDs:");
     // console.log(props.windows.map((window) => window.id));
@@ -32,4 +33,4 @@ export function WindowList(props: WindowListProps) {
             })}
         </>
     );
-}
+});

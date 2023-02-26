@@ -13,7 +13,8 @@ export class TabCollection {
 
     // Allow adding a tab to the collection.
     addTab(tab: ITab) {
-        this._tabs.push(tab);
+        // Add tab to front of array.
+        this._tabs.unshift(tab);
     }
 
     // Allow observing changes to the collection.
@@ -45,6 +46,13 @@ export class TabCollection {
     async save() {
         // Save the collection to local storage.
         await set(`closedTabs-${this.windowIndex}`, this);
+    }
+}
+
+export class TabCollectionArray extends Array<TabCollection> {
+    constructor() {
+        super();
+        makeAutoObservable(this);
     }
 }
 

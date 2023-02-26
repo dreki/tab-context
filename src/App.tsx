@@ -3,20 +3,21 @@ import "./App.css";
 import { observer } from "mobx-react";
 import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
-import { TabCollection } from "./stores/closedTabs";
+import { TabCollection, TabCollectionArray } from "./stores/closedTabs";
 import { SessionStore } from "./stores/session";
-import { Window, WindowObserver } from "./stores/window";
-import { fromMostRecentClosedTab, getCurrentTabId, ITab } from "./types/ITab";
-import { Maybe } from "./types/Maybe";
+import { WindowObserver } from "./stores/window";
+import { ITab } from "./types/ITab";
 import { IMessage, IResponse } from "./types/Message";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { restore } from "./workflows/restore";
 import { suspend } from "./workflows/suspend";
+import { addMostRecentClosedTabToCollection } from "./workflows/tabCollections";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
-let closedTabs: TabCollection[] = [];
+// let closedTabs: TabCollection[] = [];
+let closedTabs: TabCollectionArray = [];
 
 async function loadStores() {
     await windowObserver.loadChromeWindows();
@@ -104,45 +105,47 @@ chrome.runtime.onMessage.addListener((message: IMessage): Promise<IResponse> => 
 });
  */
 
-// TODO: Decouple closed tabs from `Window` store class. Seems like this would have the added
-// benefit of the UI being updated.
-
 chrome.runtime.onMessage.addListener(
     (message: IMessage): Promise<IResponse> => {
         // return {success: true} as IResponse;
 
         (async () => {
-            // If the message is for this window and tab, then handle.
-            const currentWindowId: Maybe<number> =
-                await Window.getCurrentWindowId();
-            const currentTabId: Maybe<number> = await getCurrentTabId();
-            if (
-                currentWindowId !== message.targetWindowId ||
-                currentTabId !== message.targetTabId
-            ) {
-                return;
-            }
-            console.log(`> Received message from service worker: ${message}`);
-            // Find `Window` with matching ID.
-            const window: Maybe<Window> =
-                windowObserver.windows.find(
-                    (window) => window.id === message.targetWindowId
-                ) || null;
-            if (window === null) {
-                return;
-            }
-            const closedTab: Maybe<ITab> = await fromMostRecentClosedTab();
-            if (closedTab === null) {
-                return;
-            }
-            // Add to the list of `window`'s closed tabs.
-            /*
-            window.closedTabs.addTab(closedTab);
-            await window.closedTabs.save();
-             */
-            const tabCollection: TabCollection = closedTabs[window.index];
-            tabCollection.addTab(closedTab);
-            await tabCollection.save();
+            await addMostRecentClosedTabToCollection(
+                message,
+                windowObserver,
+                closedTabs
+            );
+            // // If the message is for this window and tab, then handle.
+            // const currentWindowId: Maybe<number> =
+            //     await Window.getCurrentWindowId();
+            // const currentTabId: Maybe<number> = await getCurrentTabId();
+            // if (
+            //     currentWindowId !== message.targetWindowId ||
+            //     currentTabId !== message.targetTabId
+            // ) {
+            //     return;
+            // }
+            // console.log(`> Received message from service worker: ${message}`);
+            // // Find `Window` with matching ID.
+            // const window: Maybe<Window> =
+            //     windowObserver.windows.find(
+            //         (window) => window.id === message.targetWindowId
+            //     ) || null;
+            // if (window === null) {
+            //     return;
+            // }
+            // const closedTab: Maybe<ITab> = await fromMostRecentClosedTab();
+            // if (closedTab === null) {
+            //     return;
+            // }
+            // // Add to the list of `window`'s closed tabs.
+            // /*
+            // window.closedTabs.addTab(closedTab);
+            // await window.closedTabs.save();
+            //  */
+            // const tabCollection: TabCollection = closedTabs[window.index];
+            // tabCollection.addTab(closedTab);
+            // await tabCollection.save();
         })();
         return Promise.resolve({ success: true } as IResponse);
     }
