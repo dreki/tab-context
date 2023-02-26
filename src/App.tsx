@@ -3,7 +3,7 @@ import "./App.css";
 import { observer } from "mobx-react";
 import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
-import { TabCollection, TabCollectionArray } from "./stores/closedTabs";
+import { TabCollection } from "./stores/closedTabs";
 import { SessionStore } from "./stores/session";
 import { WindowObserver } from "./stores/window";
 import { ITab } from "./types/ITab";
@@ -16,8 +16,8 @@ import { addMostRecentClosedTabToCollection } from "./workflows/tabCollections";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
-// let closedTabs: TabCollection[] = [];
-let closedTabs: TabCollectionArray = [];
+let closedTabs: TabCollection[] = [];
+// let closedTabs: TabCollectionArray = [];
 
 async function loadStores() {
     await windowObserver.loadChromeWindows();

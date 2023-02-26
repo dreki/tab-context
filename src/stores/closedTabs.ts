@@ -49,12 +49,6 @@ export class TabCollection {
     }
 }
 
-export class TabCollectionArray extends Array<TabCollection> {
-    constructor() {
-        super();
-        makeAutoObservable(this);
-    }
-}
 
 /**
  * Load nonvolatile list of closed tabs for a window, by index.

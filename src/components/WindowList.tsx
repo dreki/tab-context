@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
-import { TabCollectionArray } from "../stores/closedTabs";
+import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { WindowComponent } from "./WindowComponent";
 
 interface WindowListProps {
     windows: Window[];
-    closedTabs: TabCollectionArray;
+    closedTabs: TabCollection[];
 
     // A callback for when the user wants to save the window's current state to a session.
     // onSaveWindowToSession: (window: Window) => void;

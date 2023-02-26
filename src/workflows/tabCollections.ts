@@ -1,4 +1,4 @@
-import { TabCollection, TabCollectionArray } from "../stores/closedTabs";
+import { TabCollection } from "../stores/closedTabs";
 import { Window, WindowObserver } from "../stores/window";
 import { fromMostRecentClosedTab, getCurrentTabId, ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
@@ -28,7 +28,7 @@ import { IMessage } from "../types/Message";
 export async function addMostRecentClosedTabToCollection(
     message: IMessage,
     windowObserver: WindowObserver,
-    collections: TabCollectionArray
+    collections: TabCollection[]
 ) {
     // If the message is for this window and tab, then handle.
     const currentWindowId: Maybe<number> = await Window.getCurrentWindowId();
