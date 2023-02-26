@@ -1,4 +1,5 @@
 // import { IWindow } from "../stores";
+import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { TabList } from "./TabList";
 
@@ -13,9 +14,12 @@ interface WindowComponentProps {
 
 export function WindowComponent(props: WindowComponentProps) {
     // const closedTabs = props.window.closedTabs.tabs.map((tab) => {
-    const closedTabs = props.closedTabs.tabs.map((tab) => {
+
+    const closedTabs = props.closedTabs?.tabs?.map((tab) => {
         return <li key={tab.id}>{tab.title}</li>;
-    });
+    }) || null;
+    // console.log(`> WindowComponent, closedTabs: ${props.closedTabs}, closedTabs.tabs: ${props.closedTabs?.tabs}`)
+    // const closedTabs = "";
     return (
         <div className="card-bordered card card-compact mb-8 bg-slate-50 shadow-md">
             {/* Hidden h2, for accessibility, noting window */}
