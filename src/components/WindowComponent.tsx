@@ -1,7 +1,9 @@
 // import { IWindow } from "../stores";
 import { observer } from "mobx-react";
+import { useState } from "react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
+import { TabDetailList } from "./TabDetailList";
 import { TabList } from "./TabList";
 
 interface WindowComponentProps {
@@ -23,18 +25,19 @@ interface WindowComponentProps {
 export const WindowComponent = observer(function WindowComponent(
     props: WindowComponentProps
 ) {
+    const [expand, setExpand] = useState<Boolean>(false);
     /*
     let closedTabs =
         props.closedTabs?.tabs?.map((tab) => {
             return <li key={tab.id}>{tab.title}</li>;
         }) || null;
     */
-    
+
     // Show "X Closed Tabs" if there are closed tabs, even if there are 0.
     let closedTabs = <>...</>;
     if (props.closedTabs) {
         closedTabs = (
-            <p className="font-medium text-base">
+            <p className="text-base font-medium">
                 {props.closedTabs.tabs.length} Closed Tabs
             </p>
         );
@@ -46,7 +49,16 @@ export const WindowComponent = observer(function WindowComponent(
             <div className="overflow-hidden rounded-t-2xl bg-slate-200 p-2">
                 {/* Hidden h3 to note tab list */}
                 <h3 className="sr-only">Tab List</h3>
-                <TabList tabs={props.window.tabs} />
+                {/* If expanded, use TabDetailList */}
+                {/* If not expanded, use TabList */}
+                {expand? <TabDetailList tabs={props.window.tabs} /> : <TabList tabs={props.window.tabs} />}
+                {/* <TabList tabs={props.window.tabs} /> */}
+                <div className="grid place-items-center">
+                    {/* When clicking button, flip `expand` */}
+                    <button className="btn-ghost btn-xs btn" onClick={() => setExpand(!expand)}>
+                        Click to expand
+                    </button>
+                </div>
             </div>
             <div className="card-body">
                 <div>
