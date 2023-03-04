@@ -20,18 +20,20 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
         </button>
     ) : null;
     return (
-        <div className="card-bordered card card-compact mb-4 bg-purple-100 shadow-md">
-            <div className="card-body">
-                {tabs.map((tab, index) => {
-                    return (
-                        <div key={index}>
-                            <TabDetailComponent tab={tab} />
-                        </div>
-                    );
-                })}
+        <>
+            {/* <div className="card-bordered card card-compact mb-4 bg-purple-100 shadow-md">
+            <div className="card-body"> */}
+            {tabs.map((tab, index) => {
+                return (
+                    <div key={index}>
+                        <TabDetailComponent tab={tab} />
+                    </div>
+                );
+            })}
 
-                <div className="card-actions mt-2">{restore}</div>
+            {/* <div className="card-actions mt-2">{restore}</div>
             </div>
-        </div>
+        </div> */}
+        </>
     );
 }
