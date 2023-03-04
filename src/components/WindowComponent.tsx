@@ -62,6 +62,10 @@ export const WindowComponent = observer(function WindowComponent(
             </div>
             <div className="card-body">
                 <div>
+                    {/* h3 SR only to note tabs label */}
+                    <h3 className="sr-only">Tabs</h3>
+                    <p className="text-base font-medium">{props.window.tabs.length} Tabs</p>
+                    
                     {/* h3 SR only to note closed tabs label */}
                     <h3 className="sr-only">Closed Tabs</h3>
                     {closedTabs}
