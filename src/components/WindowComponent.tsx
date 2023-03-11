@@ -5,6 +5,10 @@ import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { TabDetailList } from "./TabDetailList";
 import { TabList } from "./TabList";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { Grid } from "@mui/material";
 
 interface WindowComponentProps {
     window: Window;
@@ -37,9 +41,9 @@ export const WindowComponent = observer(function WindowComponent(
     let closedTabs = <>...</>;
     if (props.closedTabs) {
         closedTabs = (
-            <p className="text-base font-medium">
+            <span className="text-base font-medium">
                 {props.closedTabs.tabs.length} Closed Tabs
-            </p>
+            </span>
         );
     }
     return (
@@ -61,6 +65,18 @@ export const WindowComponent = observer(function WindowComponent(
                 </div>
             </div>
             <div className="card-body">
+                <Grid container spacing={1} alignItems="center">
+                    <Grid item xs={2}>
+                        {props.window.tabs.length} Tabs
+                    </Grid>
+                    <Divider orientation="vertical" flexItem />
+                    <Grid item xs={2}>{closedTabs}</Grid>
+                </Grid>
+                <Box>
+                    <span className="text-base font-medium">{props.window.tabs.length} Tabs</span>
+                    <Divider orientation="vertical"/>
+                    {closedTabs}
+                </Box>
                 <div>
                     {/* h3 SR only to note tabs label */}
                     <h3 className="sr-only">Tabs</h3>
