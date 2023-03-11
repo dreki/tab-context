@@ -72,20 +72,6 @@ export const WindowComponent = observer(function WindowComponent(
                     <Divider orientation="vertical" flexItem />
                     <Grid item xs={2}>{closedTabs}</Grid>
                 </Grid>
-                <Box>
-                    <span className="text-base font-medium">{props.window.tabs.length} Tabs</span>
-                    <Divider orientation="vertical"/>
-                    {closedTabs}
-                </Box>
-                <div>
-                    {/* h3 SR only to note tabs label */}
-                    <h3 className="sr-only">Tabs</h3>
-                    <p className="text-base font-medium">{props.window.tabs.length} Tabs</p>
-                    
-                    {/* h3 SR only to note closed tabs label */}
-                    <h3 className="sr-only">Closed Tabs</h3>
-                    {closedTabs}
-                </div>
                 <div className="card-actions mt-2">
                     <button
                         className="btn-primary btn-sm btn"
