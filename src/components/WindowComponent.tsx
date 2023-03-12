@@ -1,14 +1,13 @@
 // import { IWindow } from "../stores";
+import Divider from "@mui/material/Divider";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { TabDetailList } from "./TabDetailList";
 import { TabList } from "./TabList";
-import Divider from "@mui/material/Divider";
-import Box from "@mui/material/Box";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { Grid } from "@mui/material";
+// import { Grid } from "@mui/material";
 
 interface WindowComponentProps {
     window: Window;
@@ -37,11 +36,18 @@ export const WindowComponent = observer(function WindowComponent(
         }) || null;
     */
 
+    // Show "X Tabs" for the amount of open tabs in the window.
+    let openTabs = (
+        <span className="text-base font-medium">
+            {props.window.tabs.length} Tabs
+        </span>
+    );
+
     // Show "X Closed Tabs" if there are closed tabs, even if there are 0.
     let closedTabs = <>...</>;
     if (props.closedTabs) {
         closedTabs = (
-            <span className="text-base font-medium">
+            <span className="text-base">
                 {props.closedTabs.tabs.length} Closed Tabs
             </span>
         );
@@ -55,23 +61,31 @@ export const WindowComponent = observer(function WindowComponent(
                 <h3 className="sr-only">Tab List</h3>
                 {/* If expanded, use TabDetailList */}
                 {/* If not expanded, use TabList */}
-                {expand? <TabDetailList tabs={props.window.tabs} /> : <TabList tabs={props.window.tabs} />}
+                {expand ? (
+                    <TabDetailList tabs={props.window.tabs} />
+                ) : (
+                    <TabList tabs={props.window.tabs} />
+                )}
                 {/* <TabList tabs={props.window.tabs} /> */}
                 <div className="grid place-items-center">
                     {/* When clicking button, flip `expand` */}
-                    <button className="btn-ghost btn-xs btn" onClick={() => setExpand(!expand)}>
+                    <button
+                        className="btn-ghost btn-xs btn"
+                        onClick={() => setExpand(!expand)}
+                    >
                         Click to expand
                     </button>
                 </div>
             </div>
             <div className="card-body">
-                <Grid container spacing={1} alignItems="center">
-                    <Grid item xs={2}>
-                        {props.window.tabs.length} Tabs
-                    </Grid>
+                <Grid2 container spacing={1} alignItems="center">
+                    <Grid2 xs={1}>{openTabs}</Grid2>
                     <Divider orientation="vertical" flexItem />
-                    <Grid item xs={2}>{closedTabs}</Grid>
-                </Grid>
+                    <Grid2 xs={2}>
+                        <div className="pl-2">{closedTabs}</div>
+                    </Grid2>
+                    <Grid2 xs={9}></Grid2>
+                </Grid2>
                 <div className="card-actions mt-2">
                     <button
                         className="btn-primary btn-sm btn"
