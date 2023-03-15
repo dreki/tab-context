@@ -20,7 +20,7 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
             Restore
         </button>
     ) : null;
-    const oldJsx = (
+    return (
         <>
             {/* <div className="card-bordered card card-compact mb-4 bg-purple-100 shadow-md">
             <div className="card-body"> */}
@@ -28,6 +28,7 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
                 return (
                     <div key={index}>
                         <TabDetailComponent tab={tab} />
+                        {/* <TabDetailListItem tab={tab} /> */}
                     </div>
                 );
             })}
@@ -36,15 +37,5 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
             </div>
         </div> */}
         </>
-    );
-
-    return (
-        <List>
-            {tabs.map((tab, index) => {
-                return (
-                    <TabDetailListItem key={index} tab={tab} />
-                );
-            })}
-        </List>
     );
 }

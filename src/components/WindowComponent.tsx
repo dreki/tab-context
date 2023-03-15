@@ -70,14 +70,9 @@ export const WindowComponent = observer(function WindowComponent(
                 </div>
             </div>
             <div className="card-body">
-                <Grid2 container spacing={1} alignItems="center">
-                    <Grid2 xs={1}>{openTabs}</Grid2>
-                    <Divider orientation="vertical" flexItem />
-                    <Grid2 xs={2}>
-                        <div className="pl-2">{closedTabs}</div>
-                    </Grid2>
-                    <Grid2 xs={9}></Grid2>
-                </Grid2>
+                {openTabs}
+                |
+                {closedTabs}
                 <div className="card-actions mt-2">
                     <button
                         className="btn-primary btn-sm btn"

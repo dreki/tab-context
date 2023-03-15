@@ -1,4 +1,5 @@
 import { ITab } from "../types/ITab";
+import { FavIconWithDefault } from "./FavIconWithDefault";
 
 interface TabDetailListItemProps {
     tab: ITab;
@@ -13,21 +14,27 @@ interface TabDetailListItemProps {
 // }
 
 export function TabDetailListItem(props: TabDetailListItemProps) {
-    let avatar = (
-        <Avatar sx={{ height: 20, width: 20}}><LanguageIcon /></Avatar>
-    )
-    if (props.tab.favIconUrl) {
-        avatar = (
-            <Avatar src={props.tab.favIconUrl} />
-        );
-    }
+    // let avatar = (
+    //     <Avatar sx={{ height: 20, width: 20}}><LanguageIcon /></Avatar>
+    // )
+    // if (props.tab.favIconUrl) {
+    //     avatar = (
+    //         <Avatar src={props.tab.favIconUrl} />
+    //     );
+    // }
+    // return (
+    //     <ListItem>
+    //         <ListItemAvatar>
+    //             {/* <Avatar src=""></Avatar> */}
+    //             {avatar}
+    //         </ListItemAvatar>
+    //         <ListItemText primary={props.tab.title} />
+    //     </ListItem>
+    // );
     return (
-        <ListItem>
-            <ListItemAvatar>
-                {/* <Avatar src=""></Avatar> */}
-                {avatar}
-            </ListItemAvatar>
-            <ListItemText primary={props.tab.title} />
-        </ListItem>
+        <>
+            <FavIconWithDefault tab={props.tab} className={"align-middle"} />
+            <span className="text-base">{props.tab.title}</span>
+        </>
     );
 }
