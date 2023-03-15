@@ -13,7 +13,8 @@ export function TabDetailComponent({ tab }: TabDetailComponentProps) {
                 <FavIconWithDefault tab={tab} className={"align-middle"} />
             </div>
             <div>
-                <div className="h-5 pl-1 align-middle">{tab.title}</div>
+                {/* <div className="h-5 pl-1 align-middle">{tab.title}</div> */}
+                <span className="text-base">{tab.title}</span>
             </div>
         </div>
     );

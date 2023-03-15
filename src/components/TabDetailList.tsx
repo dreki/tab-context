@@ -1,5 +1,6 @@
 import { ITab } from "../types/ITab";
 import { TabDetailComponent } from "./TabDetailComponent";
+import { TabDetailListItem } from "./TabDetailListItem";
 
 interface TabDetailListProps {
     tabs: ITab[];
@@ -19,7 +20,7 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
             Restore
         </button>
     ) : null;
-    return (
+    const oldJsx = (
         <>
             {/* <div className="card-bordered card card-compact mb-4 bg-purple-100 shadow-md">
             <div className="card-body"> */}
@@ -35,5 +36,15 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
             </div>
         </div> */}
         </>
+    );
+
+    return (
+        <List>
+            {tabs.map((tab, index) => {
+                return (
+                    <TabDetailListItem key={index} tab={tab} />
+                );
+            })}
+        </List>
     );
 }

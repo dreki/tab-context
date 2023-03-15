@@ -1,14 +1,13 @@
-// import { IWindow } from "../stores";
-import Divider from "@mui/material/Divider";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { TabDetailList } from "./TabDetailList";
 import { TabList } from "./TabList";
-// import { Grid } from "@mui/material";
 
+/**
+ * WindowComponentProps interface. Props for the `WindowComponent` component.
+ */
 interface WindowComponentProps {
     window: Window;
     closedTabs: TabCollection;
@@ -29,12 +28,6 @@ export const WindowComponent = observer(function WindowComponent(
     props: WindowComponentProps
 ) {
     const [expand, setExpand] = useState<Boolean>(false);
-    /*
-    let closedTabs =
-        props.closedTabs?.tabs?.map((tab) => {
-            return <li key={tab.id}>{tab.title}</li>;
-        }) || null;
-    */
 
     // Show "X Tabs" for the amount of open tabs in the window.
     let openTabs = (
@@ -66,7 +59,6 @@ export const WindowComponent = observer(function WindowComponent(
                 ) : (
                     <TabList tabs={props.window.tabs} />
                 )}
-                {/* <TabList tabs={props.window.tabs} /> */}
                 <div className="grid place-items-center">
                     {/* When clicking button, flip `expand` */}
                     <button
