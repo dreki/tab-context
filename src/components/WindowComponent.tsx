@@ -70,9 +70,11 @@ export const WindowComponent = observer(function WindowComponent(
                 </div>
             </div>
             <div className="card-body">
-                {openTabs}
-                |
-                {closedTabs}
+                <div>
+                    {openTabs}
+                    <span className="ml-2 mr-2 text-gray-400">|</span>
+                    {closedTabs}
+                </div>
                 <div className="card-actions mt-2">
                     <button
                         className="btn-primary btn-sm btn"
