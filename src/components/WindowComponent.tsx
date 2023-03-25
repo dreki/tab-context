@@ -1,7 +1,8 @@
 import { observer } from "mobx-react";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
+import { ITab } from "../types/ITab";
 import { TabDetailList } from "./TabDetailList";
 import { TabList } from "./TabList";
 
@@ -19,6 +20,43 @@ interface WindowComponentProps {
      */
     onSuspend: (window: Window) => void;
 }
+
+interface WindowTabListComponentProps {
+    expanded: Boolean;
+    tabs: ITab[];
+    closedTabs: TabCollection;
+}
+
+export const WindowTabListComponent = observer(function WindowTabListComponent(
+    props: WindowTabListComponentProps
+) {
+    let output: ReactElement | null = null;
+    if (!props.expanded) {
+        output = (
+            <>
+                {/* Hidden h3 to note tab list */}
+                <h3 className="sr-only">Tab List</h3>
+                <TabList tabs={props.tabs} />
+            </>
+        );
+    }
+    if (props.expanded) {
+        output = (
+            <div className="flex flex-row">
+                <div className="basis-3/4">
+                    {/* Hidden h3 to note tab list */}
+                    <h3 className="sr-only">Tab List</h3>
+                    <TabDetailList tabs={props.tabs} />
+                </div>
+                <div className="basis-1/4">
+                    <h3>Closed Tabs</h3>
+                    <TabDetailList tabs={props.closedTabs.tabs} />
+                </div>
+            </div>
+        );
+    }
+    return <>{output}</>;
+});
 
 /**
  * WindowComponent component. Renders a `Window`.
@@ -50,23 +88,21 @@ export const WindowComponent = observer(function WindowComponent(
             {/* Hidden h2, for accessibility, noting window */}
             <h2 className="sr-only">Window {props.window.index}</h2>
             <div className="overflow-hidden rounded-t-2xl bg-slate-200 p-2">
-                {/* Hidden h3 to note tab list */}
-                <h3 className="sr-only">Tab List</h3>
-                {/* If expanded, use TabDetailList */}
-                {/* If not expanded, use TabList */}
-                {expand ? (
-                    <TabDetailList tabs={props.window.tabs} />
-                ) : (
-                    <TabList tabs={props.window.tabs} />
-                )}
-                <div className="grid place-items-center">
+                <div className="">
+                    <WindowTabListComponent
+                        expanded={expand}
+                        tabs={props.window.tabs}
+                        closedTabs={props.closedTabs}
+                    />
                     {/* When clicking button, flip `expand` */}
-                    <button
-                        className="btn-ghost btn-xs btn"
-                        onClick={() => setExpand(!expand)}
-                    >
-                        Click to expand
-                    </button>
+                    <div className="grid place-items-center">
+                        <button
+                            className="btn-ghost btn-xs btn"
+                            onClick={() => setExpand(!expand)}
+                        >
+                            Click to expand
+                        </button>
+                    </div>
                 </div>
             </div>
             <div className="card-body">
