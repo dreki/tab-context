@@ -3,19 +3,14 @@ import { FavIconWithDefault } from "./FavIconWithDefault";
 
 interface TabDetailComponentProps {
     tab: ITab;
+    key?: number;
 }
 
-export function TabDetailComponent({ tab }: TabDetailComponentProps) {
+export function TabDetailComponent({ tab, key }: TabDetailComponentProps) {
     return (
-        // Lay out a FavIconWithDefault to the left of tab.title.
-        <div className="flex flex-row">
-            <div>
-                <FavIconWithDefault tab={tab} className={"align-middle"} />
-            </div>
-            <div>
-                {/* <div className="h-5 pl-1 align-middle">{tab.title}</div> */}
-                <span className="text-base">{tab.title}</span>
-            </div>
-        </div>
+        <li className="flex items-center space-x-3" key={key}>
+            <FavIconWithDefault tab={tab} className={"h-5 w-5 flex-shrink-0"} />
+            <span>{tab.title}</span>
+        </li>
     );
 }

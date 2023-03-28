@@ -31,6 +31,7 @@ export function TabDetailListItem(props: TabDetailListItemProps) {
     //         <ListItemText primary={props.tab.title} />
     //     </ListItem>
     // );
+
     return (
         <>
             <FavIconWithDefault tab={props.tab} className={"align-middle"} />

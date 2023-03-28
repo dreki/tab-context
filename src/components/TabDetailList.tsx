@@ -1,13 +1,12 @@
 import { ITab } from "../types/ITab";
 import { TabDetailComponent } from "./TabDetailComponent";
-import { TabDetailListItem } from "./TabDetailListItem";
 
 interface TabDetailListProps {
     tabs: ITab[];
     onRestore?: (tabs: ITab[]) => void;
 }
 
-export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+export function TabDetailList__DEP({ tabs, onRestore }: TabDetailListProps) {
     if (!tabs) {
         return null;
     }
@@ -37,5 +36,19 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
             </div>
         </div> */}
         </>
+    );
+}
+
+export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+    if (!tabs) {
+        return null;
+    }
+
+    return (
+        <ul className="mb-8 space-y-2 text-left dark:text-gray-400">
+            {tabs.map((tab, index) => {
+                return <TabDetailComponent tab={tab} key={index} />;
+            })}
+        </ul>
     );
 }
