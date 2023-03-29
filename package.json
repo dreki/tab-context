@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@chakra-ui/react": "^2.5.4",
     "@craco/craco": "^7.0.0",
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
     "@heroicons/react": "^2.0.13",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -19,7 +16,6 @@
     "@types/uuid": "^9.0.0",
     "daisyui": "^2.46.0",
     "escape-string-regexp": "^1.0.5",
-    "framer-motion": "^10.10.0",
     "jotai": "^1.12.0",
     "localforage": "^1.10.0",
     "mobx": "^6.7.0",
