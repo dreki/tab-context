@@ -45,7 +45,7 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
     }
 
     return (
-        <div className="m-2 rounded-lg bg-white p-2 dark:bg-gray-800">
+        <div className="m-2 rounded-lg">
             <ul className="mb-8 space-y-2 text-left dark:text-gray-400">
                 {tabs.map((tab, index) => {
                     return <TabDetailComponent tab={tab} key={index} />;
