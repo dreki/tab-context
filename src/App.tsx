@@ -1,3 +1,4 @@
+import { ChakraProvider } from "@chakra-ui/react";
 import { observer } from "mobx-react";
 import "./App.css";
 import { SessionList } from "./components/SessionList";
@@ -55,22 +56,24 @@ interface IAppProps {
  */
 const App = observer(function App({ windowObserver }: IAppProps) {
     return (
-        <div className="container p-8">
-            <h1 className="mt-4 mb-4 text-2xl font-bold">Windows</h1>
-            <WindowList
-                windows={windowObserver.windows}
-                closedTabs={closedTabs}
-                onSuspend={(window) => {
-                    suspend(window);
-                }}
-            />
+        <ChakraProvider>
+            <div className="container p-8">
+                <h1 className="mt-4 mb-4 text-2xl font-bold">Windows</h1>
+                <WindowList
+                    windows={windowObserver.windows}
+                    closedTabs={closedTabs}
+                    onSuspend={(window) => {
+                        suspend(window);
+                    }}
+                />
 
-            <h1 className="mt-8 mb-4 text-2xl font-bold">Sessions</h1>
-            <SessionList
-                sessions={sessionStore.sessions}
-                onRestore={onRestore}
-            />
-        </div>
+                <h1 className="mt-8 mb-4 text-2xl font-bold">Sessions</h1>
+                <SessionList
+                    sessions={sessionStore.sessions}
+                    onRestore={onRestore}
+                />
+            </div>
+        </ChakraProvider>
     );
 });
 
