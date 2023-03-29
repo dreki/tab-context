@@ -1,3 +1,4 @@
+import { List, ListIcon, ListItem } from "@chakra-ui/react";
 import { ITab } from "../types/ITab";
 import { TabDetailComponent } from "./TabDetailComponent";
 
@@ -39,7 +40,7 @@ export function TabDetailList__DEP({ tabs, onRestore }: TabDetailListProps) {
     );
 }
 
-export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+export function TabDetailList__DEP2({ tabs, onRestore }: TabDetailListProps) {
     if (!tabs) {
         return null;
     }
@@ -52,5 +53,24 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
                 })}
             </ul>
         </div>
+    );
+}
+
+export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+    if (!tabs) {
+        return null;
+    }
+
+    return (
+        <List spacing={1}>
+            {tabs.map((tab, index) => {
+                return (
+                    <ListItem key={index}>
+                        <ListIcon  />
+                       {tab.title}
+                    </ListItem>
+                );
+            })}
+        </List>
     );
 }
