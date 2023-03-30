@@ -1,3 +1,4 @@
+import { List } from "antd";
 import { ITab } from "../types/ITab";
 import { TabDetailComponent } from "./TabDetailComponent";
 
@@ -39,7 +40,7 @@ export function TabDetailList__DEP({ tabs, onRestore }: TabDetailListProps) {
     );
 }
 
-export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+export function TabDetailList__DEP2({ tabs, onRestore }: TabDetailListProps) {
     if (!tabs) {
         return null;
     }
@@ -52,5 +53,15 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
                 })}
             </ul>
         </div>
+    );
+}
+
+export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+    return (
+        <List
+            dataSource={tabs}
+            split={false}
+            renderItem={(tab) => <List.Item className="p-0">{tab.title}</List.Item>}
+        />
     );
 }
