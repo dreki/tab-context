@@ -1,3 +1,9 @@
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
 import { ITab } from "../types/ITab";
 import { TabDetailComponent } from "./TabDetailComponent";
 
@@ -39,7 +45,7 @@ export function TabDetailList__DEP({ tabs, onRestore }: TabDetailListProps) {
     );
 }
 
-export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+export function TabDetailList__DEP2({ tabs, onRestore }: TabDetailListProps) {
     if (!tabs) {
         return null;
     }
@@ -52,5 +58,41 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
                 })}
             </ul>
         </div>
+    );
+}
+
+export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+    if (!tabs) {
+        return null;
+    }
+
+    return (
+        <Box>
+            <List dense={true}>
+                {tabs.map((tab, index) => {
+                    return (
+                        <ListItem
+                            disableGutters={true}
+                            dense={true}
+                            disablePadding={true}
+                        >
+                            {/* Avatar is the favicon for the tab */}
+                            <ListItemAvatar>
+                                {/* sx={{
+                                    width: 20, height: 20,
+                                    // right-align the avatar
+                                    marginLeft: "auto",
+                                }} */}
+                                <Avatar
+                                    src={tab.favIconUrl}
+                                    variant="rounded"
+                                />
+                            </ListItemAvatar>
+                            <ListItemText primary={tab.title} />
+                        </ListItem>
+                    );
+                })}
+            </List>
+        </Box>
     );
 }

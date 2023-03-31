@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^7.0.0",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@heroicons/react": "^2.0.13",
+    "@mui/material": "^5.11.15",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -14,7 +17,6 @@
     "@types/react-dom": "^18.0.0",
     "@types/spark-md5": "^3.0.2",
     "@types/uuid": "^9.0.0",
-    "antd": "^5.3.3",
     "daisyui": "^2.46.0",
     "escape-string-regexp": "^1.0.5",
     "jotai": "^1.12.0",
