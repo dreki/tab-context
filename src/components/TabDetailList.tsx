@@ -1,10 +1,9 @@
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import { ITab } from "../types/ITab";
+import { FavIconWithDefault } from "./FavIconWithDefault";
 import { TabDetailComponent } from "./TabDetailComponent";
 
 interface TabDetailListProps {
@@ -67,32 +66,17 @@ export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
     }
 
     return (
-        <Box>
+        <div className="ml-1">
             <List dense={true}>
                 {tabs.map((tab, index) => {
                     return (
-                        <ListItem
-                            disableGutters={true}
-                            dense={true}
-                            disablePadding={true}
-                        >
-                            {/* Avatar is the favicon for the tab */}
-                            <ListItemAvatar>
-                                {/* sx={{
-                                    width: 20, height: 20,
-                                    // right-align the avatar
-                                    marginLeft: "auto",
-                                }} */}
-                                <Avatar
-                                    src={tab.favIconUrl}
-                                    variant="rounded"
-                                />
-                            </ListItemAvatar>
+                        <ListItem disableGutters={true}>
+                            <FavIconWithDefault tab={tab} className="mr-2" />
                             <ListItemText primary={tab.title} />
                         </ListItem>
                     );
                 })}
             </List>
-        </Box>
+        </div>
     );
 }
