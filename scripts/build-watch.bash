@@ -13,4 +13,6 @@ yarn build
 inotifywait -m -r -e modify,create,delete,move --format '%w%f' src | while read -r file; do
   echo "Change detected in $file"
   yarn build
+  # Play bell noise
+  echo -e "\a"
 done
