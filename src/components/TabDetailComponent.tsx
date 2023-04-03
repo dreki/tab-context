@@ -7,7 +7,7 @@ interface TabDetailComponentProps {
     key?: number;
 }
 
-export function TabDetailComponent({ tab, key }: TabDetailComponentProps) {
+export function TabDetailComponent__DEP({ tab, key }: TabDetailComponentProps) {
     // useState for whether to show tab actions
     const [showTabActions, setShowTabActions] = useState(false);
 
@@ -48,6 +48,37 @@ export function TabDetailComponent({ tab, key }: TabDetailComponentProps) {
             <div className="grow">{tab.title}</div>
             {/* If showTabActions is true, show tab actions */}
             {showTabActions && <div>{tabActions}</div>}
+        </li>
+    );
+}
+
+export function TabDetailComponent({ tab, key }: TabDetailComponentProps) {
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    return (
+        <li
+            className="flex h-6 items-center space-x-3 hover:rounded hover:bg-gray-50 p-2"
+            key={key}
+            onMouseEnter={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+        >
+            <FavIconWithDefault tab={tab} className={"h-5 w-5 flex-shrink-0"} />
+            <div className="grow">
+                <div className="dropdown-hover dropdown">
+                    <label tabIndex={0}>{tab.title}</label>
+                    <ul
+                        tabIndex={0}
+                        className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
+                    >
+                        <li>
+                            <a>Close</a>
+                        </li>
+                        <li>
+                            <a>Save as Resource</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </li>
     );
 }
