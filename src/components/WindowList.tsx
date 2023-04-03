@@ -1,6 +1,7 @@
 import { observer } from "mobx-react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
+import { ITab } from "../types/ITab";
 import { WindowComponent } from "./WindowComponent";
 
 interface WindowListProps {
@@ -13,6 +14,8 @@ interface WindowListProps {
      * @returns  A promise that resolves when the window has been suspended.
      */
     onSuspend: (window: Window) => void;
+
+    onCloseTab?: (tab: ITab) => void;
 }
 
 /**
@@ -20,6 +23,12 @@ interface WindowListProps {
  * @param {WindowListProps} props
  */
 export const WindowList = observer(function WindowList(props: WindowListProps) {
+    const handleTabClose = (tab: ITab) => {
+        if (props.onCloseTab) {
+            props.onCloseTab(tab);
+        }
+    };
+
     // Render `WindowComponent`s in a `DivideChildren` component
     return (
         <>
@@ -30,6 +39,7 @@ export const WindowList = observer(function WindowList(props: WindowListProps) {
                         window={window}
                         closedTabs={props.closedTabs[window.index]}
                         onSuspend={props.onSuspend}
+                        onCloseTab={handleTabClose}
                     />
                 );
             })}

@@ -5,6 +5,7 @@ import { FavIconWithDefault } from "./FavIconWithDefault";
 interface TabDetailComponentProps {
     tab: ITab;
     key?: number;
+    onClose?: (tab: ITab) => void;
 }
 
 export function TabDetailComponent__DEP({ tab, key }: TabDetailComponentProps) {
@@ -52,12 +53,22 @@ export function TabDetailComponent__DEP({ tab, key }: TabDetailComponentProps) {
     );
 }
 
-export function TabDetailComponent({ tab, key }: TabDetailComponentProps) {
+export function TabDetailComponent({
+    tab,
+    key,
+    onClose,
+}: TabDetailComponentProps) {
     const [showDropdown, setShowDropdown] = useState(false);
+
+    const handleOnClose = () => {
+        if (onClose) {
+            onClose(tab);
+        }
+    };
 
     return (
         <li
-            className="flex h-6 items-center space-x-3 hover:rounded hover:bg-gray-50 p-2"
+            className="flex h-6 items-center space-x-3 p-2 text-sm hover:rounded hover:bg-gray-50"
             key={key}
             onMouseEnter={() => setShowDropdown(true)}
             onMouseLeave={() => setShowDropdown(false)}
@@ -71,7 +82,7 @@ export function TabDetailComponent({ tab, key }: TabDetailComponentProps) {
                         className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
                     >
                         <li>
-                            <a>Close</a>
+                            <a onClick={handleOnClose}>Close</a>
                         </li>
                         <li>
                             <a>Save as Resource</a>

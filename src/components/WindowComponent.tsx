@@ -19,18 +19,32 @@ interface WindowComponentProps {
      * @returns  A promise that resolves when the window has been suspended.
      */
     onSuspend: (window: Window) => void;
+
+    /**
+     * A callback for when a user wants to close a tab.
+     * @param tab  The tab to close.
+     */
+    onCloseTab?: (tab: ITab) => void;
 }
 
 interface WindowTabListComponentProps {
     expanded: Boolean;
     tabs: ITab[];
     closedTabs: TabCollection;
+    onCloseTab?: (tab: ITab) => void;
 }
 
 export const WindowTabListComponent = observer(function WindowTabListComponent(
     props: WindowTabListComponentProps
 ) {
     let output: ReactElement | null = null;
+
+    const handleTabClose = (tab: ITab) => {
+        if (props.onCloseTab) {
+            props.onCloseTab(tab);
+        }
+    };
+
     if (!props.expanded) {
         output = (
             <>
@@ -46,11 +60,17 @@ export const WindowTabListComponent = observer(function WindowTabListComponent(
                 <div className="basis-3/4">
                     {/* Hidden h3 to note tab list */}
                     <h3 className="sr-only">Tab List</h3>
-                    <TabDetailList tabs={props.tabs} />
+                    <TabDetailList
+                        onCloseTab={handleTabClose}
+                        tabs={props.tabs}
+                    />
                 </div>
                 <div className="basis-1/4">
                     <h3>Closed Tabs</h3>
-                    <TabDetailList tabs={props.closedTabs.tabs} />
+                    <TabDetailList
+                        onCloseTab={handleTabClose}
+                        tabs={props.closedTabs.tabs}
+                    />
                 </div>
             </div>
         );
@@ -93,6 +113,7 @@ export const WindowComponent = observer(function WindowComponent(
                         expanded={expand}
                         tabs={props.window.tabs}
                         closedTabs={props.closedTabs}
+                        onCloseTab={props.onCloseTab}
                     />
                     {/* When clicking button, flip `expand` */}
                     <div className="grid place-items-center">

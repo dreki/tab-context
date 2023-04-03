@@ -4,6 +4,7 @@ import { TabDetailComponent } from "./TabDetailComponent";
 interface TabDetailListProps {
     tabs: ITab[];
     onRestore?: (tabs: ITab[]) => void;
+    onCloseTab?: (tab: ITab) => void;
 }
 
 export function TabDetailList__DEP({ tabs, onRestore }: TabDetailListProps) {
@@ -39,16 +40,32 @@ export function TabDetailList__DEP({ tabs, onRestore }: TabDetailListProps) {
     );
 }
 
-export function TabDetailList({ tabs, onRestore }: TabDetailListProps) {
+export function TabDetailList({
+    tabs,
+    onRestore,
+    onCloseTab,
+}: TabDetailListProps) {
     if (!tabs) {
         return null;
     }
+
+    const handleTabClose = (tab: ITab) => {
+        if (onCloseTab) {
+            onCloseTab(tab);
+        }
+    };
 
     return (
         <div className="m-2 rounded-lg">
             <ul className="mb-8 space-y-2 text-left dark:text-gray-400">
                 {tabs.map((tab, index) => {
-                    return <TabDetailComponent tab={tab} key={index} />;
+                    return (
+                        <TabDetailComponent
+                            tab={tab}
+                            key={index}
+                            onClose={handleTabClose}
+                        />
+                    );
                 })}
             </ul>
         </div>

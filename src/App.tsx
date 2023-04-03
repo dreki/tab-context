@@ -63,6 +63,9 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                 onSuspend={(window) => {
                     suspend(window);
                 }}
+                onCloseTab={(tab) => {
+                    console.log("> Asked to close tab", tab);
+                }}
             />
 
             <h1 className="mt-8 mb-4 text-2xl font-bold">Sessions</h1>
