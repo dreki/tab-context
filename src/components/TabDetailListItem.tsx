@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import { useState } from "react";
 import { ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
@@ -9,7 +10,7 @@ interface TabDetailComponentProps {
     onClose?: Maybe<(tab: ITab) => void>;
 }
 
-export function TabDetailListItem({
+export const TabDetailListItem = observer(function TabDetailListItem({
     tab,
     key,
     onClose,
@@ -65,4 +66,4 @@ export function TabDetailListItem({
             {tabComponent}
         </li>
     );
-}
+});

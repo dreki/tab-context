@@ -1,3 +1,5 @@
+import { observer } from "mobx-react";
+
 import { ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
 import { TabDetailListItem } from "./TabDetailListItem";
@@ -9,7 +11,7 @@ interface TabDetailListProps {
 }
 
 
-export function TabDetailList({
+export const TabDetailList = observer(function TabDetailList({
     tabs,
     onRestore,
     onCloseTab,
@@ -42,4 +44,4 @@ export function TabDetailList({
             </ul>
         </div>
     );
-}
+});

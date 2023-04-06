@@ -112,7 +112,7 @@ chrome.runtime.onMessage.addListener(
                 windowObserver,
                 closedTabs
             );
-            await loadStores();
+            // await loadStores();
         })();
         return Promise.resolve({ success: true } as IResponse);
     }

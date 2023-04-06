@@ -1,10 +1,9 @@
 import { observer } from "mobx-react";
-import { ReactElement, useState } from "react";
+import { useState } from "react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { ITab } from "../types/ITab";
-import { TabDetailList } from "./TabDetailList";
-import { TabList } from "./TabList";
+import { MiniTabList } from "./MiniTabList";
 
 /**
  * WindowComponentProps interface. Props for the `WindowComponent` component.
@@ -27,59 +26,11 @@ interface WindowListItemProps {
     onCloseTab?: (tab: ITab) => void;
 }
 
-interface WindowTabListComponentProps {
-    expanded: Boolean;
-    tabs: ITab[];
-    closedTabs: TabCollection;
-    onCloseTab?: (tab: ITab) => void;
-}
-
-export const WindowTabListComponent = observer(function WindowTabListComponent(
-    props: WindowTabListComponentProps
-) {
-    let output: ReactElement | null = null;
-
-    const handleTabClose = (tab: ITab) => {
-        if (props.onCloseTab) {
-            props.onCloseTab(tab);
-        }
-    };
-
-    if (!props.expanded) {
-        output = (
-            <>
-                {/* Hidden h3 to note tab list */}
-                <h3 className="sr-only">Tab List</h3>
-                <TabList tabs={props.tabs} />
-            </>
-        );
-    }
-    if (props.expanded) {
-        output = (
-            <div className="flex flex-row">
-                <div className="basis-3/4">
-                    {/* Hidden h3 to note tab list */}
-                    <h3 className="sr-only">Tab List</h3>
-                    <TabDetailList
-                        onCloseTab={handleTabClose}
-                        tabs={props.tabs}
-                    />
-                </div>
-                <div className="basis-1/4">
-                    <h3>Closed Tabs</h3>
-                    <TabDetailList tabs={props.closedTabs.tabs} />
-                </div>
-            </div>
-        );
-    }
-    return <>{output}</>;
-});
-
 /**
  * WindowComponent component. Renders a `Window`.
  * @param {WindowListItemProps} props
  */
-export const WindowListItem = observer(function WindowComponent(
+export const WindowListItem = observer(function WindowListItem(
     props: WindowListItemProps
 ) {
     const [expand, setExpand] = useState<Boolean>(false);
@@ -106,7 +57,7 @@ export const WindowListItem = observer(function WindowComponent(
             <h2 className="sr-only">Window {props.window.index}</h2>
             <div className="overflow-hidden rounded-t-2xl bg-slate-200 p-2">
                 <div className="">
-                    <WindowTabListComponent
+                    <MiniTabList
                         expanded={expand}
                         tabs={props.window.tabs}
                         closedTabs={props.closedTabs}
