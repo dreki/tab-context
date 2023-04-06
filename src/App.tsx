@@ -11,7 +11,11 @@ import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
 import { restore } from "./workflows/restore";
 import { suspend } from "./workflows/suspend";
-import { addMostRecentClosedTabToCollection } from "./workflows/tabCollections";
+import {
+    addMostRecentClosedTabToCollection,
+    addTabToCollection,
+    closeTab
+} from "./workflows/tabCollections";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
@@ -64,7 +68,10 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                     suspend(window);
                 }}
                 onCloseTab={(tab) => {
-                    console.log("> Asked to close tab", tab);
+                    // console.log("> Asked to close tab", tab);
+                    closeTab(tab);
+
+                    // addTabToCollection(tab, windowObserver, closedTabs);
                 }}
             />
 
@@ -99,13 +106,13 @@ onOurWindowActivated({
 chrome.runtime.onMessage.addListener(
     (message: IMessage): Promise<IResponse> => {
         // return {success: true} as IResponse;
-
         (async () => {
             await addMostRecentClosedTabToCollection(
                 message,
                 windowObserver,
                 closedTabs
             );
+            await loadStores();
         })();
         return Promise.resolve({ success: true } as IResponse);
     }

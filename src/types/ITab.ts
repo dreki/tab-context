@@ -5,6 +5,7 @@ import { Maybe } from "./Maybe";
 
 export interface ITab {
     id: number;
+    windowId?: number;
     title: string;
     pinned: boolean;
     // Group name and color are optional
@@ -36,6 +37,7 @@ export async function fromChromeTab(tabId: number): Promise<Maybe<ITab>> {
     // If the tab is found, return it
     return {
         id: tabId,
+        windowId: tab.windowId,
         title: tab.title || "",
         pinned: tab.pinned || false,
         url: tab.url || "",

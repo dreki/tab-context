@@ -16,6 +16,13 @@ export class TabCollection {
      * @param tab  Tab to add to the collection.
      */
     addTab(tab: ITab) {
+        // If tab is already in the collection, return. Based on title and URL.
+        if (
+            this._tabs.find((t) => t.title === tab.title && t.url === tab.url)
+        ) {
+            return;
+        }
+
         // Add tab to front of array.
         this._tabs.unshift(tab);
     }

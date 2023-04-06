@@ -16,6 +16,7 @@ export async function addMostRecentClosedTabToCollection(
     windowObserver: WindowObserver,
     collections: TabCollection[]
 ) {
+    /*
     // If the message is for this window and tab, then handle.
     const currentWindowId: Maybe<number> = await Window.getCurrentWindowId();
     const currentTabId: Maybe<number> = await getCurrentTabId();
@@ -25,20 +26,58 @@ export async function addMostRecentClosedTabToCollection(
     ) {
         return;
     }
+    */
     // Find `Window` with matching ID.
     const window: Maybe<Window> =
         windowObserver.windows.find(
             (window) => window.id === message.targetWindowId
         ) || null;
     if (window === null) {
+        console.log("window is null");
         return;
     }
     const closedTab: Maybe<ITab> = await fromMostRecentClosedTab();
     if (closedTab === null) {
+        console.log("closedTab is null");
+        return;
+    }
+    console.log("saving to collection")
+    // Add to the list of `window`'s closed tabs.
+    // const tabCollection: TabCollection = collections[window.index];
+    const tabCollection: TabCollection = collections[window.index];
+    console.log(tabCollection);
+    
+    tabCollection.addTab(closedTab);
+    await tabCollection.save();
+}
+
+export async function addTabToCollection(
+    tab: ITab,
+    windowObserver: WindowObserver,
+    collections: TabCollection[]
+) {
+    // If tab.windowId is null, log an error. This function should only be called
+    // for real tabs that are in a window (not closed or suspended).
+    if (tab.windowId === null) {
+        console.error("tab.windowId is null");
+        return;
+    }
+    // Find `Window` with matching ID.
+    const window: Maybe<Window> =
+        windowObserver.windows.find((window) => window.id === tab.windowId) ||
+        null;
+    if (window === null) {
         return;
     }
     // Add to the list of `window`'s closed tabs.
     const tabCollection: TabCollection = collections[window.index];
-    tabCollection.addTab(closedTab);
+    tabCollection.addTab(tab);
     await tabCollection.save();
+}
+
+/**
+ * Close a Chrome tab.
+ */
+export async function closeTab(tab: ITab) {
+    chrome.tabs.remove(tab.id);
 }

@@ -56,6 +56,10 @@ chrome.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
 // the extension's UI tab.
 chrome.tabs.onRemoved.addListener(
     (tabId, removeInfo: chrome.tabs.TabRemoveInfo) => {
+        // console.log(`> Tab ${tabId} was closed.`);
+        // console.log(removeInfo);
+        // return;
+        
         (async () => {
             // If the window ID in removeInfo isn't the current window ID, then return;
             const currentWindow = await chrome.windows.getCurrent();
