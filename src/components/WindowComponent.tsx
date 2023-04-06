@@ -67,10 +67,7 @@ export const WindowTabListComponent = observer(function WindowTabListComponent(
                 </div>
                 <div className="basis-1/4">
                     <h3>Closed Tabs</h3>
-                    <TabDetailList
-                        onCloseTab={handleTabClose}
-                        tabs={props.closedTabs.tabs}
-                    />
+                    <TabDetailList tabs={props.closedTabs.tabs} />
                 </div>
             </div>
         );

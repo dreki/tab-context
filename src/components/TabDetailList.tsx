@@ -1,4 +1,5 @@
 import { ITab } from "../types/ITab";
+import { Maybe } from "../types/Maybe";
 import { TabDetailComponent } from "./TabDetailComponent";
 
 interface TabDetailListProps {
@@ -49,11 +50,14 @@ export function TabDetailList({
         return null;
     }
 
-    const handleTabClose = (tab: ITab) => {
-        if (onCloseTab) {
-            onCloseTab(tab);
+    let handleTabClose: Maybe<(tab: ITab) => void> = null;
+    if (onCloseTab) {
+        handleTabClose = (tab: ITab) => {
+            if (onCloseTab) {
+                onCloseTab(tab);
+            }
         }
-    };
+    }
 
     return (
         <div className="m-2 rounded-lg">
