@@ -3,12 +3,12 @@ import { Session } from "../stores/session";
 import { ITab } from "../types/ITab";
 import { TabDetailList } from "./TabDetailList";
 
-interface SessionComponentProps {
+interface SessionListItemProps {
     session: Session;
     onRestore: (tabs: ITab[]) => void;
 }
-export const SessionComponent = observer(
-    ({ session, onRestore }: SessionComponentProps) => {
+export const SessionListItem = observer(
+    ({ session, onRestore }: SessionListItemProps) => {
         const restore: JSX.Element | null = onRestore ? (
             <button
                 className="btn-primary btn-sm btn"

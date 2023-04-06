@@ -9,7 +9,7 @@ import { TabList } from "./TabList";
 /**
  * WindowComponentProps interface. Props for the `WindowComponent` component.
  */
-interface WindowComponentProps {
+interface WindowListItemProps {
     window: Window;
     closedTabs: TabCollection;
 
@@ -77,10 +77,10 @@ export const WindowTabListComponent = observer(function WindowTabListComponent(
 
 /**
  * WindowComponent component. Renders a `Window`.
- * @param {WindowComponentProps} props
+ * @param {WindowListItemProps} props
  */
 export const WindowListItem = observer(function WindowComponent(
-    props: WindowComponentProps
+    props: WindowListItemProps
 ) {
     const [expand, setExpand] = useState<Boolean>(false);
 

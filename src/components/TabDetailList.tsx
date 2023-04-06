@@ -1,6 +1,6 @@
 import { ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
-import { TabDetailComponent } from "./TabDetailComponent";
+import { TabDetailListItem } from "./TabDetailListItem";
 
 interface TabDetailListProps {
     tabs: ITab[];
@@ -32,7 +32,7 @@ export function TabDetailList({
             <ul className="mb-8 space-y-2 text-left dark:text-gray-400">
                 {tabs.map((tab, index) => {
                     return (
-                        <TabDetailComponent
+                        <TabDetailListItem
                             tab={tab}
                             key={index}
                             onClose={handleTabClose}

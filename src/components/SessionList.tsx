@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Session } from "../stores/session";
 import { ITab } from "../types/ITab";
-import { SessionComponent } from "./SessionComponent";
+import { SessionListItem } from "./SessionComponent";
 
 interface SessionListProps {
     sessions: Session[] | null;
@@ -16,7 +16,7 @@ export const SessionList = observer(
             <>
                 {sessions.map((session, index) => {
                     return (
-                        <SessionComponent
+                        <SessionListItem
                             session={session}
                             onRestore={onRestore}
                             key={index}
