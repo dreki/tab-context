@@ -79,7 +79,7 @@ export const WindowTabListComponent = observer(function WindowTabListComponent(
  * WindowComponent component. Renders a `Window`.
  * @param {WindowComponentProps} props
  */
-export const WindowComponent = observer(function WindowComponent(
+export const WindowListItem = observer(function WindowComponent(
     props: WindowComponentProps
 ) {
     const [expand, setExpand] = useState<Boolean>(false);
