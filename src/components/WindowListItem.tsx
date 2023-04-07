@@ -1,9 +1,9 @@
 import { Collapse } from "antd";
 import { observer } from "mobx-react";
-import { useState } from "react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { ITab } from "../types/ITab";
+import { Maybe } from "../types/Maybe";
 import { MiniTabList } from "./MiniTabList";
 import { TabDetailList } from "./TabDetailList";
 
@@ -43,14 +43,27 @@ export const WindowListItem = observer(function WindowListItem(
     );
 
     // Show "X Closed Tabs" if there are closed tabs, even if there are 0.
-    let closedTabs = <>...</>;
+    let closedTabs: Maybe<JSX.Element> = <></>;
     if (props.closedTabs) {
+        // closedTabs = (
+        //     <span className="text-base">
+        //         {props.closedTabs.tabs.length} Closed Tabs
+        //     </span>
+        // );
         closedTabs = (
-            <span className="text-base">
-                {props.closedTabs.tabs.length} Closed Tabs
-            </span>
+            <Collapse.Panel
+                header={
+                    <span className="text-base">
+                        {props.closedTabs.tabs.length} Closed Tabs
+                    </span>
+                }
+                key="2"
+            >
+                <TabDetailList tabs={props.closedTabs.tabs} />
+            </Collapse.Panel>
         );
     }
+
     return (
         <div className="card-bordered card card-compact mb-8 bg-slate-50 shadow-md">
             {/* Hidden h2, for accessibility, noting window */}
@@ -76,6 +89,8 @@ export const WindowListItem = observer(function WindowListItem(
                     >
                         <TabDetailList tabs={props.window.tabs} />
                     </Collapse.Panel>
+
+                    {closedTabs}
                 </Collapse>
                 <div>
                     {openTabs}
