@@ -35,21 +35,26 @@ interface WindowListItemProps {
 export const WindowListItem = observer(function WindowListItem(
     props: WindowListItemProps
 ) {
-    // Show "X Tabs" for the amount of open tabs in the window.
+    // Open tabs for this window
     let openTabs = (
-        <span className="text-base font-medium">
-            {props.window.tabs.length} Tabs
-        </span>
+        // <span className="text-base font-medium">
+        //     {props.window.tabs.length} Tabs
+        // </span>
+        <Collapse.Panel
+            header={
+                <span className="text-base font-medium">
+                    {props.window.tabs.length + " Tabs"}
+                </span>
+            }
+            key="1"
+        >
+            <TabDetailList tabs={props.window.tabs} onCloseTab={props.onCloseTab} />
+        </Collapse.Panel>
     );
 
-    // Show "X Closed Tabs" if there are closed tabs, even if there are 0.
+    // Closed tabs for this window
     let closedTabs: Maybe<JSX.Element> = <></>;
     if (props.closedTabs) {
-        // closedTabs = (
-        //     <span className="text-base">
-        //         {props.closedTabs.tabs.length} Closed Tabs
-        //     </span>
-        // );
         closedTabs = (
             <Collapse.Panel
                 header={
@@ -78,25 +83,9 @@ export const WindowListItem = observer(function WindowListItem(
             </div>
             <div className="card-body">
                 <Collapse ghost={true}>
-                    {/* <Collapse.Panel header={props.window.tabs.length + " Tabs"} key="1"> */}
-                    <Collapse.Panel
-                        header={
-                            <span className="text-base font-medium">
-                                {props.window.tabs.length + " Tabs"}
-                            </span>
-                        }
-                        key="1"
-                    >
-                        <TabDetailList tabs={props.window.tabs} />
-                    </Collapse.Panel>
-
+                    {openTabs}
                     {closedTabs}
                 </Collapse>
-                <div>
-                    {openTabs}
-                    <span className="ml-2 mr-2 text-gray-400">|</span>
-                    {closedTabs}
-                </div>
                 <div className="card-actions mt-2">
                     <button
                         className="btn-primary btn-sm btn"
