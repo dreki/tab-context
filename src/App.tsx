@@ -112,7 +112,8 @@ chrome.runtime.onMessage.addListener(
                 windowObserver,
                 closedTabs
             );
-            // await loadStores();
+            // TODO: Remove this later to see if `observer` components are all functioning correctly. If they're not, and this is still required, that's fine too.
+            await loadStores();
         })();
         return Promise.resolve({ success: true } as IResponse);
     }

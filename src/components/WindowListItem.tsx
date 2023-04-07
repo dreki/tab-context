@@ -1,9 +1,11 @@
+import { Collapse } from "antd";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { ITab } from "../types/ITab";
 import { MiniTabList } from "./MiniTabList";
+import { TabDetailList } from "./TabDetailList";
 
 /**
  * WindowComponentProps interface. Props for the `WindowComponent` component.
@@ -33,8 +35,6 @@ interface WindowListItemProps {
 export const WindowListItem = observer(function WindowListItem(
     props: WindowListItemProps
 ) {
-    const [expand, setExpand] = useState<Boolean>(false);
-
     // Show "X Tabs" for the amount of open tabs in the window.
     let openTabs = (
         <span className="text-base font-medium">
@@ -58,23 +58,25 @@ export const WindowListItem = observer(function WindowListItem(
             <div className="overflow-hidden rounded-t-2xl bg-slate-200 p-2">
                 <div className="">
                     <MiniTabList
-                        expanded={expand}
                         tabs={props.window.tabs}
                         closedTabs={props.closedTabs}
-                        onCloseTab={props.onCloseTab}
                     />
-                    {/* When clicking button, flip `expand` */}
-                    <div className="grid place-items-center">
-                        <button
-                            className="btn-ghost btn-xs btn"
-                            onClick={() => setExpand(!expand)}
-                        >
-                            Click to expand
-                        </button>
-                    </div>
                 </div>
             </div>
             <div className="card-body">
+                <Collapse ghost={true}>
+                    {/* <Collapse.Panel header={props.window.tabs.length + " Tabs"} key="1"> */}
+                    <Collapse.Panel
+                        header={
+                            <span className="text-base font-medium">
+                                {props.window.tabs.length + " Tabs"}
+                            </span>
+                        }
+                        key="1"
+                    >
+                        <TabDetailList tabs={props.window.tabs} />
+                    </Collapse.Panel>
+                </Collapse>
                 <div>
                     {openTabs}
                     <span className="ml-2 mr-2 text-gray-400">|</span>
