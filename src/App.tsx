@@ -13,8 +13,10 @@ import { restore } from "./workflows/restore";
 import { suspend } from "./workflows/suspend";
 import {
     addMostRecentClosedTabToCollection,
-    closeTab
+    closeTab,
 } from "./workflows/tabCollections";
+import { SessionCreationModal, Values as SessionCreationValues } from "./components/SessionCreationModal";
+import React from "react";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
@@ -57,31 +59,44 @@ interface IAppProps {
  * The main app component.
  */
 const App = observer(function App({ windowObserver }: IAppProps) {
+    const [showModal, setShowModal] = React.useState(false);
+
     const onSuspend = (window: Window) => {
-        suspend(window);
-    }
-    
+        setShowModal(true);
+        // suspend(window);
+    };
+
+    const onCreateSession = (values: SessionCreationValues) => {
+        console.log("> Creating session", values);
+    };
+
     return (
-        <div className="container p-8">
-            <h1 className="mt-4 mb-4 text-2xl font-bold">Windows</h1>
-            <WindowList
-                windows={windowObserver.windows}
-                closedTabs={closedTabs}
-                onSuspend={onSuspend}
-                onCloseTab={(tab) => {
-                    // console.log("> Asked to close tab", tab);
-                    closeTab(tab);
+        <>
+            <div className="container p-8">
+                <h1 className="mt-4 mb-4 text-2xl font-bold">Windows</h1>
+                <WindowList
+                    windows={windowObserver.windows}
+                    closedTabs={closedTabs}
+                    onSuspend={onSuspend}
+                    onCloseTab={(tab) => {
+                        // console.log("> Asked to close tab", tab);
+                        closeTab(tab);
 
-                    // addTabToCollection(tab, windowObserver, closedTabs);
-                }}
-            />
+                        // addTabToCollection(tab, windowObserver, closedTabs);
+                    }}
+                />
 
-            <h1 className="mt-8 mb-4 text-2xl font-bold">Sessions</h1>
-            <SessionList
-                sessions={sessionStore.sessions}
-                onRestore={onRestore}
-            />
-        </div>
+                <h1 className="mt-8 mb-4 text-2xl font-bold">Sessions</h1>
+                <SessionList
+                    sessions={sessionStore.sessions}
+                    onRestore={onRestore}
+                />
+            </div>
+
+            {showModal && (
+                <SessionCreationModal onCancel={() => setShowModal(false)} onCreate={onCreateSession} />
+            )}
+        </>
     );
 });
 
