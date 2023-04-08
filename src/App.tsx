@@ -4,7 +4,7 @@ import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
 import { TabCollection } from "./stores/closedTabs";
 import { SessionStore } from "./stores/session";
-import { WindowObserver } from "./stores/window";
+import { Window, WindowObserver } from "./stores/window";
 import { ITab } from "./types/ITab";
 import { IMessage, IResponse } from "./types/Message";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
@@ -13,7 +13,6 @@ import { restore } from "./workflows/restore";
 import { suspend } from "./workflows/suspend";
 import {
     addMostRecentClosedTabToCollection,
-    addTabToCollection,
     closeTab
 } from "./workflows/tabCollections";
 
@@ -58,15 +57,17 @@ interface IAppProps {
  * The main app component.
  */
 const App = observer(function App({ windowObserver }: IAppProps) {
+    const onSuspend = (window: Window) => {
+        suspend(window);
+    }
+    
     return (
         <div className="container p-8">
             <h1 className="mt-4 mb-4 text-2xl font-bold">Windows</h1>
             <WindowList
                 windows={windowObserver.windows}
                 closedTabs={closedTabs}
-                onSuspend={(window) => {
-                    suspend(window);
-                }}
+                onSuspend={onSuspend}
                 onCloseTab={(tab) => {
                     // console.log("> Asked to close tab", tab);
                     closeTab(tab);
