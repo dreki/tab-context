@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { ButtonProps, Form, Input, Modal } from "antd";
 import { observer } from "mobx-react";
 
 export interface Values {
@@ -26,6 +26,10 @@ export const SessionCreationModal = observer(function SessionCreationModal(
         }
     };
 
+    const buttonProps: ButtonProps = {
+        className: "btn btn-primary btn-sm",
+    }
+
     return (
         <>
             <Modal
@@ -34,6 +38,7 @@ export const SessionCreationModal = observer(function SessionCreationModal(
                 okText="Create"
                 onOk={onOk}
                 onCancel={props.onCancel}
+                okButtonProps={buttonProps}
             >
                 <Form form={form} layout="vertical" name="form_in_modal">
                     <Form.Item
