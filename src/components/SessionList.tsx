@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Session } from "../stores/session";
 import { ITab } from "../types/ITab";
-import { SessionListItem } from "./SessionComponent";
+import { SessionListItem } from "./SessionListItem";
 
 interface SessionListProps {
     sessions: Session[] | null;

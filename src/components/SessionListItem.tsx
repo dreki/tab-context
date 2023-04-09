@@ -20,6 +20,7 @@ export const SessionListItem = observer(
         return (
             <div className="card-bordered card card-compact mb-4 bg-purple-100 shadow-md">
                 <div className="card-body">
+                    <span>{session.name}</span>
                     <TabDetailList tabs={session.tabs} onRestore={onRestore} />
                 </div>
                 <div className="card-actions mt-2">{restore}</div>

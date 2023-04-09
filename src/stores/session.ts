@@ -32,6 +32,8 @@ export class Session {
     // id is a unique identifier for the session
     id!: string;
 
+    name: string = "";
+
     // tabs: Tab[] = [];
     // status is the status of the session
     status: SessionStatus = SessionStatus.Active;
