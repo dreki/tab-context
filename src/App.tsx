@@ -1,5 +1,10 @@
 import { observer } from "mobx-react";
+import React from "react";
 import "./App.css";
+import {
+    SessionCreationModal,
+    Values as SessionCreationValues,
+} from "./components/SessionCreationModal";
 import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
 import { TabCollection } from "./stores/closedTabs";
@@ -15,8 +20,6 @@ import {
     addMostRecentClosedTabToCollection,
     closeTab,
 } from "./workflows/tabCollections";
-import { SessionCreationModal, Values as SessionCreationValues } from "./components/SessionCreationModal";
-import React from "react";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
@@ -60,14 +63,19 @@ interface IAppProps {
  */
 const App = observer(function App({ windowObserver }: IAppProps) {
     const [showModal, setShowModal] = React.useState(false);
+    const [windowForSession, setWindowForSession] =
+        React.useState<Window | null>(null);
 
     const onSuspend = (window: Window) => {
         setShowModal(true);
         // suspend(window);
+        setWindowForSession(window);
     };
 
-    const onCreateSession = (values: SessionCreationValues) => {
-        console.log("> Creating session", values);
+    const onCreateSession = async (values: SessionCreationValues) => {
+        // const onCreateSession = (w: Window) => async (values: SessionCreationValues) => {
+        await suspend(windowForSession!, values.name);
+        setShowModal(false);
     };
 
     return (
@@ -94,7 +102,10 @@ const App = observer(function App({ windowObserver }: IAppProps) {
             </div>
 
             {showModal && (
-                <SessionCreationModal onCancel={() => setShowModal(false)} onCreate={onCreateSession} />
+                <SessionCreationModal
+                    onCancel={() => setShowModal(false)}
+                    onCreate={onCreateSession}
+                />
             )}
         </>
     );

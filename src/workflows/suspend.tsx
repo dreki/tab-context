@@ -40,8 +40,9 @@ function tabToSessionTab(tab: Tab): SessionTab {
 /**
  * Syncs all tabs in the window to the session, and then closes the window.
  * @param window The window to suspend.
+ * @param name The name of the session.
  */
-export async function suspend(window: Window) {
+export async function suspend(window: Window, name: string) {
     // Reload all tabs in the window.
     // await reloadTabs(window.tabs, true);
 
@@ -49,6 +50,7 @@ export async function suspend(window: Window) {
     // const session = new Session(window.tabs.map((tab) => tabToSessionTab(tab)));
     // const session = new Session(window.tabs);
     const session = new Session();
+    session.name = name;
     session.tabs = window.tabs;
     console.log("> session:");
     console.log(session);
