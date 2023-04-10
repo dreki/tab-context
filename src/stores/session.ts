@@ -2,6 +2,7 @@ import { makeAutoObservable, observable } from "mobx";
 import SparkMD5 from "spark-md5";
 import { ITab } from "../types/ITab";
 import { getArray, set } from "./db";
+import { log } from "console";
 
 export class Tab implements ITab {
     // Constructor that defines public properties, based on ITab interface
@@ -31,6 +32,8 @@ export enum SessionStatus {
 export class Session {
     // id is a unique identifier for the session
     id!: string;
+
+    name: string = "";
 
     // tabs: Tab[] = [];
     // status is the status of the session
@@ -126,9 +129,13 @@ export class SessionStore {
         // Update this.sessions with the new session
         const index = this.sessions.findIndex((s) => s.id === session.id);
         if (index >= 0) {
+            console.log(`> updating session ${session.id}`);
+            console.log(session);
+            
             this.sessions[index] = session;
         }
         if (index < 0) {
+            console.log(`> adding session ${session.id}`);
             this.sessions.push(session);
         }
         // Save the sessions array

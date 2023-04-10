@@ -1,7 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
-import { TabCollection } from "./closedTabs";
 
 export class Tab implements ITab {
     constructor(

@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { TabCollection } from "../stores/closedTabs";
 import { Window } from "../stores/window";
 import { ITab } from "../types/ITab";
-import { WindowComponent } from "./WindowComponent";
+import { WindowListItem } from "./WindowListItem";
 
 interface WindowListProps {
     windows: Window[];
@@ -34,7 +34,7 @@ export const WindowList = observer(function WindowList(props: WindowListProps) {
         <>
             {props.windows.map((window, index) => {
                 return (
-                    <WindowComponent
+                    <WindowListItem
                         key={index}
                         window={window}
                         closedTabs={props.closedTabs[window.index]}
