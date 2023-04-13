@@ -112,6 +112,8 @@ export class SessionStore {
         if (!sessions) {
             return;
         }
+        // Reverse the array so that the most recent sessions are at the top.
+        sessions.reverse();
         this.sessions = sessions;
     }
 

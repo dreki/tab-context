@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, observable } from "mobx";
 import { ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
 
@@ -15,9 +15,7 @@ export class Tab implements ITab {
         makeAutoObservable(this);
     }
 
-    /**
-     * Is this tab in a group?
-     */
+    /** Is this tab in a group? */
     isInGroup() {
         // If the group name is a defined string, return true
         return this.groupName !== undefined;
@@ -25,16 +23,14 @@ export class Tab implements ITab {
 }
 
 export class WindowObserver {
-    windows: Window[] = [];
+    windows: Window[] = observable([]);
 
     constructor() {
         makeAutoObservable(this);
         this.loadChromeWindows();
     }
 
-    /**
-     * Load all Chrome windows and place them in the `windows` array.
-     */
+    /** Load all Chrome windows and place them in the `windows` array. */
     async loadChromeWindows() {
         const chromeWindows = await chrome.windows.getAll({ populate: true });
         // The new array of windows. This will be assigned to `windows` at the end.
@@ -77,6 +73,16 @@ export class WindowObserver {
         }
         this.windows = newWindows;
     }
+
+    /**
+     * Close a window.
+     *
+     * @param windowId The ID of the window to close.
+     */
+    async closeWindow(windowId: number) {
+        await chrome.windows.remove(windowId);
+        this.loadChromeWindows();
+    }
 }
 
 export class Window {
@@ -100,6 +106,7 @@ export class Window {
 
     /**
      * Convenience method to get the current window ID.
+     *
      * @returns The ID of the current window, or null if it cannot be found.
      */
     public static async getCurrentWindowId(): Promise<Maybe<number>> {

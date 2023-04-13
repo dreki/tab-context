@@ -9,17 +9,29 @@ interface WindowListProps {
     closedTabs: TabCollection[];
 
     /**
-     * A callback for when the user wants to save the window's current state to a session.
-     * @param window  The window to suspend.
-     * @returns  A promise that resolves when the window has been suspended.
+     * A callback for when the user wants to save the window's current state to
+     * a session.
+     *
+     * @param window The window to suspend.
+     * @returns A promise that resolves when the window has been suspended.
      */
     onSuspend: (window: Window) => void;
+
+    /**
+     * A callback for when the user wants to close a window, rather than suspend
+     * it.
+     *
+     * @param window The window to close.
+     * @returns A promise that resolves when the window has been closed.
+     */
+    onCloseWindow: (window: Window) => void;
 
     onCloseTab?: (tab: ITab) => void;
 }
 
 /**
  * WindowList component. Renders a list of `WindowComponent`s for each `Window`.
+ *
  * @param {WindowListProps} props
  */
 export const WindowList = observer(function WindowList(props: WindowListProps) {
@@ -39,6 +51,7 @@ export const WindowList = observer(function WindowList(props: WindowListProps) {
                         window={window}
                         closedTabs={props.closedTabs[window.index]}
                         onSuspend={props.onSuspend}
+                        onCloseWindow={props.onCloseWindow}
                         onCloseTab={handleTabClose}
                     />
                 );

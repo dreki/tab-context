@@ -1,5 +1,5 @@
 import { Session, SessionStore, Tab as SessionTab } from "../stores/session";
-import { Tab, Window } from "../stores/window";
+import { Tab, Window, WindowObserver } from "../stores/window";
 
 function sessionIdFactory(): string {
     // Use base 36 to be more compact.
@@ -23,6 +23,7 @@ export interface ISaveWindowToSessionResponse {
 
 /**
  * Convert a window tab to a session tab.
+ *
  * @param tab The window tab to use to create a session tab.
  * @returns A session tab.
  */
@@ -39,21 +40,25 @@ function tabToSessionTab(tab: Tab): SessionTab {
 
 /**
  * Syncs all tabs in the window to the session, and then closes the window.
+ *
  * @param window The window to suspend.
+ * @param windowObserver The window observer to use to close the window.
  * @param name The name of the session.
+ * @param closeWindow Whether or not to close the window after suspending.
  */
-export async function suspend(window: Window, name: string) {
-    // Reload all tabs in the window.
-    // await reloadTabs(window.tabs, true);
-
+export async function suspend(
+    window: Window,
+    windowObserver: WindowObserver,
+    name: string,
+    closeWindow?: boolean
+) {
     // Make a new `Session` from `window`'s tabs.
-    // const session = new Session(window.tabs.map((tab) => tabToSessionTab(tab)));
-    // const session = new Session(window.tabs);
     const session = new Session();
     session.name = name;
     session.tabs = window.tabs;
-    console.log("> session:");
-    console.log(session);
-    // await SessionStore.save(session);
     await SessionStore.getInstance().save(session);
+    if (closeWindow) {
+        // await chrome.windows.remove(window.id);
+        await windowObserver.closeWindow(window.id);
+    }
 }

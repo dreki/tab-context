@@ -27,9 +27,7 @@ let closedTabs: TabCollection[] = [];
 
 // ─── Functions ───────────────────────────────────────────────────────────────
 
-/**
- * Load all the stores we need.
- */
+/** Load all the stores we need. */
 async function loadStores() {
     await windowObserver.loadChromeWindows();
     await sessionStore.loadSessions();
@@ -46,6 +44,7 @@ async function loadStores() {
 
 /**
  * Restore a session. UI handler.
+ *
  * @param tabs The tabs to restore.
  */
 async function onRestore(tabs: ITab[]) {
@@ -58,9 +57,7 @@ interface IAppProps {
     windowObserver: WindowObserver;
 }
 
-/**
- * The main app component.
- */
+/** The main app component. */
 const App = observer(function App({ windowObserver }: IAppProps) {
     const [showModal, setShowModal] = React.useState(false);
     const [windowForSession, setWindowForSession] =
@@ -72,9 +69,13 @@ const App = observer(function App({ windowObserver }: IAppProps) {
         setWindowForSession(window);
     };
 
+    const onCloseWindow = async (window: Window) => {
+        await windowObserver.closeWindow(window.id);
+    };
+
     const onCreateSession = async (values: SessionCreationValues) => {
         // const onCreateSession = (w: Window) => async (values: SessionCreationValues) => {
-        await suspend(windowForSession!, values.name);
+        await suspend(windowForSession!, windowObserver, values.name, true);
         setShowModal(false);
     };
 
@@ -86,6 +87,7 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                     windows={windowObserver.windows}
                     closedTabs={closedTabs}
                     onSuspend={onSuspend}
+                    onCloseWindow={onCloseWindow}
                     onCloseTab={(tab) => {
                         // console.log("> Asked to close tab", tab);
                         closeTab(tab);

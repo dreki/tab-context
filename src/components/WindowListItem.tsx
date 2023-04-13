@@ -7,29 +7,40 @@ import { Maybe } from "../types/Maybe";
 import { MiniTabList } from "./MiniTabList";
 import { TabDetailList } from "./TabDetailList";
 
-/**
- * WindowComponentProps interface. Props for the `WindowComponent` component.
- */
+/** WindowComponentProps interface. Props for the `WindowComponent` component. */
 interface WindowListItemProps {
     window: Window;
     closedTabs: TabCollection;
 
     /**
-     * A callback for when the user wants to save the window's current state to a session.
-     * @param window  The window to suspend.
-     * @returns  A promise that resolves when the window has been suspended.
+     * A callback for when the user wants to save the window's current state to
+     * a session.
+     *
+     * @param window The window to suspend.
+     * @returns A promise that resolves when the window has been suspended.
      */
     onSuspend: (window: Window) => void;
 
     /**
+     * A callback for when the user wants to close a window, rather than suspend
+     * it.
+     *
+     * @param window The window to close.
+     * @returns A promise that resolves when the window has been closed.
+     */
+    onCloseWindow: (window: Window) => void;
+
+    /**
      * A callback for when a user wants to close a tab.
-     * @param tab  The tab to close.
+     *
+     * @param tab The tab to close.
      */
     onCloseTab?: (tab: ITab) => void;
 }
 
 /**
  * WindowComponent component. Renders a `Window`.
+ *
  * @param {WindowListItemProps} props
  */
 export const WindowListItem = observer(function WindowListItem(
@@ -48,7 +59,10 @@ export const WindowListItem = observer(function WindowListItem(
             }
             key="1"
         >
-            <TabDetailList tabs={props.window.tabs} onCloseTab={props.onCloseTab} />
+            <TabDetailList
+                tabs={props.window.tabs}
+                onCloseTab={props.onCloseTab}
+            />
         </Collapse.Panel>
     );
 
@@ -92,6 +106,13 @@ export const WindowListItem = observer(function WindowListItem(
                         onClick={() => props.onSuspend(props.window)}
                     >
                         Suspend
+                    </button>
+
+                    <button
+                        className="btn-outline btn-ghost btn-sm btn"
+                        onClick={() => props.onCloseWindow(props.window)}
+                    >
+                        Close
                     </button>
                 </div>
             </div>
