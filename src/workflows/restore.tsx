@@ -1,26 +1,16 @@
 import { ITab } from "../types/ITab";
 
-export async function restore(tabs: ITab[]) {
-    console.log(`> restore()`);
-    console.log(tabs);
-
-    const urls = tabs.map((tab) => tab.url);
-
-    console.log(`> urls:`);
-    console.log(urls);
-
-    // Create a window with all the tabs.
-    const createdWindow: chrome.windows.Window = await chrome.windows.create({
-        url: urls,
-    });
-
-    console.log(`> createdWindow:`);
-    console.log(createdWindow);
+/**
+ * Go through new window's tabs, pinning ones that should be pinned.
+ *
+ * @param createdWindow A Chrome window that was just created.
+ * @param tabs The ITab tabs that were used to create the window.
+ * @returns A promise that resolves when the tabs have been pinned.
+ */
+async function pinTabs(createdWindow: chrome.windows.Window, tabs: ITab[]) {
     if (!createdWindow || !createdWindow.tabs) {
-        console.warn("Unable to pin tabs in new window.");
         return;
     }
-    // Go through new window's tabs, pinning ones that should be pinned.
     for (const tab of createdWindow.tabs) {
         if (!tab || !tab.id) {
             console.warn(
@@ -40,16 +30,91 @@ export async function restore(tabs: ITab[]) {
         }
         */
     }
+}
 
-    // Pin tabs that have pinned: true.
-    /* 
-    const pinnedTabs = tabs.filter((tab) => tab.pinned);
-    const pinnedTabIds = pinnedTabs.map((tab) => tab.id);
-    console.log(`> pinnedTabIds:`);
-    console.log(pinnedTabIds);
-    // await chrome.tabs.update(pinnedTabIds, { pinned: true });
-    for (const tabId of pinnedTabIds) {
-        await chrome.tabs.update(tabId, { pinned: true });
+/**
+ * Group tabs in a window, based on the ITab tabs that were used to create the
+ * window.
+ *
+ * @param createdWindow A Chrome window that was just created.
+ * @param tabs The ITab tabs that were used to create the window.
+ * @returns A promise that resolves when the tabs have been grouped.
+ */
+async function groupTabs(createdWindow: chrome.windows.Window, tabs: ITab[]) {
+    if (!createdWindow || !createdWindow.tabs) {
+        return;
     }
-     */
+    const tabsToGroup: {
+        tabIds: number[];
+        groupName: string;
+        groupColor: string;
+    }[] = [];
+    for (const tab of createdWindow.tabs) {
+        if (!tab || !tab.id) {
+            console.warn(
+                "Unable to group tab in new window due to missing tab ID."
+            );
+            continue;
+        }
+        // Match tabs by index in array.
+        const matchingTab = tabs[tab.index];
+        if (matchingTab && matchingTab.groupColor) {
+            const group = tabsToGroup.find(
+                (t) =>
+                    t.groupName === matchingTab.groupName &&
+                    t.groupColor === matchingTab.groupColor
+            );
+            if (group) {
+                group.tabIds.push(tab.id);
+            } else {
+                tabsToGroup.push({
+                    tabIds: [tab.id],
+                    groupName: matchingTab.groupName || "",
+                    groupColor: matchingTab.groupColor,
+                });
+            }
+        }
+    }
+    // Go through tabs to group, grouping them.
+    for (const tabGroup of tabsToGroup) {
+        const groupId = await chrome.tabs.group({
+            createProperties: {
+                windowId: createdWindow.id,
+            },
+            tabIds: tabGroup.tabIds,
+        });
+
+        await chrome.tabGroups.update(groupId, {
+            title: tabGroup.groupName,
+            color: (tabGroup.groupColor ||
+                "grey") as chrome.tabGroups.ColorEnum,
+        });
+    }
+}
+
+/**
+ * Restore a group of ITabs into a new window.
+ *
+ * @param tabs
+ * @returns
+ */
+export async function restore(tabs: ITab[]) {
+    const urls = tabs.map((tab) => tab.url);
+
+    // Create a window with all the tabs.
+    const createdWindow: chrome.windows.Window = await chrome.windows.create({
+        url: urls,
+    });
+
+    if (!createdWindow || !createdWindow.tabs) {
+        console.warn("Unable to pin tabs in new window.");
+        return;
+    }
+
+    // Go through new window's tabs, pinning ones that should be pinned.
+    await pinTabs(createdWindow, tabs);
+
+    // Go through new window's tabs, getting IDs of ones that should be grouped, and the name and
+    // color of the group.
+    await groupTabs(createdWindow, tabs);
 }
