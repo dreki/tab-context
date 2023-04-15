@@ -66,23 +66,6 @@ export const WindowListItem = observer(function WindowListItem(
         </Collapse.Panel>
     );
 
-    // Closed tabs for this window
-    let closedTabs: Maybe<JSX.Element> = <></>;
-    if (props.closedTabs) {
-        closedTabs = (
-            <Collapse.Panel
-                header={
-                    <span className="text-base">
-                        {props.closedTabs.tabs.length} Closed Tabs
-                    </span>
-                }
-                key="2"
-            >
-                <TabDetailList tabs={props.closedTabs.tabs} />
-            </Collapse.Panel>
-        );
-    }
-
     return (
         <div className="card-bordered card card-compact mb-8 bg-slate-50 shadow-md">
             {/* Hidden h2, for accessibility, noting window */}
@@ -98,7 +81,6 @@ export const WindowListItem = observer(function WindowListItem(
             <div className="card-body">
                 <Collapse ghost={true}>
                     {openTabs}
-                    {closedTabs}
                 </Collapse>
                 <div className="card-actions mt-2">
                     <button

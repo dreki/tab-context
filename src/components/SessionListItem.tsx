@@ -25,8 +25,8 @@ export const SessionListItem = observer(
                 <div className="card-body">
                     <span>{name}</span>
                     <TabDetailList tabs={session.tabs} onRestore={onRestore} />
+                    <div className="card-actions mt-2">{restore}</div>
                 </div>
-                <div className="card-actions mt-2">{restore}</div>
             </div>
         );
     }
