@@ -86,14 +86,4 @@ chrome.tabs.onRemoved.addListener(
     }
 );
 
-// When a window is closed, find a tab for the extension's UI in the window and send a message to it
-// that the window was closed, so it can react (e.g. by removing the list of recently closed tabs
-// for the window).
-// chrome.windows.onRemoved.addListener((windowId) => {
-//     (async () => {
-//         // Get the tab for the extension's UI in the window that was closed.
-//         const extensionUiTab: Maybe<ITab> = await getExtensionUiTab(windowId);
-//         if (extensionUiTab) {
-//             // Send a message to the extension's UI tab to add the most recently closed tab.
-
 export { };

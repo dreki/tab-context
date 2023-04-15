@@ -3,7 +3,6 @@
  */
 export enum MessageType {
     AddMostRecentClosedTab = "addMostRecentClosedTab",
-    WindowClosed = "windowClosed",
 }
 
 /**
