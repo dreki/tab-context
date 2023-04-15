@@ -23,7 +23,8 @@ import {
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
-let closedTabs: TabCollection[] = [];
+// let closedTabs: TabCollection[] = [];
+let closedTabs: Map<number, TabCollection> = new Map();
 
 // ─── Functions ───────────────────────────────────────────────────────────────
 
@@ -32,10 +33,16 @@ async function loadStores() {
     await windowObserver.loadChromeWindows();
     await sessionStore.loadSessions();
     // Look through windows, loading closed tabs via index.
-    closedTabs = [];
+    // closedTabs = {};
     for (const window of windowObserver.windows) {
-        closedTabs[window.index] = await TabCollection.loadClosedTabs(
-            window.index
+        // closedTabs[window.index] = await TabCollection.loadClosedTabs(
+        //     window.index
+        // );
+
+        // closedTabs[window.id] = await TabCollection.loadClosedTabs(window.id);
+        closedTabs.set(
+            window.id,
+            await TabCollection.loadClosedTabs(window.id)
         );
     }
 }
