@@ -112,8 +112,6 @@ export class SessionStore {
         if (!sessions) {
             return;
         }
-        // Reverse the array so that the most recent sessions are at the top.
-        sessions.reverse();
         this.sessions = sessions;
     }
 
@@ -138,7 +136,8 @@ export class SessionStore {
         }
         if (index < 0) {
             console.log(`> adding session ${session.id}`);
-            this.sessions.push(session);
+            // Add session to the front of the array, so that it's the first session in the list.
+            this.sessions.unshift(session);
         }
         // Save the sessions array
         await set("sessions", this.sessions);
