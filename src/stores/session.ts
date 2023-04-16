@@ -86,7 +86,7 @@ export class SessionStore {
 
     private constructor() {
         makeAutoObservable(this);
-        this.loadSessions();
+        this.loadActiveSessions();
     }
 
     /**
@@ -101,12 +101,12 @@ export class SessionStore {
     }
 
     /**
-     * Load all sessions.
+     * Load all active sessions.
      *
      * Important: This method must be called upon construction, or after any changes to the sessions
      * array (e.g. via `save`).
      */
-    async loadSessions() {
+    async loadActiveSessions() {
         // const sessions = await get<Session>("sessions");
         const sessions = await getArray(Session, "sessions");
         if (!sessions) {
