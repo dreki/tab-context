@@ -30,7 +30,7 @@ let closedTabs: TabCollection[] = [];
 /** Load all the stores we need. */
 async function loadStores() {
     await windowObserver.loadChromeWindows();
-    await sessionStore.loadActiveSessions();
+    await sessionStore.loadSessions();
     // Look through windows, loading closed tabs via index.
     closedTabs = [];
     for (const window of windowObserver.windows) {

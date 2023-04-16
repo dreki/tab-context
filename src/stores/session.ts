@@ -22,7 +22,7 @@ export class Tab implements ITab {
 // Enum for Session status
 export enum SessionStatus {
     Active = "active",
-    Suspended = "suspended",
+    // Suspended = "suspended",
     Archived = "archived",
 }
 
@@ -86,7 +86,7 @@ export class SessionStore {
 
     private constructor() {
         makeAutoObservable(this);
-        this.loadActiveSessions();
+        this.loadSessions();
     }
 
     /**
@@ -101,12 +101,12 @@ export class SessionStore {
     }
 
     /**
-     * Load all active sessions.
+     * Load all sessions.
      *
      * Important: This method must be called upon construction, or after any changes to the sessions
      * array (e.g. via `save`).
      */
-    async loadActiveSessions() {
+    async loadSessions() {
         // const sessions = await get<Session>("sessions");
         const sessions = await getArray(Session, "sessions");
         if (!sessions) {
