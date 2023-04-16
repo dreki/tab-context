@@ -82,7 +82,8 @@ export class SessionStore {
     // Singleton instance
     static instance: SessionStore;
 
-    sessions: Session[] = observable([]);
+    activeSessions: Session[] = observable([]);
+    archivedSessions: Session[] = observable([]);
 
     private constructor() {
         makeAutoObservable(this);
@@ -112,7 +113,12 @@ export class SessionStore {
         if (!sessions) {
             return;
         }
-        this.sessions = sessions;
+        // `this.sessions` should be all Active sessions
+        this.activeSessions = sessions.filter((s) => s.status === SessionStatus.Active);
+        // `this.archivedSessions` should be all Archived sessions
+        this.archivedSessions = sessions.filter(
+            (s) => s.status === SessionStatus.Archived
+        );
     }
 
     /**
@@ -127,19 +133,19 @@ export class SessionStore {
         // await set("sessions", )
         
         // Update this.sessions with the new session
-        const index = this.sessions.findIndex((s) => s.id === session.id);
+        const index = this.activeSessions.findIndex((s) => s.id === session.id);
         if (index >= 0) {
             console.log(`> updating session ${session.id}`);
             console.log(session);
             
-            this.sessions[index] = session;
+            this.activeSessions[index] = session;
         }
         if (index < 0) {
             console.log(`> adding session ${session.id}`);
             // Add session to the front of the array, so that it's the first session in the list.
-            this.sessions.unshift(session);
+            this.activeSessions.unshift(session);
         }
         // Save the sessions array
-        await set("sessions", this.sessions);
+        await set("sessions", this.activeSessions);
     }
 }
