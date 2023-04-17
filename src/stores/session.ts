@@ -3,6 +3,7 @@ import SparkMD5 from "spark-md5";
 import { ITab } from "../types/ITab";
 import { getArray, set } from "./db";
 import { log } from "console";
+import { DateTime } from "luxon";
 
 export class Tab implements ITab {
     // Constructor that defines public properties, based on ITab interface
@@ -41,6 +42,9 @@ export class Session {
 
     // static class-level `sessions` array
     // static sessions: Session[] = observable([]);
+
+    // createdAt: Date = new Date();
+    createdAt: DateTime = DateTime.now();
 
     // `_tabs` should have getter/setter methods
     private _tabs: ITab[] = [];
