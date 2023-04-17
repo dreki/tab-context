@@ -1,6 +1,7 @@
 import { observer } from "mobx-react";
 import { Session } from "../stores/session";
 import { ITab } from "../types/ITab";
+import { makeRelativeDate } from "../utils/relativeDate";
 import { TabDetailList } from "./TabDetailList";
 
 interface SessionListItemProps {
@@ -11,6 +12,15 @@ interface SessionListItemProps {
 export const SessionListItem = observer(
     ({ session, onRestore }: SessionListItemProps) => {
         const name = session.name ? session.name : "(Unnamed)";
+
+        let tabCreated: JSX.Element | null = null;
+        if (session.createdAt) {
+            tabCreated = (
+                <span className="ml-2 text-gray-500">
+                    {makeRelativeDate(session.createdAt)}
+                </span>
+            );
+        }
 
         const restore: JSX.Element | null = onRestore ? (
             <button
@@ -26,9 +36,7 @@ export const SessionListItem = observer(
                     <span>{name}</span>
 
                     {/* Show relative day session was created (e.g. "today"; "2 days ago") */}
-                    <span className="ml-2 text-gray-500">
-                        {session.createdAt.toRelative({ unit: "days" })}
-                    </span>
+                    {tabCreated}
 
                     <TabDetailList tabs={session.tabs} onRestore={onRestore} />
                     <div className="card-actions mt-2">{restore}</div>
