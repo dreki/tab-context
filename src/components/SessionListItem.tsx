@@ -7,10 +7,11 @@ import { TabDetailList } from "./TabDetailList";
 interface SessionListItemProps {
     session: Session;
     onRestore: (tabs: ITab[]) => void;
+    onArchive: (session: Session) => void;
 }
 
 export const SessionListItem = observer(
-    ({ session, onRestore }: SessionListItemProps) => {
+    ({ session, onRestore, onArchive }: SessionListItemProps) => {
         const name = session.name ? session.name : "(Unnamed)";
 
         let tabCreated: JSX.Element | null = null;
@@ -30,6 +31,16 @@ export const SessionListItem = observer(
                 Restore
             </button>
         ) : null;
+
+        const archive: JSX.Element | null = onArchive ? (
+            <button
+                className="btn-outline btn-ghost btn-sm btn"
+                onClick={() => onArchive(session)}
+            >
+                Archive
+            </button>
+        ) : null;
+
         return (
             <div className="card-bordered card card-compact mb-4 bg-purple-100 shadow-md">
                 <div className="card-body">
@@ -39,7 +50,10 @@ export const SessionListItem = observer(
                     {tabCreated}
 
                     <TabDetailList tabs={session.tabs} onRestore={onRestore} />
-                    <div className="card-actions mt-2">{restore}</div>
+                    <div className="card-actions mt-2">
+                        {restore}
+                        {archive}
+                    </div>
                 </div>
             </div>
         );

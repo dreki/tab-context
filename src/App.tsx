@@ -97,6 +97,8 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                 <SessionList
                     sessions={sessionStore.activeSessions}
                     onRestore={onRestore}
+                    // TODO: Implement 
+                    onArchive={() => console.log("archive")}
                 />
 
                 {/* Archived sessions */}
