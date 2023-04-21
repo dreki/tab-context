@@ -3,6 +3,7 @@ import SparkMD5 from "spark-md5";
 import { ITab } from "../types/ITab";
 import { getArray, set } from "./db";
 import { log } from "console";
+import { makeRelativeDate } from "../utils/relativeDate";
 
 export class Tab implements ITab {
     // Constructor that defines public properties, based on ITab interface
@@ -74,6 +75,13 @@ export class Session {
     // Allow adding a tab to the session
     addTab(tab: Tab) {
         this.tabs.push(tab);
+    }
+
+    /**
+     * Computed property that returns a relative date string.
+     */
+    get relativeCreatedAt(): String | null {
+        return makeRelativeDate(this.createdAt);
     }
 }
 

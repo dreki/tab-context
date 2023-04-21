@@ -23,10 +23,13 @@ export function makeRelativeDate(
         return null;
     }
 
-    // If type is not Date, return null
-    if (Object.prototype.toString.call(date) !== "[object Date]") {
-        return null;
+    // If type is not Date, parse
+    if (typeof date === "string") {
+        date = new Date(date);
     }
+    // if (Object.prototype.toString.call(date) !== "[object Date]") {
+    //     return null;
+    // }
 
     const now = new Date();
     const diff = now.getTime() - date.getTime();

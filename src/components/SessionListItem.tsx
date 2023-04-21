@@ -15,13 +15,26 @@ export const SessionListItem = observer(
         const name = session.name ? session.name : "(Unnamed)";
 
         let tabCreated: JSX.Element | null = null;
-        if (session.createdAt) {
-            tabCreated = (
-                <span className="ml-2 text-gray-500">
-                    {makeRelativeDate(session.createdAt)}
-                </span>
-            );
-        }
+        // if (session.createdAt) {
+        // tabCreated = (
+        //     <span className="ml-2 text-gray-500">
+        //         !{makeRelativeDate(session.createdAt)}
+        //         {`${session.createdAt}`}
+        //     </span>
+        // );
+
+        tabCreated = (
+            <span className="ml-2 text-gray-500">
+                <>{session.relativeCreatedAt} ({session.createdAt})</>
+            </span>
+        );
+
+        // );
+        // }
+        // if (!session.createdAt) {
+        //     console.log(`> null session.createdAt: ${session.createdAt}`)
+        // }
+        // tabCreated = (<>{session.createdAt}</>)
 
         const restore: JSX.Element | null = onRestore ? (
             <button
