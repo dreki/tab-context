@@ -25,7 +25,7 @@ export const SessionListItem = observer(
 
         tabCreated = (
             <span className="ml-2 text-gray-500">
-                <>{session.relativeCreatedAt} ({session.createdAt})</>
+                <>{session.relativeCreatedAt}</>
             </span>
         );
 
