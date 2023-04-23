@@ -89,18 +89,21 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                     onSuspend={onSuspend}
                     onCloseWindow={onCloseWindow}
                     onCloseTab={(tab) => {
-                        // console.log("> Asked to close tab", tab);
-                        closeTab(tab);
-
-                        // addTabToCollection(tab, windowObserver, closedTabs);
+                        closeTab(tab, windowObserver);
                     }}
                 />
 
                 <h1 className="mt-8 mb-4 text-2xl font-bold">Sessions</h1>
                 <SessionList
-                    sessions={sessionStore.sessions}
+                    sessions={sessionStore.activeSessions}
                     onRestore={onRestore}
+                    // TODO: Implement 
+                    onArchive={() => console.log("archive")}
                 />
+
+                {/* Archived sessions */}
+                <h1 className="mt-8 mb-4 text-xl font-bold">Archived Sessions</h1>
+                <span>... (show collapsed)</span>
             </div>
 
             {showModal && (

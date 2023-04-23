@@ -1,8 +1,11 @@
-import { makeAutoObservable, observable } from "mobx";
+import {
+    makeAutoObservable,
+    observable
+} from "mobx";
 import SparkMD5 from "spark-md5";
 import { ITab } from "../types/ITab";
+import { makeFriendlyDate, makeRelativeDate } from "../utils/relativeDate";
 import { getArray, set } from "./db";
-import { log } from "console";
 
 export class Tab implements ITab {
     // Constructor that defines public properties, based on ITab interface
@@ -22,13 +25,11 @@ export class Tab implements ITab {
 // Enum for Session status
 export enum SessionStatus {
     Active = "active",
-    Suspended = "suspended",
+    // Suspended = "suspended",
     Archived = "archived",
 }
 
-/**
- * Session class. Represents a tab session.
- */
+/** Session class. Represents a tab session. */
 export class Session {
     // id is a unique identifier for the session
     id!: string;
@@ -41,6 +42,8 @@ export class Session {
 
     // static class-level `sessions` array
     // static sessions: Session[] = observable([]);
+
+    createdAt: Date = new Date();
 
     // `_tabs` should have getter/setter methods
     private _tabs: ITab[] = [];
@@ -67,22 +70,44 @@ export class Session {
     // }
     constructor() {
         makeAutoObservable(this);
+        // makeObservable(this, {
+        //     id: observable,
+        //     name: observable,
+        //     status: observable,
+        //     createdAt: observable,
+        //     tabs: computed,
+        //     addTab: action,
+        //     relativeCreatedAt: computed,
+        //     friendlyCreatedAt: computed,
+        // });
     }
 
     // Allow adding a tab to the session
     addTab(tab: Tab) {
         this.tabs.push(tab);
     }
+
+    /** Computed property that returns a relative date string. */
+    get relativeCreatedAt(): String | null {
+        return makeRelativeDate(this.createdAt);
+    }
+
+    /**
+     * Computed property that returns a friendly date string, like "Thursday, 1
+     * January 1970 at 00:00pm"
+     */
+    get friendlyCreatedAt(): String | null {
+        return makeFriendlyDate(this.createdAt);
+    }
 }
 
-/**
- * Manages access to sessions data.
- */
+/** Manages access to sessions data. */
 export class SessionStore {
     // Singleton instance
     static instance: SessionStore;
 
-    sessions: Session[] = observable([]);
+    activeSessions: Session[] = observable([]);
+    archivedSessions: Session[] = observable([]);
 
     private constructor() {
         makeAutoObservable(this);
@@ -91,6 +116,7 @@ export class SessionStore {
 
     /**
      * Get the singleton instance of SessionStore.
+     *
      * @returns Singleton instance of SessionStore
      */
     static getInstance(): SessionStore {
@@ -103,8 +129,8 @@ export class SessionStore {
     /**
      * Load all sessions.
      *
-     * Important: This method must be called upon construction, or after any changes to the sessions
-     * array (e.g. via `save`).
+     * Important: This method must be called upon construction, or after any
+     * changes to the sessions array (e.g. via `save`).
      */
     async loadSessions() {
         // const sessions = await get<Session>("sessions");
@@ -112,34 +138,43 @@ export class SessionStore {
         if (!sessions) {
             return;
         }
-        this.sessions = sessions;
+        // `this.sessions` should be all Active sessions
+        this.activeSessions = sessions.filter(
+            (s) => s.status === SessionStatus.Active
+        );
+        // `this.archivedSessions` should be all Archived sessions
+        this.archivedSessions = sessions.filter(
+            (s) => s.status === SessionStatus.Archived
+        );
     }
 
     /**
-     * Save a session. If it already exists, update it. Otherwise, create a new session.
+     * Save a session. If it already exists, update it. Otherwise, create a new
+     * session.
      *
-     * Note that you'll have to call `loadAll` again to update the sessions array after calling this
-     * method.
+     * Note that you'll have to call `loadAll` again to update the sessions
+     * array after calling this method.
+     *
      * @param session Session to save
      */
     async save(session: Session): Promise<void> {
         // await upsert(Session, "sessions", session);
         // await set("sessions", )
-        
+
         // Update this.sessions with the new session
-        const index = this.sessions.findIndex((s) => s.id === session.id);
+        const index = this.activeSessions.findIndex((s) => s.id === session.id);
         if (index >= 0) {
             console.log(`> updating session ${session.id}`);
             console.log(session);
-            
-            this.sessions[index] = session;
+
+            this.activeSessions[index] = session;
         }
         if (index < 0) {
             console.log(`> adding session ${session.id}`);
             // Add session to the front of the array, so that it's the first session in the list.
-            this.sessions.unshift(session);
+            this.activeSessions.unshift(session);
         }
         // Save the sessions array
-        await set("sessions", this.sessions);
+        await set("sessions", this.activeSessions);
     }
 }

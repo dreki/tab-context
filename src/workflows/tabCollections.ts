@@ -78,6 +78,8 @@ export async function addTabToCollection(
 /**
  * Close a Chrome tab.
  */
-export async function closeTab(tab: ITab) {
+export async function closeTab(tab: ITab, windowObserver: WindowObserver) {
     chrome.tabs.remove(tab.id);
+    // Refresh from Chrome.
+    await windowObserver.loadChromeWindows();
 }
