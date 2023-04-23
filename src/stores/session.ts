@@ -36,12 +36,8 @@ export class Session {
 
     name: string = "";
 
-    // tabs: Tab[] = [];
     // status is the status of the session
     status: SessionStatus = SessionStatus.Active;
-
-    // static class-level `sessions` array
-    // static sessions: Session[] = observable([]);
 
     createdAt: Date = new Date();
 
@@ -64,22 +60,8 @@ export class Session {
         // console.log(`> new session id: ${this.id}`);
     }
 
-    // constructor(tabs: Tab[]) {
-    //     makeAutoObservable(this);
-    //     this.tabs = tabs;
-    // }
     constructor() {
         makeAutoObservable(this);
-        // makeObservable(this, {
-        //     id: observable,
-        //     name: observable,
-        //     status: observable,
-        //     createdAt: observable,
-        //     tabs: computed,
-        //     addTab: action,
-        //     relativeCreatedAt: computed,
-        //     friendlyCreatedAt: computed,
-        // });
     }
 
     // Allow adding a tab to the session
