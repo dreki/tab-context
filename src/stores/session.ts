@@ -1,7 +1,4 @@
-import {
-    makeAutoObservable,
-    observable
-} from "mobx";
+import { makeAutoObservable, observable } from "mobx";
 import SparkMD5 from "spark-md5";
 import { ITab } from "../types/ITab";
 import { makeFriendlyDate, makeRelativeDate } from "../utils/relativeDate";

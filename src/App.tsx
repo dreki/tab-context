@@ -104,6 +104,9 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                 {/* Archived sessions */}
                 <h1 className="mt-8 mb-4 text-xl font-bold">Archived Sessions</h1>
                 <span>... (show collapsed)</span>
+                <SessionList
+                    sessions={sessionStore.archivedSessions}
+                    onRestore={onRestore} />
             </div>
 
             {showModal && (

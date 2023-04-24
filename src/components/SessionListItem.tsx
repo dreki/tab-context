@@ -1,13 +1,12 @@
 import { observer } from "mobx-react";
 import { Session } from "../stores/session";
 import { ITab } from "../types/ITab";
-import { makeRelativeDate } from "../utils/relativeDate";
 import { TabDetailList } from "./TabDetailList";
 
 interface SessionListItemProps {
     session: Session;
     onRestore: (tabs: ITab[]) => void;
-    onArchive: (session: Session) => void;
+    onArchive?: (session: Session) => void;
 }
 
 export const SessionListItem = observer(
@@ -15,26 +14,12 @@ export const SessionListItem = observer(
         const name = session.name ? session.name : "(Unnamed)";
 
         let tabCreated: JSX.Element | null = null;
-        // if (session.createdAt) {
-        // tabCreated = (
-        //     <span className="ml-2 text-gray-500">
-        //         !{makeRelativeDate(session.createdAt)}
-        //         {`${session.createdAt}`}
-        //     </span>
-        // );
 
         tabCreated = (
             <span className="ml-2 text-gray-500">
                 <>{session.relativeCreatedAt}</>
             </span>
         );
-
-        // );
-        // }
-        // if (!session.createdAt) {
-        //     console.log(`> null session.createdAt: ${session.createdAt}`)
-        // }
-        // tabCreated = (<>{session.createdAt}</>)
 
         const restore: JSX.Element | null = onRestore ? (
             <button
