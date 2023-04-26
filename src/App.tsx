@@ -8,7 +8,7 @@ import {
 import { SessionList } from "./components/SessionList";
 import { WindowList } from "./components/WindowList";
 import { TabCollection } from "./stores/closedTabs";
-import { SessionStore } from "./stores/session";
+import { Session, SessionStore } from "./stores/session";
 import { Window, WindowObserver } from "./stores/window";
 import { ITab } from "./types/ITab";
 import { IMessage, IResponse } from "./types/Message";
@@ -69,6 +69,12 @@ const App = observer(function App({ windowObserver }: IAppProps) {
         setWindowForSession(window);
     };
 
+    const onArchive = async (session: Session) => {
+        await sessionStore.archive(session);
+        // Reload
+        await loadStores();
+    };
+
     const onCloseWindow = async (window: Window) => {
         await windowObserver.closeWindow(window.id);
     };
@@ -77,6 +83,8 @@ const App = observer(function App({ windowObserver }: IAppProps) {
         // const onCreateSession = (w: Window) => async (values: SessionCreationValues) => {
         await suspend(windowForSession!, windowObserver, values.name, true);
         setShowModal(false);
+        // Reload
+        await loadStores();
     };
 
     return (
@@ -97,16 +105,18 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                 <SessionList
                     sessions={sessionStore.activeSessions}
                     onRestore={onRestore}
-                    // TODO: Implement 
-                    onArchive={() => console.log("archive")}
+                    onArchive={onArchive}
                 />
 
                 {/* Archived sessions */}
-                <h1 className="mt-8 mb-4 text-xl font-bold">Archived Sessions</h1>
+                <h1 className="mt-8 mb-4 text-xl font-bold">
+                    Archived Sessions
+                </h1>
                 <span>... (show collapsed)</span>
                 <SessionList
                     sessions={sessionStore.archivedSessions}
-                    onRestore={onRestore} />
+                    onRestore={onRestore}
+                />
             </div>
 
             {showModal && (

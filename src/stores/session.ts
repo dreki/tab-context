@@ -153,7 +153,20 @@ export class SessionStore {
             // Add session to the front of the array, so that it's the first session in the list.
             this.activeSessions.unshift(session);
         }
-        // Save the sessions array
-        await set("sessions", this.activeSessions);
+        // Save the sessions array to be activeSessions and archivedSessions
+        await set(
+            "sessions",
+            this.activeSessions.concat(this.archivedSessions)
+        );
+    }
+
+    /**
+     * Mark a session as archived and save it.
+     *
+     * @param session Session to archive
+     */
+    async archive(session: Session): Promise<void> {
+        session.status = SessionStatus.Archived;
+        await this.save(session);
     }
 }
