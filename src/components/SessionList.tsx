@@ -5,7 +5,8 @@ import { SessionListItem } from "./SessionListItem";
 
 interface SessionListProps {
     sessions: Session[] | null;
-    onRestore: (tabs: ITab[]) => void;
+    // onRestore: (tabs: ITab[]) => void;
+    onRestore: (session: Session) => void;
     onArchive?: (session: Session) => void;
 }
 export const SessionList = observer(

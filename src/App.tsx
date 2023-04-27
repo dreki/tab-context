@@ -1,6 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import "./App.css";
+import { ArchivedSessionList } from "./components/ArchivedSessionList";
 import {
     SessionCreationModal,
     Values as SessionCreationValues,
@@ -10,7 +11,6 @@ import { WindowList } from "./components/WindowList";
 import { TabCollection } from "./stores/closedTabs";
 import { Session, SessionStore } from "./stores/session";
 import { Window, WindowObserver } from "./stores/window";
-import { ITab } from "./types/ITab";
 import { IMessage, IResponse } from "./types/Message";
 import { onOurTabActivated } from "./utils/onOurTabActivated";
 import { onOurWindowActivated } from "./utils/onOurWindowActivated";
@@ -20,7 +20,6 @@ import {
     addMostRecentClosedTabToCollection,
     closeTab,
 } from "./workflows/tabCollections";
-import { ArchivedSessionList } from "./components/ArchivedSessionList";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
@@ -46,10 +45,11 @@ async function loadStores() {
 /**
  * Restore a session. UI handler.
  *
- * @param tabs The tabs to restore.
+ * @param session The session to restore.
  */
-async function onRestore(tabs: ITab[]) {
-    await restore(tabs);
+async function onRestore(session: Session) {
+    // await restore(tabs);
+    await restore(session, sessionStore);
 }
 
 // ─── Components ──────────────────────────────────────────────────────────────

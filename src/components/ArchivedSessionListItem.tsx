@@ -5,7 +5,7 @@ import { TabDetailList } from "./TabDetailList";
 
 interface ArchivedSessionListItemProps {
     session: Session;
-    onRestore: (tabs: ITab[]) => void;
+    onRestore: (session: Session) => void;
     onArchive?: (session: Session) => void;
 }
 
@@ -24,7 +24,7 @@ export const ArchivedSessionListItem = observer(
         const restore: JSX.Element | null = onRestore ? (
             <button
                 className="btn-primary btn-sm btn"
-                onClick={() => onRestore(session.tabs)}
+                onClick={() => onRestore(session)}
             >
                 Restore
             </button>

@@ -3,10 +3,12 @@ import { observer } from "mobx-react";
 import { ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
 import { TabDetailListItem } from "./TabDetailListItem";
+import { Session } from "../stores/session";
 
 interface TabDetailListProps {
     tabs: ITab[];
-    onRestore?: (tabs: ITab[]) => void;
+    // onRestore?: (tabs: ITab[]) => void;
+    onRestore?: (session: Session) => void;
     onCloseTab?: (tab: ITab) => void;
 }
 

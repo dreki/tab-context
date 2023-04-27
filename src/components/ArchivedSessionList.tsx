@@ -5,7 +5,7 @@ import { ArchivedSessionListItem } from "./ArchivedSessionListItem";
 
 interface ArchivedSessionListProps {
     sessions: Session[] | null;
-    onRestore: (tabs: ITab[]) => void;
+    onRestore: (session: Session) => void;
     onArchive?: (session: Session) => void;
 }
 export const ArchivedSessionList = observer(

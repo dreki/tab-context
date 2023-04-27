@@ -169,4 +169,29 @@ export class SessionStore {
         session.status = SessionStatus.Archived;
         await this.save(session);
     }
+
+    /**
+     * Remove a session from the database.
+     *
+     * @param session Session to delete
+     */
+    async delete(session: Session): Promise<void> {
+        // Remove the session from the active sessions array, if present.
+        const index = this.activeSessions.findIndex((s) => s.id === session.id);
+        if (index >= 0) {
+            this.activeSessions.splice(index, 1);
+        }
+        // Remove the session from the archived sessions array, if present.
+        const index2 = this.archivedSessions.findIndex(
+            (s) => s.id === session.id
+        );
+        if (index2 >= 0) {
+            this.archivedSessions.splice(index2, 1);
+        }
+        // Save the sessions array to be activeSessions and archivedSessions
+        await set(
+            "sessions",
+            this.activeSessions.concat(this.archivedSessions)
+        );
+    }
 }

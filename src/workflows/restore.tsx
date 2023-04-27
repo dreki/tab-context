@@ -1,3 +1,4 @@
+import { Session, SessionStore } from "../stores/session";
 import { ITab } from "../types/ITab";
 
 /**
@@ -98,7 +99,9 @@ async function groupTabs(createdWindow: chrome.windows.Window, tabs: ITab[]) {
  * @param tabs
  * @returns
  */
-export async function restore(tabs: ITab[]) {
+// export async function restore(tabs: ITab[]) {
+export async function restore(session: Session, sessionStore: SessionStore) {
+    const tabs = session.tabs;
     const urls = tabs.map((tab) => tab.url);
 
     // Create a window with all the tabs.
@@ -117,4 +120,7 @@ export async function restore(tabs: ITab[]) {
     // Go through new window's tabs, getting IDs of ones that should be grouped, and the name and
     // color of the group.
     await groupTabs(createdWindow, tabs);
+
+    // Delete session from store.
+    await sessionStore.delete(session)
 }
