@@ -8,7 +8,10 @@ import { IMessage, MessageType } from "../types/Message";
  * @param window Window to check
  * @returns
  */
-function ensureExtensionTabInWindow(window: chrome.windows.Window, onlyIfCurrentWindow: boolean = false) {
+function ensureExtensionTabInWindow(
+    window: chrome.windows.Window,
+    onlyIfCurrentWindow: boolean = false
+) {
     // If not current window, then return. (There are service workers for each window, so we want to
     // avoid duplicate tabs.)
     chrome.windows.getCurrent((currentWindow) => {
@@ -106,4 +109,4 @@ chrome.tabs.onRemoved.addListener(
     }
 );
 
-export {};
+export { };
