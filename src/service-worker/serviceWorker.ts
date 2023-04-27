@@ -1,19 +1,24 @@
-import {
-    getExtensionUiTab, ITab
-} from "../types/ITab";
+import { getExtensionUiTab, ITab } from "../types/ITab";
 import { Maybe } from "../types/Maybe";
 import { IMessage, MessageType } from "../types/Message";
 
-// On install, open 'ui.html' from within the extension. Open a new pinned tab in all windows,
-// unless there's already a tab open for this extension pinned.
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.windows.getAll({ populate: true }, (windows) => {
-        windows.forEach((window) => {
-            // If the window is not a popup window
-            if (!window.type || window.type === "normal") {
-                if (!window.tabs) {
-                    return;
-                }
+/**
+ * For a window, ensure that the main extension tab is open.
+ *
+ * @param window Window to check
+ * @returns
+ */
+function ensureExtensionTabInWindow(window: chrome.windows.Window, onlyIfCurrentWindow: boolean = false) {
+    // If not current window, then return. (There are service workers for each window, so we want to
+    // avoid duplicate tabs.)
+    chrome.windows.getCurrent((currentWindow) => {
+        if (onlyIfCurrentWindow && currentWindow.id !== window.id) {
+            return;
+        }
+
+        // If the window is not a popup window
+        if (!window.type || window.type === "normal") {
+            if (window.tabs) {
                 // Find a tab for 'ui.html' in this extension. Ignore query parameters.
                 const baseUrl = chrome.runtime.getURL("ui.html");
                 const uiTab = window.tabs.find(
@@ -26,15 +31,30 @@ chrome.runtime.onInstalled.addListener(() => {
                     console.log(`> URL: ${uiTab.url}`);
                     return;
                 }
-                // Open a new pinned tab in the window
-                chrome.tabs.create({
-                    windowId: window.id,
-                    url: chrome.runtime.getURL("ui.html"),
-                    pinned: true,
-                });
             }
+            // Open a new pinned tab in the window
+            chrome.tabs.create({
+                windowId: window.id,
+                url: chrome.runtime.getURL("ui.html"),
+                pinned: true,
+            });
+        }
+    });
+}
+
+// On install, open 'ui.html' from within the extension. Open a new pinned tab in all windows,
+// unless there's already a tab open for this extension pinned.
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.windows.getAll({ populate: true }, (windows) => {
+        windows.forEach((window) => {
+            ensureExtensionTabInWindow(window);
         });
     });
+});
+
+// Whenever a new window is opened, ensure that the main extension tab is open.
+chrome.windows.onCreated.addListener((window) => {
+    ensureExtensionTabInWindow(window, true);
 });
 
 chrome.windows.onRemoved.addListener((windowId) => {
@@ -59,7 +79,7 @@ chrome.tabs.onRemoved.addListener(
         // console.log(`> Tab ${tabId} was closed.`);
         // console.log(removeInfo);
         // return;
-        
+
         (async () => {
             // If the window ID in removeInfo isn't the current window ID, then return;
             const currentWindow = await chrome.windows.getCurrent();
@@ -86,4 +106,4 @@ chrome.tabs.onRemoved.addListener(
     }
 );
 
-export { };
+export {};
