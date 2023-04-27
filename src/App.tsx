@@ -20,6 +20,7 @@ import {
     addMostRecentClosedTabToCollection,
     closeTab,
 } from "./workflows/tabCollections";
+import { ArchivedSessionList } from "./components/ArchivedSessionList";
 
 const windowObserver = new WindowObserver();
 const sessionStore: SessionStore = SessionStore.getInstance();
@@ -113,7 +114,7 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                     Archived Sessions
                 </h1>
                 <span>... (show collapsed)</span>
-                <SessionList
+                <ArchivedSessionList
                     sessions={sessionStore.archivedSessions}
                     onRestore={onRestore}
                 />
