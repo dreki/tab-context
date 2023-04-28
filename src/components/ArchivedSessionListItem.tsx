@@ -13,9 +13,9 @@ export const ArchivedSessionListItem = observer(
     ({ session, onRestore, onArchive }: ArchivedSessionListItemProps) => {
         const name = session.name ? session.name : "(Unnamed)";
 
-        let tabCreated: JSX.Element | null = null;
+        let sessionCreated: JSX.Element | null = null;
 
-        tabCreated = (
+        sessionCreated = (
             <span className="ml-2 text-gray-500">
                 <>{session.relativeCreatedAt}</>
             </span>
@@ -45,7 +45,7 @@ export const ArchivedSessionListItem = observer(
                     <span>{name}</span>
 
                     {/* Show relative day session was created (e.g. "today"; "2 days ago") */}
-                    {tabCreated}
+                    {sessionCreated}
 
                     <TabDetailList tabs={session.tabs} onRestore={onRestore} />
                     <div className="card-actions mt-2">

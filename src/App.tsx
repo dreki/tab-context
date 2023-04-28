@@ -113,7 +113,6 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                 <h1 className="mt-8 mb-4 text-xl font-bold">
                     Archived Sessions
                 </h1>
-                <span>... (show collapsed)</span>
                 <ArchivedSessionList
                     sessions={sessionStore.archivedSessions}
                     onRestore={onRestore}
