@@ -10,7 +10,8 @@ import { IMessage, MessageType } from "../types/Message";
  */
 function ensureExtensionTabInWindow(
     window: chrome.windows.Window,
-    onlyIfCurrentWindow: boolean = false
+    onlyIfCurrentWindow: boolean = false,
+    selectExtensionTab: boolean = true
 ) {
     // If not current window, then return. (There are service workers for each window, so we want to
     // avoid duplicate tabs.)
@@ -41,6 +42,19 @@ function ensureExtensionTabInWindow(
                 url: chrome.runtime.getURL("ui.html"),
                 pinned: true,
             });
+
+            // If we were asked not to select the extension tab, select the second tab.
+            if (!selectExtensionTab) {
+                // Select the second tab in the window. (Selecting ours will be annoying for the user.)
+                chrome.tabs.query({ windowId: window.id }, (tabs) => {
+                    if (tabs.length > 1) {
+                        const tab = tabs[1];
+                        if (tab.id) {
+                            chrome.tabs.update(tab.id, { active: true });
+                        }
+                    }
+                });
+            }
         }
     });
 }
@@ -57,7 +71,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Whenever a new window is opened, ensure that the main extension tab is open.
 chrome.windows.onCreated.addListener((window) => {
-    ensureExtensionTabInWindow(window, true);
+    ensureExtensionTabInWindow(window, true, false);
 });
 
 chrome.windows.onRemoved.addListener((windowId) => {
