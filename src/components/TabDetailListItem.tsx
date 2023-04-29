@@ -12,8 +12,11 @@ interface TabDetailComponentProps {
 
 /**
  * Converts a tab group color to a tailwind background color class.
- * @param color The color of the tab group. This is a string like "blue" or "red".
- * @returns The tailwind background color class. If the color is null or empty, returns an empty string.
+ *
+ * @param color The color of the tab group. This is a string like "blue" or
+ *   "red".
+ * @returns The tailwind background color class. If the color is null or empty,
+ *   returns an empty string.
  */
 function tabGroupColorToTailwindBackgroundColor(color: Maybe<string>): string {
     if (!color || color === "") {
@@ -46,7 +49,9 @@ export const TabDetailListItem = observer(function TabDetailListItem({
         tabComponent = (
             <div className="grow">
                 <div className="dropdown-hover dropdown">
-                    <label tabIndex={0}>{tab.title}</label>
+                    <label tabIndex={0} className="line-clamp-1">
+                        {tab.title}
+                    </label>
                     <ul
                         tabIndex={0}
                         className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
@@ -66,12 +71,9 @@ export const TabDetailListItem = observer(function TabDetailListItem({
     if (!onClose) {
         tabComponent = (
             <div className="grow">
-                <label tabIndex={0}>{tab.title}</label>
-                {tab.groupName && (
-                    <span className="text-xs text-gray-400">
-                        {tab.groupName}
-                    </span>
-                )}
+                <label tabIndex={0} className="line-clamp-1">
+                    {tab.title}
+                </label>
             </div>
         );
     }
@@ -84,10 +86,14 @@ export const TabDetailListItem = observer(function TabDetailListItem({
     if (tab.groupColor) {
         const color = tab.groupColor;
         tabGroupBadge = (
-            <span className={`badge border-none bg-${color}-100 text-${color}-800`}>{ tab.groupName }</span>
+            <span
+                className={`badge border-none bg-${color}-100 text-${color}-800`}
+            >
+                {tab.groupName}
+            </span>
         );
     }
-    
+
     return (
         <li
             className={`flex h-6 items-center space-x-3 p-2 text-sm hover:rounded`}

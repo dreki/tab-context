@@ -17,9 +17,10 @@ export const SessionListItem = observer(
         let tabCreated: JSX.Element | null = null;
 
         tabCreated = (
-            <span className="ml-2 text-gray-500">
+            <div className="ml-3.5 mb-3 text-gray-500">
+                <span className="mr-2">⏰</span>
                 <>{session.relativeCreatedAt}</>
-            </span>
+            </div>
         );
 
         const restore: JSX.Element | null = onRestore ? (
@@ -43,7 +44,7 @@ export const SessionListItem = observer(
         return (
             <div className="card-bordered card card-compact mb-4 bg-purple-100 shadow-md">
                 <div className="card-body">
-                    <span>{name}</span>
+                    <h2 className="ml-3.5 mt-2 mb-2 text-xl font-medium">{name}</h2>
 
                     {/* Show relative day session was created (e.g. "today"; "2 days ago") */}
                     {tabCreated}

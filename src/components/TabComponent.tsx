@@ -5,6 +5,7 @@ interface TabComponentProps {
     tab: ITab;
 }
 
+/** The "little" tab icon component. */
 export function TabComponent({ tab }: TabComponentProps) {
     return (
         <>
