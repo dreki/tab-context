@@ -1,5 +1,5 @@
-import { Session, SessionStore, Tab as SessionTab } from "../stores/session";
-import { Tab, Window, WindowObserver } from "../stores/window";
+import { Session, SessionStore } from "../stores/session";
+import { Window, WindowObserver } from "../stores/window";
 
 function sessionIdFactory(): string {
     // Use base 36 to be more compact.
@@ -55,6 +55,9 @@ export async function suspend(
     // Make a new `Session` from `window`'s tabs.
     const session = new Session();
     session.name = name;
+    // Set session.tabs to all the tabs in `window.tabs`, minus our extension's UI tab.
+    session.tabs = window.tabs
+        .filter((tab) => tab.url !== chrome.runtime.getURL("ui.html"))
     session.tabs = window.tabs;
     await SessionStore.getInstance().save(session);
     if (closeWindow) {

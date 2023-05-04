@@ -59,9 +59,6 @@ export const TabDetailListItem = observer(function TabDetailListItem({
                         <li>
                             <a onClick={handleOnClose}>Close</a>
                         </li>
-                        <li>
-                            <a>Save as Resource</a>
-                        </li>
                     </ul>
                 </div>
             </div>

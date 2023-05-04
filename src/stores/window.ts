@@ -42,6 +42,10 @@ export class WindowObserver {
             if (!window.tabs || !window.id) {
                 continue;
             }
+            // If there are zero tabs in the window, continue.
+            if (window.tabs.length === 0) {
+                continue;
+            }
             for (let tab of window.tabs) {
                 if (
                     !tab ||

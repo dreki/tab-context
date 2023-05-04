@@ -78,6 +78,8 @@ const App = observer(function App({ windowObserver }: IAppProps) {
 
     const onCloseWindow = async (window: Window) => {
         await windowObserver.closeWindow(window.id);
+        // Reload
+        await loadStores();
     };
 
     const onCreateSession = async (values: SessionCreationValues) => {
