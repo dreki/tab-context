@@ -94,7 +94,7 @@ export const WindowListItem = observer(function WindowListItem(
                         className="btn-outline btn-ghost btn-sm btn"
                         onClick={() => props.onCloseWindow(props.window)}
                     >
-                        Close
+                        Close Window
                     </button>
                 </div>
             </div>

@@ -104,7 +104,7 @@ const App = observer(function App({ windowObserver }: IAppProps) {
                     }}
                 />
 
-                <h1 className="mt-8 mb-4 text-2xl font-bold">Saved Sessions</h1>
+                <h1 className="mt-8 mb-4 text-2xl font-bold">Suspended Sessions</h1>
                 <SessionList
                     sessions={sessionStore.activeSessions}
                     onRestore={onRestore}
