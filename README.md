@@ -1,8 +1,10 @@
-# Getting Started with Create React App
+# Tabber Keeper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the code behind the Chrome extension [Tabber Keeper](https://chrome.google.com/webstore/detail/tabber-keeper/mhbmhohgdjciemkgpcgkjnbjjbonnnfj)
 
-## Available Scripts
+Feel free to make issues, or modifications and pull requests. Have fun!
+
+## To work on this code, use these scripts
 
 In the project directory, you can run:
 
